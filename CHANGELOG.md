@@ -11,8 +11,38 @@ header, the Fortran module, the Python package and the conda recipe. Use
 
 ## [Unreleased]
 
-Development toward 2.0.0 (`PLAN-ndarray.md`). The Python API changes only in `pyoti.real.dmat`
-(see Changed).
+Development toward 2.0.0 (`PLAN-ndarray.md`). 2.0.0 breaks the Python API: see Breaking, and
+[Migrating to OTIlib 2.0](doc/source/migrating_to_2_0.rst).
+
+### Breaking
+
+Details, before/after recipes and a checklist: [Migrating to OTIlib 2.0](doc/source/migrating_to_2_0.rst).
+
+1. **NumPy indexing** in `pyoti.dense`, `pyoti.semisparse`, `pyoti.sparse` and `pyoti.real.dmat`:
+   an integer index drops its axis (`A[i]` is 1-D, `A[:, j]` is 1-D), negative indices work
+   everywhere, `None` / `...` are supported, and `len()` / iteration run over the first axis. All
+   integers give an OTI scalar. The Gauss types keep the matrix indexing rule.
+2. **Creators return NumPy shapes**: `zeros(n)` and `array(1-D)` give `(n,)`, and `array(scalar)`
+   gives a 0-D array. Write `zeros((n, 1))` for a column.
+3. **Assignment broadcasts as NumPy does**: an `(n, 1)` column no longer fits an `(n,)` target.
+4. **Views**: in `pyoti.dense` (`omat`) basic slices, `.T` and `reshape` are views and writes reach
+   the parent. Whether a slice result shares memory is algebra-dependent; do not rely on either.
+5. **Read-only exports**: `.real` (all algebras), `get_block` and `csr_matrix.real` (all three
+   algebras) are read-only. Use `.copy()`, `get_block(d, writeable=True)` or
+   `csr_matrix.get_real(writeable=True)`. Unchanged: static arrays (provisional), sparse Gauss
+   `.real` (a `dmatfe` object) and `dmat.to_numpy()`.
+6. **Growth with live views or exports raises `BufferError`** (dense, and now semi-sparse). Size
+   arrays up front with `reserve`, `nbases=` / `bases=` / `order=`.
+7. **`nbases=` reserves the layout** of dense arrays (`active_bases` reports `1..nbases`; `nbases=0`,
+   the default, reserves nothing; a hint too large for the memory budget raises `MemoryError`) and of
+   `elm_help` helper fields. Scalar creators are unchanged.
+8. **1-D products follow NumPy**: `dot(x, y)` of 1-D arrays is a scalar, and `A @ x` is 1-D.
+9. **Saved files are version 2**: 1.x cannot read them; 2.0 reads 1.x files.
+10. **`nrows` / `ncols` are deprecated**; use `shape`.
+11. **Static array classes are provisional** and will follow `pyoti.dense` in a later 2.x.
+
+New, not breaking: `layout=` (`'C'` / `'F'`; default `'F'` for SoA arrays) in the creators, and
+`reserve()`.
 
 ### Added
 
@@ -68,6 +98,16 @@ Development toward 2.0.0 (`PLAN-ndarray.md`). The Python API changes only in `py
   compatibility suite (`test_compat_2_0_*`, expected failures until Phase 7b).
 - Per-call dense benchmarks `tools/bench/bench_7a.c` (with `-DOTI_BUILD_BENCH=ON`) and
   `tools/bench/bench_7a_py.py`.
+- `nd_alloc_extra` (caller storage in the control block, living as long as the buffer),
+  `ND_ALLOC_SCRATCH` (call-local arrays from a per-thread arena, never exported), `nd_buffer_extra`,
+  `nd_buffer_extra_bytes`, `nd_scratch_release`.
+- n-D dense arrays (up to 31 element dimensions), `layout=`, `reserve()` in `pyoti.dense` and
+  `pyoti.semisparse` (`reserve(bases=, order=)`), `elm_help.allocate(..., bases=)` for semi-sparse.
+- `reshape` for `matso` and `dmat` (within two dimensions), `dmat.T`, `pyoti.sparse.matmul`, `abs()` of
+  `matso` and `dmat`.
+- C tests `test_dense_7b`, `test_real_ndarray_alloc`, `test_core_slice`, `test_real_darr_abs`; Python
+  tests for version-1 and version-2 files (`tests/python/data/v1/` fixtures written by the 1.x writers)
+  and `test_compat_2_0_fix2.py`.
 
 ### Changed
 
@@ -76,15 +116,26 @@ Development toward 2.0.0 (`PLAN-ndarray.md`). The Python API changes only in `py
 - With Accelerate the minimum macOS deployment target is 13.3 (`$NEWLAPACK`).
 - `fem` C code no longer uses the legacy `enum oti_errors`, `printf` or `exit()`.
 - `pyoti.real.dmat` sits on `ndarr_t`: slices are views of the parent (writes go through in both
-  directions; the 1.x shapes stay until 2.0.0); `to_numpy()` arrays keep the memory alive; a shape
-  mismatch in `D[i:j, k:l] = E` raises `ValueError` instead of terminating the process; a strided
-  view as `out=` raises `ValueError`; `numpy.ndarray op dmat` raises `TypeError`.
+  directions; its indexing shapes become NumPy's, see Breaking); `to_numpy()` arrays keep the
+  memory alive; a shape mismatch in `D[i:j, k:l] = E` raises `ValueError` instead of terminating the
+  process; a strided view as `out=` raises `ValueError`; `numpy.ndarray op dmat` raises `TypeError`.
 - Dense arrays (`oarr_t`, `feoarr_t`, `arro_t`) sit on `ndarr_t` and `oti_meta_t`, with no change in
   results, saved files or the Python API; their parallel loops run on `oti_parallel_for` with
   thresholds from the cost model, and results no longer depend on the thread count. `DN_ERR_*` are
   aliases of `OTI_ERR_*`.
 - `src/c/real_ndarray.c` and `src/c/core/exec.c` are compiled with `-ffp-contract=off` and
   `-fno-wrapv`.
+- ndarray arrays with at most 4096 data bytes take one allocation (control block and 64-byte-aligned
+  data); a dense array's `oti_meta_t` lives in its buffer.
+- `A.set(rhs)` is `A[...] = rhs` in every algebra (NumPy broadcasting; sparse was strict).
+- `out=` returns the `out` it was given (1.x returned `None`), also when `out` has extra leading axes
+  of extent 1.
+- `bool()` of an empty array is `False` (arrays have a length); `numpy.ndarray * matso` raises
+  `TypeError` (was `ValueError`); `x[i].real` of a 1-D array is a float.
+- Version-2 `'OTD'`, `'OTS'` and `'OTI'` files share one header rule (contracts 11.12). `'OTI'` files
+  are read from Python by a validating Cython decoder (the C reader is no longer called): a corrupt
+  file raises `ValueError` instead of terminating the process.
+- `VERSION` is 2.0.0 on the development branch (the release is tagged after Phase 8).
 
 ### Removed
 
@@ -99,7 +150,13 @@ Development toward 2.0.0 (`PLAN-ndarray.md`). The Python API changes only in `py
 
 - `pyoti.real.solve` returned the unsolved right-hand side for a dense `K` and more than one
   right-hand-side column.
-
+- Empty extended slices (`A[:-6:2]` of a 5-row array) of the 2-D slicers returned one row
+  (`slice_size()`, `get_slice_size()` of the real and complex arrays).
+- A `pyoti.real.dmat` view that outlived its parent read freed memory.
+- `pyoti.real.inv` / `det` / `solve` of a non-square `dmat` terminated the interpreter; they raise
+  `LinAlgError`.
+- `darr_abs` (`abs()` of real arrays in C) truncated to integers: `-1.5` became 1.
+- `erf` of a `dmat` computed `cos`.
 ## [1.3.1] - 2026-11-02
 
 Fixes the 1.3.0 conda deployment, which failed on every platform and published no package.

@@ -1,9 +1,9 @@
 # Index parsing, operand conversion and binary-operation dispatch for the array classes. Owner: WP8a.
 #
 # The omat / arro class bodies (WP8b) call these helpers: _indices, _array_binary, _aos_binary,
-# _normalize_value, _array_real, _array_get_im, _array_set_im, _array_active_bases, _soa_getitem,
-# _soa_setitem, _aos_getitem, _aos_setitem, _soa_block_view, _soa_from_real, _soa_from_matso,
-# _to_soa, _to_aos.
+# _normalize_value, _array_real, _array_get_im, _array_set_im, _array_active_bases, _aos_getitem,
+# _aos_setitem, _soa_from_real, _soa_from_matso, _to_soa, _to_aos. The SoA indexing (NumPy rules,
+# views) is in dense/ndarray.pxi (Phase 7b).
 
 from cpython.slice cimport PySlice_Unpack, PySlice_AdjustIndices
 
@@ -72,12 +72,12 @@ cdef omat _soa_from_real(np.ndarray data, ord_t order):
 
     cdef np.ndarray[np.float64_t, ndim=2, mode="fortran"] fdata = np.asfortranarray(
         data, dtype=np.float64)
-    cdef oarr_t native = oarr_init()
+    cdef omat native = omat.__new__(omat)
 
     _soa_ok("from_real", oarr_from_real_to(<coeff_t *>fdata.data if fdata.size > 0 else NULL,
-                                           fdata.shape[0], fdata.shape[1], order, &native),
-            &native)
-    return omat.wrap(native)
+                                           fdata.shape[0], fdata.shape[1], order, &native.arr),
+            &native.arr)
+    return native
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -99,10 +99,24 @@ cdef omat _soa_from_matso(matso value):
         Dense matrix over the bases 1..(largest base present).
     """
 
-    cdef oarr_t native = oarr_init()
+    cdef omat native = omat.__new__(omat)
+    cdef omat result
+    cdef tuple shape
 
-    _soa_ok("from_sparse", oarr_from_arrso_to(&value.arr, &native, _dhl), &native)
-    return omat.wrap(native)
+    _soa_ok("from_sparse", oarr_from_arrso_to(&value.arr, &native.arr, _dhl), &native.arr)
+    result = native
+
+    # A matso keeps a logical shape over its 2-D C struct (contracts 11.1): (n,) is stored n x 1 and
+    # () as 1 x 1; the dense array takes the logical shape.
+    shape = tuple(value.shape)
+
+    if len(shape) < 2 and result.shape != shape:
+
+        _soa_relabel(result, shape)
+
+    # end if
+
+    return result
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -173,58 +187,6 @@ cdef arro _to_aos(object value):
 
 
 # ********************************************************************************************************
-cdef object _soa_block_view(omat a, uint64_t index, ord_t order, object base=None):
-    """
-    Return the coefficient block of a direction as a writable Fortran-ordered NumPy view.
-
-    Parameters
-    ----------
-    a : omat
-        Source array.
-    index : int
-        Global direction index within its order.
-    order : int
-        Direction order; 0 gives the real block.
-    base : object, optional
-        Object kept as the base of the view (default: the array itself); ``omat.get_block`` passes a
-        registered ``_BlockExport`` so that growth of the array can be refused while the view lives.
-
-    Returns
-    -------
-    numpy.ndarray
-        View of shape (nrows, ncols) sharing native memory, or None when the direction uses a base
-        beyond the array's active bases (or an order above its truncation order).
-    """
-
-    cdef np.npy_intp dims[2]
-    cdef coeff_t *block
-    cdef np.ndarray flat
-
-    if order > oarr_trc_order(&a.arr):
-
-        return None
-
-    # end if
-
-    block = oarr_data(&a.arr) if order == 0 else oarr_get_block(index, order, &a.arr)
-
-    if block == NULL or oarr_size(&a.arr) == 0:
-
-        return None if block == NULL else np.zeros((oarr_nrows(&a.arr), oarr_ncols(&a.arr)), order="F")
-
-    # end if
-
-    dims[0] = oarr_ncols(&a.arr)
-    dims[1] = oarr_nrows(&a.arr)
-    flat = np.PyArray_SimpleNewFromData(2, dims, np.NPY_DOUBLE, <void *>block)
-    np.set_array_base(flat, a if base is None else base)
-    return flat.T
-
-# end function
-# --------------------------------------------------------------------------------------------------------
-
-
-# ********************************************************************************************************
 cdef object _array_binary(omat left, object other, str op, bint reverse):
     """
     Dispatch an elementwise SoA operation by operand type and side.
@@ -248,48 +210,43 @@ cdef object _array_binary(omat left, object other, str op, bint reverse):
 
     cdef omat rhs
     cdef otinum scalar
-    cdef oarr_t result = oarr_init()
+    cdef omat result = omat.__new__(omat)
     cdef int status
 
     if isinstance(other, omat):
 
+        # The shapes broadcast (NumPy rules) in C; DN_ERR_SIZE (ValueError) when they cannot.
         rhs = other
-
-        if oarr_nrows(&left.arr) != oarr_nrows(&rhs.arr) or oarr_ncols(&left.arr) != oarr_ncols(&rhs.arr):
-
-            raise ValueError("{}: array shapes must match".format(op))
-
-        # end if
 
         if op == "add":
 
-            status = oarr_sum_OO_to(&left.arr, &rhs.arr, &result, _dhl)
+            status = oarr_sum_OO_to(&left.arr, &rhs.arr, &result.arr, _dhl)
 
         elif op == "sub":
 
             if reverse:
 
-                status = oarr_sub_OO_to(&rhs.arr, &left.arr, &result, _dhl)
+                status = oarr_sub_OO_to(&rhs.arr, &left.arr, &result.arr, _dhl)
 
             else:
 
-                status = oarr_sub_OO_to(&left.arr, &rhs.arr, &result, _dhl)
+                status = oarr_sub_OO_to(&left.arr, &rhs.arr, &result.arr, _dhl)
 
             # end if
 
         elif op == "mul":
 
-            status = oarr_mul_OO_to(&left.arr, &rhs.arr, &result, _dhl)
+            status = oarr_mul_OO_to(&left.arr, &rhs.arr, &result.arr, _dhl)
 
         else:
 
             if reverse:
 
-                status = oarr_div_OO_to(&rhs.arr, &left.arr, &result, _dhl)
+                status = oarr_div_OO_to(&rhs.arr, &left.arr, &result.arr, _dhl)
 
             else:
 
-                status = oarr_div_OO_to(&left.arr, &rhs.arr, &result, _dhl)
+                status = oarr_div_OO_to(&left.arr, &rhs.arr, &result.arr, _dhl)
 
             # end if
 
@@ -301,33 +258,33 @@ cdef object _array_binary(omat left, object other, str op, bint reverse):
 
         if op == "add":
 
-            status = oarr_sum_oO_to(&scalar.num, &left.arr, &result, _dhl)
+            status = oarr_sum_oO_to(&scalar.num, &left.arr, &result.arr, _dhl)
 
         elif op == "sub":
 
             if reverse:
 
-                status = oarr_sub_oO_to(&scalar.num, &left.arr, &result, _dhl)
+                status = oarr_sub_oO_to(&scalar.num, &left.arr, &result.arr, _dhl)
 
             else:
 
-                status = oarr_sub_Oo_to(&left.arr, &scalar.num, &result, _dhl)
+                status = oarr_sub_Oo_to(&left.arr, &scalar.num, &result.arr, _dhl)
 
             # end if
 
         elif op == "mul":
 
-            status = oarr_mul_oO_to(&scalar.num, &left.arr, &result, _dhl)
+            status = oarr_mul_oO_to(&scalar.num, &left.arr, &result.arr, _dhl)
 
         else:
 
             if reverse:
 
-                status = oarr_div_oO_to(&scalar.num, &left.arr, &result, _dhl)
+                status = oarr_div_oO_to(&scalar.num, &left.arr, &result.arr, _dhl)
 
             else:
 
-                status = oarr_div_Oo_to(&left.arr, &scalar.num, &result, _dhl)
+                status = oarr_div_Oo_to(&left.arr, &scalar.num, &result.arr, _dhl)
 
             # end if
 
@@ -337,33 +294,33 @@ cdef object _array_binary(omat left, object other, str op, bint reverse):
 
         if op == "add":
 
-            status = oarr_sum_rO_to(other, &left.arr, &result, _dhl)
+            status = oarr_sum_rO_to(other, &left.arr, &result.arr, _dhl)
 
         elif op == "sub":
 
             if reverse:
 
-                status = oarr_sub_rO_to(other, &left.arr, &result, _dhl)
+                status = oarr_sub_rO_to(other, &left.arr, &result.arr, _dhl)
 
             else:
 
-                status = oarr_sub_Or_to(&left.arr, other, &result, _dhl)
+                status = oarr_sub_Or_to(&left.arr, other, &result.arr, _dhl)
 
             # end if
 
         elif op == "mul":
 
-            status = oarr_mul_rO_to(other, &left.arr, &result, _dhl)
+            status = oarr_mul_rO_to(other, &left.arr, &result.arr, _dhl)
 
         else:
 
             if reverse:
 
-                status = oarr_div_rO_to(other, &left.arr, &result, _dhl)
+                status = oarr_div_rO_to(other, &left.arr, &result.arr, _dhl)
 
             else:
 
-                status = oarr_div_Or_to(&left.arr, other, &result, _dhl)
+                status = oarr_div_Or_to(&left.arr, other, &result.arr, _dhl)
 
             # end if
 
@@ -375,8 +332,8 @@ cdef object _array_binary(omat left, object other, str op, bint reverse):
 
     # end if
 
-    _soa_ok(op, status, &result)
-    return omat.wrap(result)
+    _soa_ok(op, status, &result.arr)
+    return result
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -413,9 +370,10 @@ cdef object _aos_binary(arro left, object other, str op, bint reverse):
 
         rhs = other
 
-        if arro_nrows(&left.arr) != arro_nrows(&rhs.arr) or arro_ncols(&left.arr) != arro_ncols(&rhs.arr):
+        if left.shape != rhs.shape:
 
-            raise ValueError("{}: array shapes must match".format(op))
+            raise ValueError("{}: AoS array shapes must match ({} and {})".format(op, left.shape,
+                                                                                rhs.shape))
 
         # end if
 
@@ -633,7 +591,7 @@ cdef object _normalize_value(object value, uint64_t nr, uint64_t nc, bint soa):
 # ********************************************************************************************************
 cdef np.ndarray _array_real(object a):
     """
-    Copy the real parts of an array into a C-ordered NumPy matrix.
+    The real parts of an array: a read-only NumPy view for SoA (contracts 11.11), a copy for AoS.
 
     Parameters
     ----------
@@ -643,36 +601,61 @@ cdef np.ndarray _array_real(object a):
     Returns
     -------
     numpy.ndarray
-        Matrix of shape (nrows, ncols).
+        Real coefficients, of the array's shape.
     """
 
-    cdef np.ndarray[np.float64_t, ndim=2] result
-    cdef uint64_t i, j
-    cdef omat soa
     cdef arro aos
 
     if isinstance(a, omat):
 
-        soa = a
-        return np.ascontiguousarray(
-            _soa_blocks(soa)[0].reshape(oarr_ncols(&soa.arr), oarr_nrows(&soa.arr)).T)
+        return _soa_export(<omat>a, 0, False)
 
     # end if
 
+    # AoS: a read-only strided view of the `re` fields (contracts 11.4; the store is pinned while it
+    # lives, and it is never a writable export, critic W3 finding 5).
     aos = a
-    result = np.empty((arro_nrows(&aos.arr), arro_ncols(&aos.arr)), dtype=np.float64)
+    return nd_to_numpy(arro_elems(&aos.arr), 0)
 
-    for i in range(arro_nrows(&aos.arr)):
+# end function
+# --------------------------------------------------------------------------------------------------------
 
-        for j in range(arro_ncols(&aos.arr)):
 
-            result[i, j] = arro_data(&aos.arr)[j + i * arro_ncols(&aos.arr)].re
+# ********************************************************************************************************
+cdef int64_t _soa_block_of(omat a, tuple pair):
+    """
+    Block index of a direction in a SoA array's layout, or -1 when the direction is outside it (a
+    base above nact, or an order above the truncation order).
 
-        # end for
+    Parameters
+    ----------
+    a : omat
+        Array.
+    pair : tuple
+        (global index, order) of the direction.
 
-    # end for
+    Returns
+    -------
+    int
+        Block index, or -1.
+    """
 
-    return result
+    cdef uint64_t index = pair[0]
+    cdef ord_t order = pair[1]
+
+    if order > oarr_trc_order(&a.arr):
+
+        return -1
+
+    # end if
+
+    if order > 0 and index >= <uint64_t>comb(oarr_nact(&a.arr) + order - 1, order):
+
+        return -1
+
+    # end if
+
+    return oarr_block_index(oarr_nact(&a.arr), order, index)
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -681,7 +664,7 @@ cdef np.ndarray _array_real(object a):
 # ********************************************************************************************************
 cdef np.ndarray _array_get_im(object a, object direction, bint deriv):
     """
-    Read one direction of every element of an array as a NumPy matrix.
+    Read one direction of every element of an array as a NumPy array (always a copy, 11.4).
 
     Parameters
     ----------
@@ -695,35 +678,36 @@ cdef np.ndarray _array_get_im(object a, object direction, bint deriv):
     Returns
     -------
     numpy.ndarray
-        Matrix of shape (nrows, ncols); zeros for a direction outside the active bases.
+        Array of the array's shape; zeros for a direction outside the active bases.
     """
 
     cdef tuple pair = _direction(direction)
     cdef np.ndarray[np.float64_t, ndim=2] result
-    cdef object view
+    cdef np.ndarray values
     cdef uint64_t i, j
+    cdef int64_t block
     cdef arro aos
     cdef double factor = _deriv_factor(pair[0], pair[1]) if deriv else 1.0
 
     if isinstance(a, omat):
 
-        view = _soa_block_view(a, pair[0], pair[1])
+        block = _soa_block_of(<omat>a, pair)
 
-        if view is None:
+        if block < 0:
 
-            return np.zeros((oarr_nrows(&(<omat>a).arr), oarr_ncols(&(<omat>a).arr)), dtype=np.float64)
+            return np.zeros(a.shape, dtype=np.float64)
 
         # end if
 
-        result = np.array(view, dtype=np.float64, order="C")
+        values = np.array(_soa_export(<omat>a, block, False), dtype=np.float64, order="C")
 
         if deriv:
 
-            result = result * factor
+            values *= factor
 
         # end if
 
-        return result
+        return values
 
     # end if
 
@@ -742,7 +726,7 @@ cdef np.ndarray _array_get_im(object a, object direction, bint deriv):
 
     # end for
 
-    return result
+    return result.reshape(aos.shape)
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -751,15 +735,17 @@ cdef np.ndarray _array_get_im(object a, object direction, bint deriv):
 # ********************************************************************************************************
 cdef void _array_set_im(object a, object value, object direction, bint deriv) except *:
     """
-    Set one direction of every element of an array from a real value or matrix.
+    Set one direction of every element of an array from a real value or array.
 
     Parameters
     ----------
     a : omat or arro
-        Target array; a SoA array raises its truncation order and its active bases to hold the
-        direction.
+        Target array; a SoA root nobody shares grows its truncation order and its active bases to
+        hold the direction (contracts 11.6 G1); a view or a root with live views or exports must
+        already hold it (BufferError).
     value : float or array_like
-        Real scalar, or matrix of shape (nrows, ncols).
+        Real scalar, or real values broadcasting to the array's shape (an OTI array gives its real
+        part).
     direction : int or list or tuple
         Direction in any pyoti.sparse format, or a rawdir.
     deriv : bool
@@ -770,22 +756,16 @@ cdef void _array_set_im(object a, object value, object direction, bint deriv) ex
     cdef omat soa
     cdef arro aos
     cdef np.ndarray[np.float64_t, ndim=2] data
-    cdef object view
+    cdef np.ndarray values
     cdef uint64_t i, j, rows, cols
+    cdef bases_t need
     cdef double factor = _deriv_factor(pair[0], pair[1]) if deriv else 1.0
 
-    if isinstance(a, omat):
+    if isinstance(value, (omat, arro)):
 
-        rows, cols = oarr_nrows(&(<omat>a).arr), oarr_ncols(&(<omat>a).arr)
-
-    else:
-
-        rows, cols = arro_nrows(&(<arro>a).arr), arro_ncols(&(<arro>a).arr)
+        value = value.real
 
     # end if
-
-    data = np.empty((rows, cols), dtype=np.float64)
-    data[...] = np.asarray(value, dtype=np.float64) / factor
 
     if isinstance(a, omat):
 
@@ -797,22 +777,22 @@ cdef void _array_set_im(object a, object value, object direction, bint deriv) ex
 
         # end if
 
-        if pair[1] == 0:
+        values = np.broadcast_to(np.asarray(value, dtype=np.float64) / factor, soa.shape)
 
-            _soa_blocks(soa)[0][...] = data.T.reshape(-1)
-            return
+        if pair[1] > 0:
+
+            need = _unrank(pair[0], pair[1])[-1]
+            _status("set_im", oarr_grow_layout(&soa.arr, max(need, oarr_nact(&soa.arr)),
+                                               max(pair[1], oarr_trc_order(&soa.arr))))
 
         # end if
 
-        _check_growth(soa, _unrank(pair[0], pair[1])[-1], pair[1])
-        _raise_soa_order(soa, pair[1])
-        _status("set_im", oarr_add_bases(_unrank(pair[0], pair[1])[-1], &soa.arr))
-        view = _soa_block_view(soa, pair[0], pair[1])
-        view[...] = data
+        # The internal writable path (11.11); the setter raises act itself.
+        _block_writeable(soa, _soa_block_of(soa, pair))[...] = values
 
-        if pair[1] > oarr_act_order(&soa.arr):
+        if pair[1] > 0:
 
-            oarr_set_act_order(&soa.arr, pair[1])
+            oarr_raise_act(&soa.arr, pair[1])
 
         # end if
 
@@ -820,6 +800,9 @@ cdef void _array_set_im(object a, object value, object direction, bint deriv) ex
 
     # end if
 
+    rows, cols = arro_nrows(&(<arro>a).arr), arro_ncols(&(<arro>a).arr)
+    data = np.ascontiguousarray(np.broadcast_to(np.asarray(value, dtype=np.float64) / factor,
+                                                a.shape).reshape((rows, cols)))
     aos = a
 
     for i in range(rows):
@@ -877,602 +860,6 @@ cdef list _array_active_bases(object a):
     # end for
 
     return list(range(1, top + 1))
-
-# end function
-# --------------------------------------------------------------------------------------------------------
-
-
-# ********************************************************************************************************
-cdef bint _axis_range(object index, Py_ssize_t extent, Py_ssize_t *start, Py_ssize_t *step,
-                      Py_ssize_t *count) except -1:
-    """
-    Resolve one axis index of a matrix key into a start, a step and a count.
-
-    Parameters
-    ----------
-    index : int or slice
-        Index along the axis. Negative integers count from the end.
-    extent : int
-        Length of the axis.
-    start : Py_ssize_t *
-        First selected position.
-    step : Py_ssize_t *
-        Distance between selected positions.
-    count : Py_ssize_t *
-        Number of selected positions.
-
-    Returns
-    -------
-    bool
-        True when the index was an integer.
-    """
-
-    cdef Py_ssize_t stop
-    cdef Py_ssize_t value
-
-    if isinstance(index, slice):
-
-        PySlice_Unpack(index, start, &stop, step)
-        count[0] = PySlice_AdjustIndices(extent, start, &stop, step[0])
-        return False
-
-    # end if
-
-    if type(index) is not int:
-
-        if isinstance(index, (bool, np.bool_)) or not isinstance(index, (int, np.integer)):
-
-            raise IndexError("only integers and slices (`:`) are valid indices")
-
-        # end if
-
-    # end if
-
-    value = index
-
-    if value < 0:
-
-        value += extent
-
-    # end if
-
-    if value < 0 or value >= extent:
-
-        raise IndexError("Index out of bounds.")
-
-    # end if
-
-    start[0] = value
-    step[0] = 1
-    count[0] = 1
-    return True
-
-# end function
-# --------------------------------------------------------------------------------------------------------
-
-
-# ********************************************************************************************************
-cdef bint _parse_key_c(object key, Py_ssize_t nrows, Py_ssize_t ncols, Py_ssize_t *r0,
-                       Py_ssize_t *rs, Py_ssize_t *rn, Py_ssize_t *c0, Py_ssize_t *cs,
-                       Py_ssize_t *cn) except -1:
-    """
-    Parse a matrix key with the semantics of ``pyoti.sparse.matso`` into C ranges.
-
-    A single integer or slice selects rows and keeps every column, so ``A[i]`` is a 1 x ncols
-    matrix. A pair of two integers selects one element.
-
-    Parameters
-    ----------
-    key : int or slice or tuple
-        Matrix key.
-    nrows : int
-        Row count.
-    ncols : int
-        Column count.
-    r0, rs, rn : Py_ssize_t *
-        Start, step and count of the selected rows.
-    c0, cs, cn : Py_ssize_t *
-        Start, step and count of the selected columns.
-
-    Returns
-    -------
-    bool
-        True when the key names a single element.
-    """
-
-    cdef bint row_integer, column_integer
-
-    if isinstance(key, tuple):
-
-        if len(<tuple>key) != 2:
-
-            raise IndexError("expected a row index or a (row, column) pair")
-
-        # end if
-
-        row_integer = _axis_range((<tuple>key)[0], nrows, r0, rs, rn)
-        column_integer = _axis_range((<tuple>key)[1], ncols, c0, cs, cn)
-        return row_integer and column_integer
-
-    # end if
-
-    _axis_range(key, nrows, r0, rs, rn)
-    c0[0] = 0
-    cs[0] = 1
-    cn[0] = ncols
-    return False
-
-# end function
-# --------------------------------------------------------------------------------------------------------
-
-
-# ********************************************************************************************************
-cdef void _copy_strided(coeff_t *dst, Py_ssize_t dst_nrows, Py_ssize_t dr0, Py_ssize_t drs,
-                        Py_ssize_t dc0, Py_ssize_t dcs, const coeff_t *src, Py_ssize_t src_nrows,
-                        Py_ssize_t sr0, Py_ssize_t srs, Py_ssize_t sc0, Py_ssize_t scs,
-                        Py_ssize_t nr, Py_ssize_t nc) noexcept nogil:
-    """
-    Copy an nr x nc block between two column-major matrices with independent strides.
-
-    Parameters
-    ----------
-    dst : coeff_t *
-        Destination matrix (one direction block).
-    dst_nrows : int
-        Rows of the destination matrix.
-    dr0, drs, dc0, dcs : int
-        First row, row step, first column and column step of the destination block.
-    src : coeff_t *
-        Source matrix.
-    src_nrows : int
-        Rows of the source matrix.
-    sr0, srs, sc0, scs : int
-        First row, row step, first column and column step of the source block.
-    nr, nc : int
-        Rows and columns copied.
-    """
-
-    cdef Py_ssize_t ii, jj
-    cdef coeff_t *d
-    cdef const coeff_t *s
-
-    for jj in range(nc):
-
-        d = dst + (dc0 + jj * dcs) * dst_nrows + dr0
-        s = src + (sc0 + jj * scs) * src_nrows + sr0
-
-        for ii in range(nr):
-
-            d[ii * drs] = s[ii * srs]
-
-        # end for
-
-    # end for
-
-# end function
-# --------------------------------------------------------------------------------------------------------
-
-
-# ********************************************************************************************************
-cdef object _soa_getitem(omat a, object key):
-    """
-    Read an element or a block of a SoA array with the semantics of ``pyoti.sparse.matso``.
-
-    Parameters
-    ----------
-    a : omat
-        Source array.
-    key : int or slice or tuple
-        Matrix key.
-
-    Returns
-    -------
-    otinum or omat
-        Element copy for an (int, int) key, otherwise a new array holding the selected block.
-    """
-
-    cdef Py_ssize_t r0, rs, rn, c0, cs, cn, block
-    cdef Py_ssize_t nrows = oarr_nrows(&a.arr)
-    cdef uint64_t nblocks
-    cdef otinum element
-    cdef omat result
-
-    if _parse_key_c(key, nrows, oarr_ncols(&a.arr), &r0, &rs, &rn, &c0, &cs, &cn):
-
-        element = otinum.__new__(otinum)
-        _status("getitem", oarr_get_item_to(r0, c0, &a.arr, &element.num))
-        return element
-
-    # end if
-
-    result = _soa_zeros((rn, cn), oarr_nact(&a.arr), oarr_trc_order(&a.arr))
-
-    if rn * cn > 0:
-
-        nblocks = 1 + sshelp_ndir_total(oarr_nact(&a.arr), oarr_trc_order(&a.arr))
-
-        for block in range(nblocks):
-
-            _copy_strided(oarr_data(&result.arr) + block * oarr_size(&result.arr), rn, 0, 1, 0, 1,
-                          oarr_data(&a.arr) + block * oarr_size(&a.arr), nrows, r0, rs, c0, cs, rn, cn)
-
-        # end for
-
-    # end if
-
-    oarr_set_act_order(&result.arr, oarr_act_order(&a.arr))
-    return result
-
-# end function
-# --------------------------------------------------------------------------------------------------------
-
-
-# ********************************************************************************************************
-cdef int _soa_setitem(omat a, object key, object value) except -1:
-    """
-    Assign an element or a block of a SoA array with the semantics of ``pyoti.sparse.matso``.
-
-    The array's truncation order is raised to the value's (zero-extending every entry) and its
-    active bases grow to hold the value's, so no derivative of the value is dropped.
-
-    Parameters
-    ----------
-    a : omat
-        Target array; must own its buffer.
-    key : int or slice or tuple
-        Matrix key.
-    value : object
-        Real, scalar, array of OTI numbers or real NumPy array. Arrays must have the slice's shape.
-    """
-
-    cdef Py_ssize_t r0, rs, rn, c0, cs, cn, block, ii, jj
-    cdef Py_ssize_t nrows = oarr_nrows(&a.arr)
-    cdef Py_ssize_t size = oarr_size(&a.arr)
-    cdef uint64_t nblocks
-    cdef otinum scalar
-    cdef omat source
-    cdef coeff_t *buffer = NULL
-    cdef const coeff_t *table
-    cdef bint is_item
-    cdef bint same_layout
-    cdef ord_t top
-    cdef type kind = type(value)
-    cdef double real_value
-
-    if not a.FLAGS & 1:
-
-        raise ValueError("this array is a view of another object and cannot be modified")
-
-    # end if
-
-    is_item = _parse_key_c(key, nrows, oarr_ncols(&a.arr), &r0, &rs, &rn, &c0, &cs, &cn)
-
-    if is_item:
-
-        if kind is otinum:
-
-            scalar = value
-            _check_growth(a, scalar.num.nact, scalar.num.trc_order)
-            _status("setitem", oarr_set_item(&scalar.num, r0, c0, &a.arr))
-            return 0
-
-        # end if
-
-        if kind is float or kind is int:
-
-            _status("setitem", oarr_set_item_r(value, r0, c0, &a.arr))
-            return 0
-
-        # end if
-
-    # end if
-
-    value = _normalize_value(value, rn, cn, True)
-
-    if isinstance(value, omat):
-
-        source = value
-
-        if oarr_nrows(&source.arr) != rn or oarr_ncols(&source.arr) != cn:
-
-            raise ValueError("slice assignment: value has shape {}, the slice has shape {}.".format(
-                (oarr_nrows(&source.arr), oarr_ncols(&source.arr)), (rn, cn)))
-
-        # end if
-
-    # end if
-
-    if rn * cn == 0:
-
-        return 0
-
-    # end if
-
-    if isinstance(value, Real):
-
-        real_value = value
-        nblocks = 1 + sshelp_ndir_total(oarr_nact(&a.arr), oarr_trc_order(&a.arr))
-
-        for block in range(nblocks):
-
-            for jj in range(cn):
-
-                for ii in range(rn):
-
-                    oarr_data(&a.arr)[block * size + (c0 + jj * cs) * nrows + r0 + ii * rs] = (
-                        real_value if block == 0 else 0.0)
-
-                # end for
-
-            # end for
-
-        # end for
-
-        return 0
-
-    # end if
-
-    if isinstance(value, otinum):
-
-        scalar = value
-        _check_growth(a, scalar.num.nact, scalar.num.trc_order)
-        _raise_soa_order(a, scalar.num.trc_order)
-        _status("setitem", oarr_add_bases(scalar.num.nact, &a.arr))
-        nblocks = 1 + sshelp_ndir_total(oarr_nact(&a.arr), oarr_trc_order(&a.arr))
-        buffer = <coeff_t *>malloc(nblocks * sizeof(coeff_t))
-
-        if buffer == NULL:
-
-            raise MemoryError("setitem: allocation failed")
-
-        # end if
-
-        try:
-
-            buffer[0] = scalar.num.re
-
-            if nblocks > 1:
-
-                oti_kernel_expand(&scalar.num, oarr_nact(&a.arr), oarr_trc_order(&a.arr), buffer + 1)
-
-            # end if
-
-            for block in range(nblocks):
-
-                for jj in range(cn):
-
-                    for ii in range(rn):
-
-                        oarr_data(&a.arr)[block * size + (c0 + jj * cs) * nrows + r0 + ii * rs] = (
-                            buffer[block])
-
-                    # end for
-
-                # end for
-
-            # end for
-
-        finally:
-
-            free(buffer)
-
-        # end try
-
-        top = (scalar.num.act_order if scalar.num.act_order < oarr_trc_order(&a.arr)
-               else oarr_trc_order(&a.arr))
-
-        if top > oarr_act_order(&a.arr):
-
-            oarr_set_act_order(&a.arr, top)
-
-        # end if
-
-        return 0
-
-    # end if
-
-    _check_growth(a, oarr_nact(&source.arr), oarr_trc_order(&source.arr))
-    _raise_soa_order(a, oarr_trc_order(&source.arr))
-    _status("setitem", oarr_add_bases(oarr_nact(&source.arr), &a.arr))
-    nblocks = 1 + sshelp_ndir_total(oarr_nact(&a.arr), oarr_trc_order(&a.arr))
-    size = oarr_size(&a.arr)
-
-    same_layout = (oarr_nact(&source.arr) == oarr_nact(&a.arr)
-                   and oarr_trc_order(&source.arr) == oarr_trc_order(&a.arr))
-
-    if same_layout:
-
-        table = oarr_data(&source.arr)
-
-    else:
-
-        buffer = <coeff_t *>malloc(nblocks * oarr_size(&source.arr) * sizeof(coeff_t))
-
-        if buffer == NULL:
-
-            raise MemoryError("setitem: allocation failed")
-
-        # end if
-
-        oarr_kernel_expand(&source.arr, oarr_nact(&a.arr), oarr_trc_order(&a.arr), buffer)
-        table = buffer
-
-    # end if
-
-    try:
-
-        for block in range(nblocks):
-
-            _copy_strided(oarr_data(&a.arr) + block * size, nrows, r0, rs, c0, cs,
-                          table + block * oarr_size(&source.arr), rn, 0, 1, 0, 1, rn, cn)
-
-        # end for
-
-    finally:
-
-        free(buffer)
-
-    # end try
-
-    top = (oarr_act_order(&source.arr) if oarr_act_order(&source.arr) < oarr_trc_order(&a.arr)
-           else oarr_trc_order(&a.arr))
-
-    if top > oarr_act_order(&a.arr):
-
-        oarr_set_act_order(&a.arr, top)
-
-    # end if
-
-    return 0
-
-# end function
-# --------------------------------------------------------------------------------------------------------
-
-
-# ********************************************************************************************************
-cdef object _aos_getitem(arro a, object key):
-    """
-    Read an element or a block of an AoS array with the semantics of ``pyoti.sparse.matso``.
-
-    Parameters
-    ----------
-    a : arro
-        Source array.
-    key : int or slice or tuple
-        Matrix key.
-
-    Returns
-    -------
-    otinum or arro
-        Element copy for an (int, int) key, otherwise a new array holding copies of the block.
-    """
-
-    cdef Py_ssize_t r0, rs, rn, c0, cs, cn, ii, jj
-    cdef otinum element
-    cdef arro_t native
-    cdef arro result
-
-    if _parse_key_c(key, arro_nrows(&a.arr), arro_ncols(&a.arr), &r0, &rs, &rn, &c0, &cs, &cn):
-
-        element = otinum.__new__(otinum)
-        _status("getitem", oti_copy_to(arro_get_item_ptr(r0, c0, &a.arr), &element.num))
-        return element
-
-    # end if
-
-    native = arro_init()
-    _aos_ok("getitem", arro_zeros_to(rn, cn, 0, &native), &native)
-    result = arro.wrap(native)
-
-    for ii in range(rn):
-
-        for jj in range(cn):
-
-            _status("getitem", arro_set_item(arro_get_item_ptr(r0 + ii * rs, c0 + jj * cs, &a.arr),
-                                            ii, jj, &result.arr))
-
-        # end for
-
-    # end for
-
-    return result
-
-# end function
-# --------------------------------------------------------------------------------------------------------
-
-
-# ********************************************************************************************************
-cdef int _aos_setitem(arro a, object key, object value) except -1:
-    """
-    Assign an element or a block of an AoS array with the semantics of ``pyoti.sparse.matso``.
-
-    Every assigned element becomes a copy of the value, with the value's truncation order.
-
-    Parameters
-    ----------
-    a : arro
-        Target array; must own its buffers.
-    key : int or slice or tuple
-        Matrix key.
-    value : object
-        Real, scalar, array of OTI numbers or real NumPy array. Arrays must have the slice's shape.
-    """
-
-    cdef Py_ssize_t r0, rs, rn, c0, cs, cn, ii, jj
-    cdef bint is_item
-    cdef otinum scalar
-    cdef arro source
-    cdef type kind = type(value)
-
-    if not a.FLAGS & 1:
-
-        raise ValueError("this array is a view of another object and cannot be modified")
-
-    # end if
-
-    is_item = _parse_key_c(key, arro_nrows(&a.arr), arro_ncols(&a.arr), &r0, &rs, &rn, &c0, &cs, &cn)
-
-    if is_item and kind is otinum:
-
-        scalar = value
-        _status("setitem", arro_set_item(&scalar.num, r0, c0, &a.arr))
-        return 0
-
-    # end if
-
-    value = _normalize_value(value, rn, cn, False)
-
-    if isinstance(value, arro):
-
-        source = value
-
-        if arro_nrows(&source.arr) != rn or arro_ncols(&source.arr) != cn:
-
-            raise ValueError("slice assignment: value has shape {}, the slice has shape {}.".format(
-                (arro_nrows(&source.arr), arro_ncols(&source.arr)), (rn, cn)))
-
-        # end if
-
-        for ii in range(rn):
-
-            for jj in range(cn):
-
-                _status("setitem", arro_set_item(arro_get_item_ptr(ii, jj, &source.arr),
-                                                r0 + ii * rs, c0 + jj * cs, &a.arr))
-
-            # end for
-
-        # end for
-
-    elif isinstance(value, Real):
-
-        for ii in range(rn):
-
-            for jj in range(cn):
-
-                _status("setitem", arro_set_item_r(value, r0 + ii * rs, c0 + jj * cs, &a.arr))
-
-            # end for
-
-        # end for
-
-    else:
-
-        scalar = value
-
-        for ii in range(rn):
-
-            for jj in range(cn):
-
-                _status("setitem", arro_set_item(&scalar.num, r0 + ii * rs, c0 + jj * cs, &a.arr))
-
-            # end for
-
-        # end for
-
-    # end if
-
-    return 0
 
 # end function
 # --------------------------------------------------------------------------------------------------------

@@ -50,6 +50,8 @@ cdef __dot_product_FX(dmatfe Flhs, object rhs, object out = None):
     return res
   # end if 
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
 
 
@@ -105,6 +107,8 @@ cdef __dot_product_RX( dmat Rlhs, object rhs, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 

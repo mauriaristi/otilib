@@ -53,7 +53,7 @@ cdef (uint64_t,uint64_t) process_shape_r(object shape_in):
 
   else:
 
-    raise ValueError(" Can't create matrix with more than 2 dimensions.")
+    raise ValueError("pyoti.real arrays have at most 2 dimensions")
 
   # end if 
 
@@ -62,6 +62,49 @@ cdef (uint64_t,uint64_t) process_shape_r(object shape_in):
 
 
   
+
+#*****************************************************************************************************
+cdef (uint64_t,uint64_t,uint8_t) process_shape_k(object shape_in):
+  """
+  PURPOSE: The (nrows, ncols) of the 2-D struct and the logical shape kind of a NumPy shape: an int or a
+           1-tuple is 1-D (kind 1, stored n x 1), () is 0-D (kind 2, stored 1 x 1), a 2-tuple is 2-D.
+  """
+
+  cdef uint64_t nrows, ncols
+  cdef uint8_t  kind = 0
+
+  if isinstance(shape_in, (int, np.integer)):
+
+    nrows = shape_in
+    ncols = 1
+    kind  = 1
+
+  elif ( len(shape_in) == 0 ):
+
+    nrows = 1
+    ncols = 1
+    kind  = 2
+
+  elif ( len(shape_in) == 1 ):
+
+    nrows = shape_in[0]
+    ncols = 1
+    kind  = 1
+
+  elif ( len(shape_in) == 2 ):
+
+    nrows = shape_in[0]
+    ncols = shape_in[1]
+
+  else:
+
+    raise ValueError("pyoti.real arrays have at most 2 dimensions")
+
+  # end if
+
+  return (nrows, ncols, kind)
+#-----------------------------------------------------------------------------------------------------
+
 
 #*****************************************************************************************************
 cdef inline uint64_t binSearch_list(list a, uint64_t x):

@@ -2,12 +2,10 @@
 The 2.0.0 compatibility suite of ``pyoti.real`` (``dmat``, ``dmatfe``, ``dnumfe``; contracts 11.9, 11.8
 and list 11.14).
 
-Every test asserts the 2.0.0 behaviour (the "after" column of the contracts). Tests whose behaviour
-lands with Phase 7b carry ``@pytest.mark.xfail(strict=True, reason="2.0.0 behaviour, Phase 7b")``: the
-suite passes today, and a test that starts to pass (XPASS) fails loudly, which is the signal to remove
-its marker. Behaviour that is already 2.0.0 carries no marker; that includes what Phase 6b delivers
-(``dmat`` slices are views, ``to_numpy()`` is a writable zero-copy view). ``Row n`` in the docstrings
-refers to the numbered items of the breaking-changes list (11.14).
+Every test asserts the 2.0.0 behaviour (the "after" column of the contracts). The Phase 7b features
+have landed, so no test carries an expected-failure marker; the suite also covers what Phase 6b
+delivers (``dmat`` slices are views, ``to_numpy()`` is a writable zero-copy view). ``Row n`` in the
+docstrings refers to the numbered items of the breaking-changes list (11.14).
 
 ``dmat`` keeps a 2-D C struct: the Python object carries a logical shape of ndim 0, 1 or 2, and ndim
 above 2 raises ``ValueError``. Its indexing switches to NumPy's in 7b, in the same commit as ``matso``.
@@ -24,7 +22,6 @@ import pytest
 import pyoti.real as real
 import pyoti.sparse as sp
 
-PENDING = pytest.mark.xfail(strict=True, reason="2.0.0 behaviour, Phase 7b")
 
 
 # ********************************************************************************************************
@@ -54,13 +51,13 @@ def _make(shape, seed=0):
 
 
 KEYS_3X4 = [
-    pytest.param(1, id="int", marks=PENDING),
-    pytest.param((1, slice(None)), id="int-colon", marks=PENDING),
-    pytest.param((slice(None), 2), id="colon-int", marks=PENDING),
-    pytest.param(-1, id="negative-int", marks=PENDING),
-    pytest.param((-2, slice(None)), id="negative-int-colon", marks=PENDING),
-    pytest.param((slice(None), -1), id="colon-negative-int", marks=PENDING),
-    pytest.param((Ellipsis, 0), id="ellipsis-int", marks=PENDING),
+    pytest.param(1, id="int"),
+    pytest.param((1, slice(None)), id="int-colon"),
+    pytest.param((slice(None), 2), id="colon-int"),
+    pytest.param(-1, id="negative-int"),
+    pytest.param((-2, slice(None)), id="negative-int-colon"),
+    pytest.param((slice(None), -1), id="colon-negative-int"),
+    pytest.param((Ellipsis, 0), id="ellipsis-int"),
     pytest.param((slice(1, 2), slice(None)), id="row-slice"),
     pytest.param((slice(None), slice(2, 3)), id="column-slice"),
     pytest.param((slice(None, None, -1), slice(0, 4, 2)), id="reversed-strided"),
@@ -91,7 +88,6 @@ def test_basic_indexing_matches_numpy(key):
 
 
 # ********************************************************************************************************
-@PENDING
 def test_integer_keys_give_floats_and_negative_indices_count_from_the_end():
     """
     Row 1: one integer per axis gives a float; negative indices count from the end.
@@ -108,7 +104,6 @@ def test_integer_keys_give_floats_and_negative_indices_count_from_the_end():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_newaxis_is_a_rank_error():
     """
     Row 1 / 11.1: ``D[None]`` raises ``ValueError`` (the rank limit of 2 applies to ``dmat``).
@@ -127,7 +122,6 @@ def test_newaxis_is_a_rank_error():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_three_dimensional_shapes_are_refused():
     """
     11.1: ndim > 2 raises ``ValueError("... arrays have at most 2 dimensions")``.
@@ -144,7 +138,7 @@ def test_three_dimensional_shapes_are_refused():
 
 
 # ********************************************************************************************************
-@pytest.mark.parametrize("key", [(3, 0), (0, 4), pytest.param((-4, 0), marks=PENDING), 3, (0, 0, 0)])
+@pytest.mark.parametrize("key", [(3, 0), (0, 4), (-4, 0), 3, (0, 0, 0)])
 def test_index_errors(key):
     """
     Row 1: out-of-range integers and too many indices raise ``IndexError``.
@@ -192,7 +186,6 @@ def test_float_and_string_keys_raise(key):
 
 
 # ********************************************************************************************************
-@PENDING
 def test_len_and_iteration():
     """
     Row 1: ``len(D) == D.shape[0]`` and ``iter(D)`` yields ``D[0], D[1], ...`` (rows of shape
@@ -230,11 +223,11 @@ def test_len_and_iteration():
 
 # ********************************************************************************************************
 @pytest.mark.parametrize("call, shape", [
-    pytest.param(lambda: real.zeros(4), (4,), id="zeros-int", marks=PENDING),
-    pytest.param(lambda: real.zeros((4,)), (4,), id="zeros-1-tuple", marks=PENDING),
-    pytest.param(lambda: real.ones(4), (4,), id="ones-int", marks=PENDING),
-    pytest.param(lambda: real.array(np.arange(1.0, 5.0)), (4,), id="array-1d", marks=PENDING),
-    pytest.param(lambda: real.array(2.5), (), id="array-scalar", marks=PENDING),
+    pytest.param(lambda: real.zeros(4), (4,), id="zeros-int"),
+    pytest.param(lambda: real.zeros((4,)), (4,), id="zeros-1-tuple"),
+    pytest.param(lambda: real.ones(4), (4,), id="ones-int"),
+    pytest.param(lambda: real.array(np.arange(1.0, 5.0)), (4,), id="array-1d"),
+    pytest.param(lambda: real.array(2.5), (), id="array-scalar"),
     pytest.param(lambda: real.array(np.ones((2, 1))), (2, 1), id="array-column"),
     pytest.param(lambda: real.zeros((2, 3)), (2, 3), id="zeros-2d"),
     pytest.param(lambda: real.eye(3), (3, 3), id="eye"),
@@ -285,7 +278,6 @@ def test_nrows_ncols_keep_their_values_for_low_dimensions():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_column_into_one_dimensional_target_raises():
     """
     Row 3: assignment broadcasts as NumPy does: an ``(n, 1)`` column no longer fits an ``(n,)`` target;
@@ -316,7 +308,6 @@ def test_column_into_one_dimensional_target_raises():
 
 
 # ********************************************************************************************************
-@PENDING
 @pytest.mark.parametrize("seed", range(8))
 def test_assignment_broadcasts_like_numpy(seed):
     """
@@ -372,7 +363,6 @@ def test_assignment_broadcasts_like_numpy(seed):
 
 
 # ********************************************************************************************************
-@PENDING
 @pytest.mark.parametrize("operation", ["shift", "reverse"])
 def test_assignment_from_an_overlapping_view_is_a_snapshot(operation):
     """
@@ -405,7 +395,6 @@ def test_assignment_from_an_overlapping_view_is_a_snapshot(operation):
 
 
 # ********************************************************************************************************
-@PENDING
 def test_row_views_are_one_dimensional_and_write_through():
     """
     Row 4 (from 6b, shapes from 7b): ``D[i]`` is a 1-D view of the row; a write through it reaches the
@@ -511,7 +500,6 @@ def _isolated(code):
 
 
 # ********************************************************************************************************
-@PENDING
 @pytest.mark.parametrize("expression, shape", [
     pytest.param("real.dot(x, y)", None, id="inner"),
     pytest.param("real.dot(matrix, x)", (3,), id="matrix-vector"),
@@ -575,7 +563,6 @@ def test_the_column_idiom_still_works():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_sparse_and_dmat_agree_on_shapes():
     """
     11.9: ``matso op dmat`` agrees on shapes after the switch: a 1-D ``dmat`` and a 1-D ``matso`` of the
@@ -594,7 +581,6 @@ def test_sparse_and_dmat_agree_on_shapes():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_sparse_row_and_dmat_row_have_the_same_shape():
     """
     11.9: the row of a ``matso`` and the row of a ``dmat`` built from the same data have the same shape
@@ -629,7 +615,6 @@ def test_dmatfe_keeps_the_matrix_rule():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_dmatfe_negative_indices_work():
     """
     Row 1 / 11.8: negative indices work in Gauss arrays of every algebra, ``dmatfe`` included:
@@ -658,6 +643,320 @@ def test_dmatfe_three_index_keys_raise():
         gauss[(0, 0, 0)]
 
     # end with
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def _holder(shape):
+    """
+    Build an ``out`` holder of the given shape, sized up front for one imaginary direction at order two.
+
+    Rule S1b hands the C function a view of the holder, and a view must never need to grow.
+
+    Parameters
+    ----------
+    shape : tuple of int
+        Shape of the holder.
+
+    Returns
+    -------
+    object
+        The zero holder.
+    """
+
+    return real.zeros(shape)
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def _values(obj):
+    """
+    Collect the numbers of an array as flat NumPy arrays: the real part.
+
+    Parameters
+    ----------
+    obj : object
+        Array.
+
+    Returns
+    -------
+    list of numpy.ndarray
+        The flattened numbers.
+    """
+
+    return [np.array(obj.to_numpy(), copy=True).reshape(-1)]
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+@pytest.mark.parametrize("extra", [1])
+@pytest.mark.parametrize("name", ["sum", "sub", "mul"])
+def test_out_with_leading_unit_axes_elementwise(name, extra):
+    """
+    Rule S1b: an elementwise ``out`` whose shape is the result shape with extra leading axes of extent 1
+    is accepted and receives the result.
+
+    Parameters
+    ----------
+    name : str
+        Binary operation.
+    extra : int
+        Number of leading axes of extent 1.
+    """
+
+    left, _ = _make((3,), 1)
+    right, _ = _make((3,), 2)
+    expected = getattr(real, name)(left, right)
+    shape = (1,) * extra + (3,)
+    holder = _holder(shape)
+
+    getattr(real, name)(left, right, out=holder)
+
+    assert holder.shape == shape
+
+    for got, want in zip(_values(holder), _values(expected)):
+
+        np.testing.assert_allclose(got, want)
+
+    # end for
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+@pytest.mark.parametrize("name", [
+    pytest.param('neg'),
+    pytest.param('exp'),
+])
+def test_out_with_leading_unit_axes_unary(name):
+    """
+    Rule S1b: a unary function accepts an ``out`` with an extra leading axis of extent 1.
+
+    Parameters
+    ----------
+    name : str
+        Unary function.
+    """
+
+    value, _ = _make((3,), 3)
+    expected = getattr(real, name)(value)
+    shape = (1,) + (3,)
+    holder = _holder(shape)
+
+    getattr(real, name)(value, out=holder)
+
+    assert holder.shape == shape
+
+    for got, want in zip(_values(holder), _values(expected)):
+
+        np.testing.assert_allclose(got, want)
+
+    # end for
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+@pytest.mark.parametrize("shape", [
+    pytest.param((3, 1)),
+    pytest.param((1, 4)),
+    pytest.param((2, 3)),
+])
+def test_out_that_is_not_the_result_shape_with_leading_ones_is_rejected(shape):
+    """
+    Rule S1b: only extra leading axes of extent 1 are tolerated; any other ``out`` shape (an inner or
+    trailing extent-1 axis, a different extent) raises ``ValueError``.
+
+    Parameters
+    ----------
+    shape : tuple of int
+        Shape of the rejected holder.
+    """
+
+    left, _ = _make((3,), 1)
+    right, _ = _make((3,), 2)
+    holder = _holder(shape)
+
+    with pytest.raises(ValueError):
+
+        real.sum(left, right, out=holder)
+
+    # end with
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+# ********************************************************************************************************
+@pytest.mark.parametrize("name", ["dot"])
+def test_out_with_leading_unit_axes_matrix_products(name):
+    """
+    Rule S1b: ``dot`` accepts an ``out`` with extra leading axes of extent 1, for a matrix
+    times a vector (a matrix times a matrix needs a three-dimensional holder, which the two-dimensional
+    modules do not have).
+
+    Parameters
+    ----------
+    name : str
+        Product function.
+    """
+
+    matrix, _ = _make((2, 3), 1)
+    vector, _ = _make((3,), 3)
+
+    for operand, shape in ((vector, (2,)),):
+
+        expected = getattr(real, name)(matrix, operand)
+        holder = _holder((1,) + shape)
+
+        getattr(real, name)(matrix, operand, out=holder)
+
+        assert holder.shape == (1,) + shape
+
+        for got, want in zip(_values(holder), _values(expected)):
+
+            np.testing.assert_allclose(got, want)
+
+        # end for
+
+    # end for
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def test_assignment_with_leading_unit_axes():
+    """
+    Rule S1b (assignment): a target with extra leading axes of extent 1 takes a value without them, and
+    a value with extra leading axes of extent 1 fits a target without them (rule S1 broadcasting).
+    """
+
+    value, _ = _make((3,), 4)
+    target = _holder((1,) + (3,))
+
+    target[...] = value
+
+    for got, want in zip(_values(target), _values(value)):
+
+        np.testing.assert_allclose(got, want)
+
+    # end for
+
+    wide, _ = _make((1,) + (3,), 5)
+    narrow = _holder((3,))
+
+    narrow[...] = wide
+
+    for got, want in zip(_values(narrow), _values(wide)):
+
+        np.testing.assert_allclose(got, want)
+
+    # end for
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+@pytest.mark.parametrize("function", [
+    pytest.param('norm'),
+    pytest.param('dot_product'),
+])
+def test_reductions_reject_an_out_with_unit_axes(function):
+    """
+    Rule S1b: reductions (``norm``, ``dot_product``) do not accept an array ``out`` with extra axes of
+    extent 1, as NumPy's reductions do not (``TypeError`` or ``ValueError``).
+
+    Parameters
+    ----------
+    function : str
+        Reduction.
+    """
+
+    value, _ = _make((3,), 6)
+    holder = _holder((1,))
+
+    with pytest.raises((TypeError, ValueError)):
+
+        if function == "norm":
+
+            real.norm(value, out=holder)
+
+        else:
+
+            real.dot_product(value, value, out=holder)
+
+        # end if
+
+    # end with
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def test_numpy_scalar_times_a_dmat_stays_a_dmat():
+    """
+    ``numpy.float64(2) * D`` is a ``dmat`` (the array opts out of NumPy's ufunc dispatch).
+    """
+
+    matrix, data = _make((2, 3), 1)
+    result = np.float64(2.0) * matrix
+
+    assert isinstance(result, real.dmat)
+    assert result.shape == (2, 3)
+    np.testing.assert_allclose(result.to_numpy(), 2.0 * data)
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def test_dot_of_one_dimensional_dmats_is_a_float():
+    """
+    ``real.dot(x, y)`` of two 1-D ``dmat`` is a Python float (the inner product).
+    """
+
+    x, xdata = _make((4,), 1)
+    y, ydata = _make((4,), 2)
+    value = real.dot(x, y)
+
+    assert isinstance(value, float)
+    assert value == pytest.approx(xdata @ ydata)
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+@pytest.mark.parametrize("shape", [(2, 3), (4,)])
+def test_real_part_of_a_dmat_is_a_copy_with_the_logical_shape(shape):
+    """
+    ``D.real`` is a NumPy copy with the logical shape of ``D``: writing to it does not change ``D``.
+
+    Parameters
+    ----------
+    shape : tuple of int
+        Shape of the matrix.
+    """
+
+    matrix, data = _make(shape, 1)
+    part = matrix.real
+
+    assert part.shape == shape
+    np.testing.assert_array_equal(part, data)
+
+    part[...] = 0.0
+
+    np.testing.assert_array_equal(matrix.to_numpy(), data)
 
 # end function
 # --------------------------------------------------------------------------------------------------------

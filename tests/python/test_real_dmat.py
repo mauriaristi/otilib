@@ -1,18 +1,20 @@
 """
 Tests of ``pyoti.real.dmat`` on ``ndarr_t`` (Phase 6b; contracts 11.9, 11.8, 11.11, 1.8, 6).
 
-``dmat`` keeps the 1.x indexing shapes (an integer keeps its axis: ``D[0]`` is ``(1, ncols)``; NumPy
-indexing arrives in 7b, in the same commit as ``matso``) but its slices are **views** now: a write
-through a slice reaches the parent. ``to_numpy()`` is a writable zero-copy view, ``dmat`` operands keep
-working with sparse (``matso op dmat``) and the fem helpers, and the producers (``memoryview``,
-``np.asarray``, ``np.from_dlpack``) share the memory of the ``dmat``. ``dmatfe`` / ``dnumfe`` keep their
-behaviour.
+``dmat`` indexes as NumPy does (an integer drops its axis: ``D[0]`` is ``(ncols,)``; 2.0.0, Phase 7b),
+and its slices are **views**: a write through a slice reaches the parent. ``to_numpy()`` is a writable
+zero-copy view, ``dmat`` operands keep working with sparse (``matso op dmat``) and the fem helpers, and
+the producers (``memoryview``, ``np.asarray``, ``np.from_dlpack``) share the memory of the ``dmat``.
+``dmatfe`` / ``dnumfe`` keep their behaviour.
 
 The references of the arrays under test are always held in a variable: 1.x returned views that did not
 keep their owner alive.
 """
 
 import gc
+import os
+import subprocess
+import sys
 import threading
 
 import numpy as np
@@ -52,7 +54,7 @@ def _make(shape, seed=0):
 # ********************************************************************************************************
 def _expected(data, key):
     """
-    Apply a 1.x ``dmat`` key to a NumPy array: an integer keeps its axis.
+    Apply a ``dmat`` key to a NumPy array (NumPy's rule, 2.0.0): an integer drops its axis.
 
     Parameters
     ----------
@@ -64,24 +66,10 @@ def _expected(data, key):
     Returns
     -------
     numpy.ndarray or float
-        The selected part (a 2-D array, or a float when both indices are integers).
+        The selected part: a view of ``data``, or a float when every index is an integer.
     """
 
-    if not isinstance(key, tuple):
-
-        key = (key, slice(None))
-
-    # end if
-
-    if all(isinstance(item, int) for item in key):
-
-        return data[key]
-
-    # end if
-
-    items = tuple(slice(item, item + 1) if isinstance(item, int) else item for item in key)
-
-    return data[items]
+    return data[key]
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -101,10 +89,10 @@ KEYS = [
 
 # ********************************************************************************************************
 @pytest.mark.parametrize("key", KEYS)
-def test_slices_keep_the_one_x_shapes_and_values(key):
+def test_slices_have_numpy_shapes_and_values(key):
     """
-    The indexing shapes stay those of 1.x: an integer keeps its axis (``D[0]`` is ``(1, ncols)``,
-    ``D[:, 1]`` is ``(nrows, 1)``), and the values are NumPy's.
+    The indexing shapes and values are NumPy's: an integer drops its axis (``D[0]`` is ``(ncols,)``,
+    ``D[:, 1]`` is ``(nrows,)``).
 
     Parameters
     ----------
@@ -159,9 +147,10 @@ def test_a_write_through_a_slice_reaches_the_parent(key):
 
     np.testing.assert_array_equal(matrix.to_numpy(), data)
 
-    view[0, 0] = -3.0
+    first = (0,) * len(shape)
+    view[first] = -3.0
     selected = _expected(data, key)
-    selected[0, 0] = -3.0
+    selected[first] = -3.0
 
     np.testing.assert_array_equal(matrix.to_numpy(), data)
     assert view.shape == shape
@@ -247,6 +236,108 @@ def test_random_slices_and_writes_follow_numpy(seed):
     data[key] = -1.25
 
     np.testing.assert_array_equal(matrix.to_numpy(), data)
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def _isolated(code):
+    """
+    Run a snippet in a fresh interpreter with the same import path.
+
+    Parameters
+    ----------
+    code : str
+        Python source; it must exit with status 0 when the behaviour is the expected one.
+
+    Returns
+    -------
+    subprocess.CompletedProcess
+        The finished process.
+    """
+
+    env = dict(os.environ, PYTHONPATH=os.pathsep.join(path for path in sys.path if path))
+
+    return subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, env=env,
+                          timeout=300, check=False)
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+@pytest.mark.parametrize("key", [
+    "(slice(1, 3), slice(None))",
+    "(slice(None), slice(1, 3))",
+    "(slice(None, None, 2), slice(1, 4))",
+    "(slice(1, 4), slice(1, 4))",
+])
+@pytest.mark.parametrize("reader", ["to_numpy", "arithmetic", "element", "copy", "nested"])
+def test_a_slice_read_after_the_parent_is_dropped(key, reader):
+    """
+    Regression (W4, ``dmat._view`` kept a temporary view of its parent): a slice, a slice of a slice,
+    and the results computed from them read valid memory after every reference to the parent is gone
+    and the heap has been churned.
+
+    The check runs in a fresh interpreter, because a dangling view can crash the process.
+
+    Parameters
+    ----------
+    key : str
+        Source of the key of the slice.
+    reader : str
+        How the slice is read after the parent is dropped.
+    """
+
+    code = f"""
+import gc
+import numpy as np
+import pyoti.real as real
+
+data = np.random.default_rng(11).standard_normal((6, 6))
+matrix = real.array(data)
+key = {key}
+view = matrix[key]
+expected = data[key]
+
+if {reader!r} == "nested":
+
+    view = view[0:2, 0:2]
+    expected = expected[0:2, 0:2]
+
+del matrix
+gc.collect()
+noise = [np.full(50000, 123.0) for _ in range(8)]
+
+if {reader!r} == "to_numpy":
+
+    got = view.to_numpy()
+
+elif {reader!r} == "arithmetic":
+
+    got = (view + view).to_numpy()
+    expected = expected + expected
+
+elif {reader!r} == "element":
+
+    got = np.array([view[0, 0]])
+    expected = expected[:1, 0]
+
+elif {reader!r} == "copy":
+
+    got = view.copy().to_numpy()
+
+else:
+
+    got = view.to_numpy()
+
+np.testing.assert_allclose(got.reshape(-1), np.asarray(expected).reshape(-1))
+"""
+
+    result = _isolated(code)
+
+    assert result.returncode == 0, result.stderr[-2000:]
 
 # end function
 # --------------------------------------------------------------------------------------------------------

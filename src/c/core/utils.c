@@ -498,17 +498,36 @@ void error_exit(int64_t error_id){
 
 
 // ****************************************************************************************************
+// Number of elements of the range start, start + step, ... that stops before stop (Python's
+// len(range(start, stop, step))); 0 for an empty range (start == stop, or stop on the wrong side of
+// start for the sign of step).
+//
+// W4 fix: the old formula alone, (stop - start - 1) / step + 1, gave 1 for start == stop with
+// |step| >= 2 (C truncates -1 / step to 0) and 0 or a negative size for a reversed range.
+// Checker W4 fix: valid for every int64_t start, stop and nonzero step. The distance and the step's
+// magnitude are taken in uint64_t, so neither -step for step == INT64_MIN nor stop - start for a range
+// wider than INT64_MAX overflows. A count above INT64_MAX (only for a range wider than INT64_MAX with
+// |step| <= 2, where Python's len() raises OverflowError) saturates to INT64_MAX; callers pass indices
+// normalized to an axis, whose counts are far below it.
 inline int64_t slice_size(int64_t start, int64_t stop, int64_t step){
-    
-    uint64_t size;
 
-    if (step > 0){      
+    uint64_t dist, mag, size;
 
-        size =  ( ( stop - start - 1 ) / step + 1);
+    if (step > 0){
+
+        if (stop <= start){
+            return 0;
+        }
+        dist = (uint64_t)stop - (uint64_t)start;
+        mag  = (uint64_t)step;
 
     } else if (step < 0){
 
-        size =  ( ( start - stop - 1 ) / ( - step ) + 1);
+        if (start <= stop){
+            return 0;
+        }
+        dist = (uint64_t)start - (uint64_t)stop;
+        mag  = (uint64_t)0 - (uint64_t)step;
 
     } else {
 
@@ -517,7 +536,9 @@ inline int64_t slice_size(int64_t start, int64_t stop, int64_t step){
 
     }
 
-    return size;
+    size = (dist - 1) / mag + 1;
+
+    return size > (uint64_t)INT64_MAX ? INT64_MAX : (int64_t)size;
 }
 // ----------------------------------------------------------------------------------------------------
 

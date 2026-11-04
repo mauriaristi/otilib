@@ -1,16 +1,31 @@
 
 // ****************************************************************************************************
+// Number of elements of the range start, start + step, ... before stop (Python's
+// len(range(start, stop, step))); 0 for an empty range. Same rule and arithmetic as slice_size() in
+// src/c/core/utils.c (kept as a copy: this legacy unit does not include oti/core/utils.h).
+// W4 fix round 2 (critic F11): the old (stop - start - 1) / step + 1 gave 1 for start == stop with
+// |step| >= 2 and 0 or a negative size for a reversed range, and -step overflowed for INT64_MIN. The
+// distance and the step's magnitude are taken in uint64_t (no overflow for any int64_t input); a count
+// above INT64_MAX (a range wider than INT64_MAX with |step| <= 2) saturates to INT64_MAX.
 inline int64_t get_slice_size(int64_t start, int64_t stop, int64_t step){
-    
-    uint64_t size;
 
-    if (step > 0){      
+    uint64_t dist, mag, size;
 
-        size =  ( ( stop - start - 1 ) / step + 1);
+    if (step > 0){
+
+        if (stop <= start){
+            return 0;
+        }
+        dist = (uint64_t)stop - (uint64_t)start;
+        mag  = (uint64_t)step;
 
     } else if (step < 0){
 
-        size =  ( ( start - stop - 1 ) / ( - step ) + 1);
+        if (start <= stop){
+            return 0;
+        }
+        dist = (uint64_t)start - (uint64_t)stop;
+        mag  = (uint64_t)0 - (uint64_t)step;
 
     } else {
 
@@ -19,7 +34,9 @@ inline int64_t get_slice_size(int64_t start, int64_t stop, int64_t step){
 
     }
 
-    return size;
+    size = (dist - 1) / mag + 1;
+
+    return size > (uint64_t)INT64_MAX ? INT64_MAX : (int64_t)size;
 }
 // ----------------------------------------------------------------------------------------------------
 

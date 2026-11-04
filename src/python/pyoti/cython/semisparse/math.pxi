@@ -210,7 +210,7 @@ cdef object _unary(object value, str name):
 
         # end if
 
-        return oarrss.wrap(result)
+        return _nd(oarrss.wrap(result), array._ndim)
 
     elif isinstance(value, arrss):
 
@@ -290,7 +290,7 @@ cdef object _unary(object value, str name):
 
         # end if
 
-        return arrss.wrap(aos_result)
+        return _nd(arrss.wrap(aos_result), aos._ndim)
 
     # end if
 
@@ -749,7 +749,7 @@ def pow(val, e, out=None):
     Returns
     -------
     ssotinum or oarrss or arrss
-        Power, or None when ``out`` is given.
+        Power; ``out`` itself when it is given.
     """
 
     return _finish(val ** e, out)

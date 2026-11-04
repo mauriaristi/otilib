@@ -207,6 +207,50 @@ int oti_meta_create(int32_t kind, int32_t trc_order, int32_t nbases, const bases
 
 
 // *******************************************************************************************************
+int oti_meta_init(oti_meta_t* m, int32_t kind, int32_t trc_order, int32_t nbases, const bases_t* bases,
+                  int32_t cap_bases){
+
+    int st;
+
+    if (m == NULL){
+        return OTI_ERR_ARGUMENT;
+    }
+
+    st = om_check_layout(kind, trc_order, nbases, bases);
+    if (st != OTI_OK){
+        return st;
+    }
+    if (kind == OTI_META_BASES && (cap_bases < nbases || cap_bases > OM_MAX_BASES)){
+        return OTI_ERR_ARGUMENT;
+    }
+
+    m->refs      = 1;
+    m->kind      = kind;
+    m->trc_order = trc_order;
+    m->act_order = 0;
+    m->nbases    = nbases;
+    m->cap_bases = 0;
+    m->reserved  = OTI_META_EMBEDDED;
+    m->bases     = NULL;
+    m->bases_i64 = NULL;
+
+    if (kind == OTI_META_BASES){
+
+        if (om_alloc_labels(cap_bases, &m->bases, &m->bases_i64) != OTI_OK){
+            return OTI_ERR_MEMORY;
+        }
+        m->cap_bases = cap_bases;
+        om_store_labels(m, bases, nbases);
+
+    }
+
+    return OTI_OK;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 oti_meta_t* oti_meta_retain(oti_meta_t* m){
 
     OM_ASSERT(m != NULL && __atomic_load_n(&m->refs, __ATOMIC_RELAXED) > 0);
@@ -231,9 +275,15 @@ void oti_meta_release(oti_meta_t** m){
 
     OM_ASSERT(__atomic_load_n(&p->refs, __ATOMIC_RELAXED) > 0);
     if (__atomic_sub_fetch(&p->refs, 1, __ATOMIC_ACQ_REL) == 0){
+
         free(p->bases);
         free(p->bases_i64);
-        free(p);
+
+        // An embedded meta (oti_meta_init()) lives in its owner's storage.
+        if (!(p->reserved & OTI_META_EMBEDDED)){
+            free(p);
+        }
+
     }
 
 }

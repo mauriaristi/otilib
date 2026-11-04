@@ -138,7 +138,7 @@ def _assert_matches_sparse(module, perturb_geometry):
     """
     Compare every displacement derivative of the TWC model in an algebra with the sparse oracle.
 
-    Skips when the algebra lacks the TWC APIs or ``pyoti.fem`` rejects it.
+    Fails when the algebra lacks the TWC APIs or ``pyoti.fem`` rejects it (contracts 11.13: no skips).
 
     Parameters
     ----------
@@ -157,7 +157,7 @@ def _assert_matches_sparse(module, perturb_geometry):
 
         if missing:
 
-            pytest.skip(f"{name} lacks TWC APIs: {', '.join(missing)}")
+            pytest.fail(f"{name} lacks TWC APIs: {', '.join(missing)}")
 
         # end if
 
@@ -167,7 +167,7 @@ def _assert_matches_sparse(module, perturb_geometry):
 
         except Exception as error:
 
-            pytest.skip(f"pyoti.fem.set_global_algebra rejects {name}: {error}")
+            pytest.fail(f"pyoti.fem.set_global_algebra rejects {name}: {error}")
 
         # end try
 

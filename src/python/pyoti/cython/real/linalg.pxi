@@ -39,6 +39,8 @@ cpdef dot_product(object lhs, object rhs, object out = None):
     return res
   # end if 
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
 
 
@@ -92,6 +94,161 @@ cpdef dot_product(object lhs, object rhs, object out = None):
 
 
 
+
+
+#*****************************************************************************************************
+cdef object _dmat_dot(dmat A, dmat B, object out):
+  """
+  PURPOSE:  dot of two dmat with NumPy's shape rules for the logical shapes (11.3, rule I3):
+              - 1-D . 1-D: the inner product, a float;
+              - 2-D . 1-D: (m,); 1-D . 2-D: (n,); 2-D . 2-D: (m, k);
+              - a 0-D operand multiplies (numpy.dot with a scalar).
+            The 2-D C struct stores a 1-D (n,) as n x 1, so a 1-D left operand is read as the 1 x n
+            row over the same memory, and a (n,) result of a row product is stored n x 1.
+  """
+  #***************************************************************************************************
+
+  cdef darr_t a, b, cres, o
+  cdef dmat Rres
+  cdef uint64_t t
+  cdef uint8_t kind = 0
+  cdef coeff_t x
+  cdef int swap_result = 0
+  cdef tuple rshape
+
+  if A._lk == 2:
+
+    if out is not None:
+
+      raise ValueError("out= is not supported for the product with a 0-d matrix")
+
+    # end if
+
+    return (<double*>A.nd.data)[0] * B
+
+  elif B._lk == 2:
+
+    if out is not None:
+
+      raise ValueError("out= is not supported for the product with a 0-d matrix")
+
+    # end if
+
+    return A * (<double*>B.nd.data)[0]
+
+  # end if
+
+  A._sync()
+  B._sync()
+
+  a = A.arr
+  b = B.arr
+
+  if A._lk == 1:
+
+    if B._lk == 1:
+
+      # inner product
+      if a.nrows != b.nrows:
+
+        raise ValueError("shapes {} and {} not aligned: {} (dim 0) != {} (dim 0)".format(
+                         A.shape, B.shape, a.nrows, b.nrows))
+
+      # end if
+
+      if out is not None:
+
+        raise ValueError("out= is not supported for the inner product of two 1-d matrices")
+
+      # end if
+
+      t = a.nrows
+      a.nrows = 1
+      a.ncols = t
+      cres = darr_matmul(&a, &b)
+      x = cres.p_data[0]
+      darr_free(&cres)
+
+      return x
+
+    # end if
+
+    # (m,) . (m, n) -> (n,): the row x B, stored n x 1
+    if a.nrows != b.nrows:
+
+      raise ValueError("shapes {} and {} not aligned: {} (dim 0) != {} (dim 0)".format(
+                       A.shape, B.shape, a.nrows, b.nrows))
+
+    # end if
+
+    t = a.nrows
+    a.nrows = 1
+    a.ncols = t
+    kind = 1
+    swap_result = 1
+
+  elif B._lk == 1:
+
+    # (m, n) . (n,) -> (m,)
+    if a.ncols != b.nrows:
+
+      raise ValueError("shapes {} and {} not aligned: {} (dim 1) != {} (dim 0)".format(
+                       A.shape, B.shape, a.ncols, b.nrows))
+
+    # end if
+
+    kind = 1
+
+  elif a.ncols != b.nrows:
+
+    raise ValueError("shapes {} and {} not aligned: {} (dim 1) != {} (dim 0)".format(
+                     A.shape, B.shape, a.ncols, b.nrows))
+
+  # end if
+
+  if out is not None:
+
+    if kind == 1:
+
+      rshape = (b.ncols if swap_result else a.nrows,)
+
+    else:
+
+      rshape = (a.nrows, b.ncols)
+
+    # end if
+
+    Rres = _dmat_out_shape(out, rshape)
+    Rres._check_out()
+    o = Rres.arr
+
+    if swap_result:
+
+      t = o.nrows
+      o.nrows = o.ncols
+      o.ncols = t
+
+    # end if
+
+    darr_matmul_to(&a, &b, &o)
+
+    return out
+
+  # end if
+
+  cres = darr_matmul(&a, &b)
+
+  if swap_result:
+
+    t = cres.nrows
+    cres.nrows = cres.ncols
+    cres.ncols = t
+
+  # end if
+
+  return _dmat_k(dmat.create(&cres), kind)
+
+#-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
 cpdef dot(object lhs, object rhs, object out = None):
@@ -163,18 +320,12 @@ cpdef dot(object lhs, object rhs, object out = None):
         res = dmatfe.create(&cFres)
       # end if
 
-    elif tlhs is dmat:    # RR
+    elif trhs is dmat:    # RR
       Rrhs = rhs
-      Rrhs._sync()
+      res = _dmat_dot(Rlhs, Rrhs, out)
       if res_flag:
-        Rres = out
-        Rres._check_out()
-        darr_matmul_to( &Rlhs.arr, &Rrhs.arr , &Rres.arr)
-      else:
-        cRres = darr_matmul( &Rlhs.arr, &Rrhs.arr)
-        res = dmat.create(&cRres)   
-      # end if 
-    
+        res = None
+      # end if
     else:
       raise TypeError("Unsupported types at dot operation.")      
     # end if 
@@ -187,6 +338,8 @@ cpdef dot(object lhs, object rhs, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -231,11 +384,19 @@ cpdef transpose(object arr, object out = None):
     # end if 
 
   elif tarr is dmat:
-    
     R = arr
     R._sync()
-    if res_flag:
-      Rres = out
+    if R._lk != 0:
+      # transpose() of a 1-D or 0-D matrix is the matrix itself (as NumPy): a copy here, or out.
+      if res_flag:
+        Rres = _dmat_out(out, R)
+        Rres._check_out()
+        darr_copy_to( &R.arr, &Rres.arr)
+      else:
+        res = R.copy()
+      # end if
+    elif res_flag:
+      Rres = _dmat_out_shape(out, (R.nd.shape[1], R.nd.shape[0]))
       Rres._check_out()
       darr_transpose_to( &R.arr, &Rres.arr)
     else:
@@ -251,8 +412,38 @@ cpdef transpose(object arr, object out = None):
     return res
   # end if 
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
 
+
+
+#*****************************************************************************************************
+cdef int _check_square(uint8_t lk, uint64_t nrows, uint64_t ncols) except -1:
+  """
+  PURPOSE:  inv / det / solve need a square matrix. The C routines answer a non-square matrix with exit():
+            the shape is checked here and NumPy's text and type (numpy.linalg.LinAlgError, a ValueError
+            subclass) are raised: one table for the four algebras (build-orch/w4-notes/py-ss.md).
+  """
+  #***************************************************************************************************
+
+  if lk == 2:
+
+    raise np.linalg.LinAlgError("0-dimensional array given. Array must be at least two-dimensional")
+
+  elif lk == 1:
+
+    raise np.linalg.LinAlgError("1-dimensional array given. Array must be at least two-dimensional")
+
+  elif nrows != ncols:
+
+    raise np.linalg.LinAlgError("Last 2 dimensions of the array must be square")
+
+  # end if
+
+  return 0
+
+#-----------------------------------------------------------------------------------------------------
 
 
 #*****************************************************************************************************
@@ -286,6 +477,7 @@ cpdef det(object arr, object out = None):
   if   tarr is dmatfe:
     
     F = arr
+    _check_square(0, F.arr.nrows, F.arr.ncols)
     if res_flag:
       fres = out
       fedarr_det_to( &F.arr, &fres.num)
@@ -297,14 +489,14 @@ cpdef det(object arr, object out = None):
   elif tarr is dmat:
     
     R = arr
+    _check_square(R._lk, R.nd.shape[0], R.nd.shape[1])
     R._sync()
     crres = darr_det( &R.arr)
 
     if res_flag:
-      out = crres
-    else:
-      res = crres
-    # end if 
+      raise TypeError("det: the determinant of a dmat is a float; out= is not supported.")
+    # end if
+    res = crres
 
   else:
     raise TypeError("Unsupported types at det operation.")    
@@ -314,6 +506,8 @@ cpdef det(object arr, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -368,10 +562,9 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
     R._sync()
     crres = darr_pnorm( &R.arr, p)
     if res_flag:
-      out = crres
-    else:
-      res = crres
-    # end if 
+      raise TypeError("norm: the norm of a dmat is a float; out= is not supported.")
+    # end if
+    res = crres
 
   else:
     raise TypeError("Unsupported types at det operation.")
@@ -380,6 +573,8 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -420,6 +615,7 @@ cpdef inv(object arr, object out = None):
 
   if   tarr is dmatfe:    
     F = arr
+    _check_square(0, F.arr.nrows, F.arr.ncols)
     if res_flag:
       Fres = out
       fedarr_invert_to( &F.arr, &Fres.arr)
@@ -429,9 +625,10 @@ cpdef inv(object arr, object out = None):
     # end if 
   elif tarr is dmat:    
     R = arr
+    _check_square(R._lk, R.nd.shape[0], R.nd.shape[1])
     R._sync()
     if res_flag:
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_invert_to( &R.arr, &Rres.arr)
     else:
@@ -445,6 +642,8 @@ cpdef inv(object arr, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -502,6 +701,8 @@ cpdef solve(object K_in, dmat b_in, dmat out = None, solver = 'SuperLU', solver_
     return res
   # end if 
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
 
 
@@ -527,6 +728,16 @@ cdef solve_dense(dmat K_in, dmat b_in, dmat out = None, solver = 'SuperLU', solv
     res_flag = 0
   # end if      
   
+  _check_square(K_in._lk, K_in.nd.shape[0], K_in.nd.shape[1])
+
+  if b_in.nd.shape[0] != K_in.nd.shape[0]:
+
+    # NumPy raises a plain ValueError (not LinAlgError) for a right-hand side of the wrong size.
+    raise ValueError("solve: the right-hand side has {} rows but the matrix has {}".format(
+                     b_in.nd.shape[0], K_in.nd.shape[0]))
+
+  # end if
+
   if res_flag:
     Rres = out
     Rres._check_out()
@@ -542,17 +753,12 @@ cdef solve_dense(dmat K_in, dmat b_in, dmat out = None, solver = 'SuperLU', solv
   rhs = lu_solve(lu, rhs, overwrite_b=True)
 
   # Solve the real coefficient
-  for i in range(Rres.nrows):      
-    for j in range(Rres.ncols):
-
-      darr_set_item_ij_r( rhs[i,j], i, j, &Rres.arr)
-
-    # end for
-  # end for
-  
+  Rres.to_numpy()[...] = rhs
   if res_flag == 0:
     return Rres
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -651,15 +857,12 @@ cdef solve_sparse(object K_in, dmat b_in, dmat out = None, solver = 'SuperLU', s
   rhs = solve(rhs)
 
   # Solve the real coefficient
-  for i in range(Rres.nrows):
-    for j in range(Rres.ncols):
-      darr_set_item_ij_r( rhs[i,j], i, j, &Rres.arr)
-    # end for
-  # end for  
-
+  Rres.to_numpy()[...] = rhs
   if res_flag == 0:
     return Rres
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -687,11 +890,11 @@ def solve_sparse_tests(object K_in, dmat b_in, np.ndarray out = None):
   if res_flag:
     Rres = out
   else:
-    Rres = np.zeros(b_in.shape)
+    Rres = np.zeros((b_in.nd.shape[0], b_in.nd.shape[1]))
   # end if
 
   lu = splu(K_in.tocsc())
-  rhs = b_in.real
+  rhs = b_in.real.reshape(b_in.nd.shape[0], b_in.nd.shape[1])
   # Solve the real system of equations, using LU solver:
   Rres = lu.solve(rhs)
 
@@ -705,5 +908,7 @@ def solve_sparse_tests(object K_in, dmat b_in, np.ndarray out = None):
   if res_flag == 0:
     return rhs
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------

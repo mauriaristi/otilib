@@ -306,7 +306,7 @@ def test_get_order_im(order, sets):
         _same_array(dn.get_order_im(k, aos), ref, order, f"aos order {k}")
 
         out = dn.zeros((2, 3))
-        assert dn.get_order_im(k, soa, out=out) is None
+        assert dn.get_order_im(k, soa, out=out) is out
         _same_array(out, ref, order, f"soa out order {k}")
 
     # end for
@@ -365,7 +365,7 @@ def test_extract_im_and_deriv(order, sets):
             _same_array(getattr(aos, name)(d), ref_m, order, f"{name} aos method {d}")
 
             out = dn.otinum(0.0)
-            assert sfun(d, sx, out=out) is None
+            assert sfun(d, sx, out=out) is out
             _same_scalar(out, ref_s, order, f"{name} scalar out {d}")
 
         # end for
@@ -704,7 +704,7 @@ def test_trunc_dot(order, sets):
     # end for
 
     out = sb.copy() if hasattr(sb, "copy") else dn.omat.from_sparse(b)
-    assert dn.trunc_dot(0, sb, 1, out, out=out) is None
+    assert dn.trunc_dot(0, sb, 1, out, out=out) is out
     _same_array(out, _trunc_dot_reference(0, b, 1, b), order, "out aliasing the right operand")
 
     with pytest.raises(ValueError):
@@ -748,7 +748,7 @@ def test_trunc_sub(order, sets):
         _same_array(dn.trunc_sub(k, aa, ab), ref, order, f"aos order {k}")
 
         out = dn.omat.from_sparse(a)
-        assert dn.trunc_sub(k, out, sb, out=out) is None
+        assert dn.trunc_sub(k, out, sb, out=out) is out
         _same_array(out, ref, order, f"soa out aliasing order {k}")
 
         _same_scalar(dn.trunc_sub(k, dn.otinum(x), dn.otinum(y)),
@@ -809,7 +809,7 @@ def test_dot_product(order, sets):
 
     out = dn.otinum(0.0)
     assert dn.dot_product(dn.omat.from_sparse(col), dn.omat.from_sparse(row),
-                            out=out) is None
+                            out=out) is out
     _same_scalar(out, sparse.dot_product(col, row), order, "out")
 
     with pytest.raises(ValueError):
@@ -1049,7 +1049,7 @@ def test_inv_block(order, sets):
     _same_array(dn.inv_block(aos), ref, order, "aos")
 
     out = dn.zeros((3, 3))
-    assert dn.inv_block(soa, out=out) is None
+    assert dn.inv_block(soa, out=out) is out
     _same_array(out, ref, order, "soa out")
 
     with pytest.raises(ValueError):
@@ -1389,7 +1389,7 @@ def test_inv_block_singular_and_out_kinds():
     m[0, 0] = m[0, 0] + 4.0
     m[1, 1] = m[1, 1] + 4.0
     out = dn.zeros((2, 2))
-    assert dn.inv_block(dn.arro.from_sparse(m), out=out) is None
+    assert dn.inv_block(dn.arro.from_sparse(m), out=out) is out
     assert isinstance(out, dn.omat)
     _same_array(out, sparse.inv_block(m), 2, "aos result into a soa holder")
 
@@ -1442,17 +1442,17 @@ def test_out_holders():
     # end with
 
     out = dn.zeros((2, 3))
-    assert dn.get_order_im(1, aos, out=out) is None
+    assert dn.get_order_im(1, aos, out=out) is out
     assert isinstance(out, dn.omat)
     _same_array(out, ref, 2, "aos result into a soa holder")
 
     out = dn.arro.zeros((2, 3))
-    assert dn.get_order_im(1, soa, out=out) is None
+    assert dn.get_order_im(1, soa, out=out) is out
     assert isinstance(out, dn.arro)
     _same_array(out, ref, 2, "soa result into an aos holder")
 
     out = dn.arro.zeros((2, 2))
-    assert dn.trunc_dot(1, soa, 0, aos.T, out=out) is None
+    assert dn.trunc_dot(1, soa, 0, aos.T, out=out) is out
     _same_array(out, _trunc_dot_reference(1, m, 0, m.T), 2, "trunc_dot into an aos holder")
 
 # end function

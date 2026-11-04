@@ -19,6 +19,15 @@ cpdef sum(object lhs, object rhs, object out = None):
 
   tlhs = type(lhs)
 
+  if out is None and _shapes_differ(lhs, rhs):
+
+    # A single-element array acts as a scalar, as in the operators (anything else is a ValueError).
+    _check_elementwise("sum", lhs, rhs, None, True)
+
+    return _matso_mixed(_op.add, lhs, rhs)
+
+  # end if
+
   _check_elementwise("sum", lhs, rhs, out)
 
   if out is None:
@@ -44,6 +53,8 @@ cpdef sum(object lhs, object rhs, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
@@ -58,6 +69,15 @@ cpdef sub(object lhs, object rhs, object out = None):
   cdef object res = None
 
   tlhs = type(lhs)
+
+  if out is None and _shapes_differ(lhs, rhs):
+
+    # A single-element array acts as a scalar, as in the operators (anything else is a ValueError).
+    _check_elementwise("sub", lhs, rhs, None, True)
+
+    return _matso_mixed(_op.sub, lhs, rhs)
+
+  # end if
 
   _check_elementwise("sub", lhs, rhs, out)
 
@@ -84,6 +104,8 @@ cpdef sub(object lhs, object rhs, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
@@ -98,6 +120,15 @@ cpdef mul(object lhs, object rhs, object out = None):
   cdef object res = None
 
   tlhs = type(lhs)
+
+  if out is None and _shapes_differ(lhs, rhs):
+
+    # A single-element array acts as a scalar, as in the operators (anything else is a ValueError).
+    _check_elementwise("mul", lhs, rhs, None, True)
+
+    return _matso_mixed(_op.mul, lhs, rhs)
+
+  # end if
 
   _check_elementwise("mul", lhs, rhs, out)
 
@@ -124,6 +155,8 @@ cpdef mul(object lhs, object rhs, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
@@ -138,6 +171,15 @@ cpdef div(object lhs, object rhs, object out = None):
   cdef object res = None
 
   tlhs = type(lhs)
+
+  if out is None and _shapes_differ(lhs, rhs):
+
+    # A single-element array acts as a scalar, as in the operators (anything else is a ValueError).
+    _check_elementwise("div", lhs, rhs, None, True)
+
+    return _matso_mixed(_op.truediv, lhs, rhs)
+
+  # end if
 
   _check_elementwise("div", lhs, rhs, out)
 
@@ -164,6 +206,8 @@ cpdef div(object lhs, object rhs, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 #-----------------------------------------------------------------------------------------------------
 
 
@@ -212,4 +256,6 @@ cpdef trunc_sub(ord_t order, matso Olhs, matso Orhs, matso out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 #-----------------------------------------------------------------------------------------------------

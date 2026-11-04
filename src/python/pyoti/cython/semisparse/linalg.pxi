@@ -91,7 +91,7 @@ def lu_solve(_LU lu_and_piv, oarrss b, out=None):
     Returns
     -------
     oarrss
-        Solution, or None when ``out`` is given.
+        Solution; ``out`` itself when it is given.
     """
 
     cdef oarrss_t result = oarrss_init()
@@ -112,7 +112,7 @@ def lu_solve(_LU lu_and_piv, oarrss b, out=None):
 
     # end if
 
-    return _finish(oarrss.wrap(result), out)
+    return _finish(_same_nd(oarrss.wrap(result), b), out)
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -142,7 +142,7 @@ def solve(K_in, b_in, out=None, solver='SuperLU', solver_args=None):
     Returns
     -------
     oarrss or arrss
-        Solution, or None when ``out`` is given.
+        Solution; ``out`` itself when it is given.
     """
 
     cdef oarrss_t result = oarrss_init()
@@ -185,7 +185,7 @@ def solve(K_in, b_in, out=None, solver='SuperLU', solver_args=None):
 
         # end if
 
-        return arrss.wrap(aos_result)
+        return _same_nd(arrss.wrap(aos_result), b_in)
 
     # end if
 
@@ -213,7 +213,7 @@ def solve(K_in, b_in, out=None, solver='SuperLU', solver_args=None):
 
     # end if
 
-    return oarrss.wrap(result)
+    return _same_nd(oarrss.wrap(result), b_in)
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -234,7 +234,7 @@ def inv(arr, out=None):
     Returns
     -------
     oarrss or arrss
-        Inverse matrix, or None when ``out`` is given.
+        Inverse matrix; ``out`` itself when it is given.
     """
 
     if isinstance(arr, _ssfe):
@@ -253,11 +253,7 @@ def inv(arr, out=None):
 
         aos_matrix = arr
 
-        if aos_matrix.arr.nrows != aos_matrix.arr.ncols:
-
-            raise ValueError("inv: matrix must be square")
-
-        # end if
+        _check_square(aos_matrix)
 
         status = arrss_inv_to(&aos_matrix.arr, &aos_result, _dhl)
 
@@ -280,11 +276,7 @@ def inv(arr, out=None):
 
     soa_matrix = arr
 
-    if soa_matrix.arr.nrows != soa_matrix.arr.ncols:
-
-        raise ValueError("inv: matrix must be square")
-
-    # end if
+    _check_square(soa_matrix)
 
     status = oarrss_inv_to(&soa_matrix.arr, &result, _dhl)
 
@@ -316,7 +308,7 @@ def det(arr, out=None):
     Returns
     -------
     ssotinum
-        Determinant, or None when ``out`` is given.
+        Determinant; ``out`` itself when it is given.
     """
 
     if isinstance(arr, _ssfe):
@@ -334,11 +326,7 @@ def det(arr, out=None):
 
         aos_matrix = arr
 
-        if aos_matrix.arr.nrows != aos_matrix.arr.ncols:
-
-            raise ValueError("det: matrix must be square")
-
-        # end if
+        _check_square(aos_matrix)
 
         status = arrss_det_to(&aos_matrix.arr, &result, _dhl)
 
@@ -346,11 +334,7 @@ def det(arr, out=None):
 
         soa_matrix = arr
 
-        if soa_matrix.arr.nrows != soa_matrix.arr.ncols:
-
-            raise ValueError("det: matrix must be square")
-
-        # end if
+        _check_square(soa_matrix)
 
         status = oarrss_det_to(&soa_matrix.arr, &result, _dhl)
 

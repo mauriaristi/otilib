@@ -191,7 +191,7 @@ static coeff_t oarr_val(const oarr_t* a, ord_t p, ndir_t i, uint64_t e){
 static int oarr_valid(const oarr_t* a){
 
     uint64_t start, end, e;
-    int ok = oarr_act_order(a) <= oarr_trc_order(a) && a->nbases >= oarr_nact(a)
+    int ok = oarr_act_order(a) <= oarr_trc_order(a) && a->cap >= oarr_nact(a)
              && oarr_size(a) == oarr_nrows(a) * oarr_ncols(a);
 
     if (oarr_nact(a) == 0){

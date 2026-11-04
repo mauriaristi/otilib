@@ -4,6 +4,8 @@
 #-----------------------------------------------------------------------------------------------------
 
 import numpy as np                  # General numerical library
+import warnings
+import operator as _op
 cimport numpy as np                 # C-level functions of numpy
 from pyoti.c_otilib cimport *       # OTI lib in C.
 cimport cython                      #
@@ -29,6 +31,14 @@ cimport pyoti.real as r
 
 from pyoti.real import  dmat
 from pyoti.real cimport dmat
+from pyoti.real cimport key2d, assign_plan, gauss_key, reshape_shape
+from pyoti.real cimport _dmat_out, _dmat_out_shape
+
+
+# The logical shape kind of a dmat result: the result takes the kind of the operand it follows.
+cdef inline object _dmat_like(dmat d, dmat like):
+  d._lk = like._lk
+  return d
 
 #-----------------------------------------------------------------------------------------------------
 #---------------------------------   EXTERNAL LIBRARIES IMPORTS     ----------------------------------

@@ -14,6 +14,8 @@ cdef class ssotinum:
 
 cdef class oarrss:
     cdef oarrss_t arr
+    # Logical ndim (0, 1 or 2; 7b): a 1-D (n,) array is stored n x 1, a 0-D () array 1 x 1.
+    cdef int _ndim
     cdef object __weakref__
     @staticmethod
     cdef oarrss wrap(oarrss_t value)
@@ -21,6 +23,8 @@ cdef class oarrss:
 
 cdef class arrss:
     cdef arrss_t arr
+    # Logical ndim (0, 1 or 2), as for oarrss.
+    cdef int _ndim
     @staticmethod
     cdef arrss wrap(arrss_t value)
 
@@ -32,6 +36,7 @@ cdef class _LU:
 # Gauss-point types (Phase 4): a common base holding one feoarrss_t.
 cdef class _ssfe:
     cdef feoarrss_t fe
+    cdef object __weakref__
 
 
 cdef class ssotife(_ssfe):

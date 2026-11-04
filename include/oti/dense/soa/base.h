@@ -14,16 +14,21 @@
 // and moved in. Only small index buffers live in the per-thread workspace (oti_ws()).
 //
 // Shapes: every extent and the product of the nonzero extents must fit int64_t (the descriptor's
-// type), also for an empty shape; otherwise DN_ERR_MEMORY with @p res unchanged. The matrix functions
-// (products, transpose, linear algebra, CSR) take arrays of element rank 2 only (DN_ERR_SIZE
-// otherwise); a Gauss array passes them an oarr_view_matrix() view.
+// type), also for an empty shape; otherwise DN_ERR_MEMORY with @p res unchanged. Phase 7b: the element
+// shape S has any rank 0 .. OTI_ND_MAXDIM - 1 (include/oti/dense/soa/structures.h). The elementwise
+// functions keep the shape of their operands (the array-array ones broadcast them, NumPy rules;
+// DN_ERR_SIZE when they do not broadcast); the matrix functions (products, transpose, linear algebra,
+// CSR, oarr_get_item_to(), oarr_set_item()) take arrays of element rank 2 only (DN_ERR_SIZE otherwise);
+// a Gauss array passes them an oarr_view_matrix() view.
 //
-// Views as results (contracts 7.3): a view (oarr_view_matrix()) passed as @p res is written in place
-// when the result has exactly its layout (nact, truncation order, shape) and the operation writes
-// straight into @p res; anything that would relayout it, regrow it or replace its buffer (an aliased
-// result built in a call-local buffer) returns OTI_ERR_BUSY. The same status is returned when a call-
-// local result would replace a buffer shared with views or exports (never the case in 7a). Through a
-// view act_order is only raised.
+// Any operand may be a view (canonical operands, structures.h): a non-canonical input is packed into a
+// call-local copy first. Views and shared roots as results (contracts 7.3): a `res` that is a view, or a
+// root with live views or exports, receives the result through oarr_assign_to(): its shape must be the
+// result's (DN_ERR_SIZE otherwise) and the result must fit its shared layout (nact and truncation order
+// within the meta's), else OTI_ERR_BUSY; nothing is clipped, directions the result lacks are written as
+// zeros in the view's region, and act_order is only raised. A root that nobody shares is replaced as in
+// 1.x (it may change its layout and shape). In-place layout changes (oarr_reserve(), oarr_add_bases(),
+// oarr_grow_layout(), growth by assignment) return OTI_ERR_BUSY for a view or a shared root.
 
 
 /**
@@ -367,6 +372,247 @@ int oarr_get_order_im_to(ord_t order, const oarr_t* arr, oarr_t* res);
  * @return DN_OK, or DN_ERR_MEMORY.
  */
 int oarr_compact_to(const oarr_t* arr, oarr_t* res);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------------------------------------
+// -------------------------------------     N-D ARRAYS (7b)     ----------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+/**
+ * @name Dense SoA n-D arrays, views and indexing (Phase 7b, contracts 7.2-7.5, 11.2-11.7)
+ * Keys are nd_index_t items (include/oti/real/ndarray/views.h) on the element axes S; the block axis is
+ * never indexed. Results named `res` follow the `_to` rule of this file (views and shared roots receive
+ * them through oarr_assign_to()); the view functions make `res` a retained view (OARR_VIEW) after
+ * releasing what it held.
+ * @{
+ */
+
+/**
+ * @brief Zero array of any element shape, with a layout reservation (contracts 7.5).
+ *
+ * @param[in]  nact      Active bases 1..nact of the layout (0: none). Every block exists (all zero,
+ *                       act_order 0), so later values over nact' <= nact and trc' <= trc_order never
+ *                       relayout the array.
+ * @param[in]  ndim      Rank of S, 0 .. OTI_ND_MAXDIM - 1.
+ * @param[in]  shape     ndim extents >= 0 (NULL when ndim is 0).
+ * @param[in]  layout    ND_LAYOUT_F (canonical) or ND_LAYOUT_C: order of the axes inside a block.
+ * @param[in]  trc_order Truncation order, <= _MAXORDER_OTI.
+ * @param[out] res       Result.
+ *
+ * @return DN_OK; DN_ERR_ARGUMENT; DN_ERR_SIZE (rank or negative extent); DN_ERR_INDEX (order);
+ *         DN_ERR_MEMORY (the layout exceeds the byte budget, checked before allocating); OTI_ERR_BUSY.
+ */
+int oarr_zeros_nd_to(bases_t nact, int32_t ndim, const int64_t* shape, int32_t layout, ord_t trc_order,
+                     oarr_t* res);
+
+/**
+ * @brief Real array (no bases) from a real descriptor of any shape and strides (a copy).
+ *
+ * @param[in]  data      OTI_F64 descriptor (well formed).
+ * @param[in]  trc_order Truncation order.
+ * @param[in]  layout    ND_LAYOUT_F or ND_LAYOUT_C.
+ * @param[out] res       Result of element shape data->shape.
+ *
+ * @return As oarr_zeros_nd_to(); OTI_ERR_DTYPE for another dtype.
+ */
+int oarr_from_real_nd_to(const ndarr_t* data, ord_t trc_order, int32_t layout, oarr_t* res);
+
+/**
+ * @brief 0-D array holding one scalar (its nact and truncation order).
+ *
+ * @param[in]  num Scalar.
+ * @param[out] res Result.
+ *
+ * @return As oarr_zeros_nd_to().
+ */
+int oarr_from_oti_to(const otinum_t* num, oarr_t* res);
+
+/**
+ * @brief Copies the element at a full index (one integer per axis; negative ones count from the end).
+ *
+ * @param[in]  arr   Array (any view).
+ * @param[in]  n     Number of indices, oarr_ndim(arr).
+ * @param[in]  index Indices.
+ * @param[out] res   Scalar over the array's layout (nact, truncation and active orders).
+ *
+ * @return DN_OK; DN_ERR_INDEX (out of range, or n != ndim); DN_ERR_MEMORY; DN_ERR_ARGUMENT.
+ */
+int oarr_get_elem_to(const oarr_t* arr, int32_t n, const int64_t* index, otinum_t* res);
+
+/**
+ * @brief Grows the layout of a root to at least (nact, trc_order) in place, zero-extending every
+ *        element (contracts 11.6 G4, `reserve`).
+ *
+ * @param[in,out] arr       Root (or an empty array).
+ * @param[in]     nact      Required active bases.
+ * @param[in]     trc_order Required truncation order.
+ *
+ * @return DN_OK (also when nothing grows); OTI_ERR_BUSY for a view, or a root with live views or
+ *         exports, when the layout would change; DN_ERR_INDEX; DN_ERR_MEMORY.
+ */
+int oarr_grow_layout(oarr_t* arr, bases_t nact, ord_t trc_order);
+
+/**
+ * @brief dst[...] = src, src broadcast to dst's shape (NumPy's assignment rule S1: trailing axes
+ *        aligned, extent 1 stretched, leading axes of extent 1 dropped).
+ *
+ * Growth rule (contracts 11.6 G1): a root nobody shares grows to hold src's layout (truncation order
+ * and bases, the elements already there zero-extended); a view or a shared root must already hold it
+ * (contracts 7.3), else OTI_ERR_BUSY and nothing changes. Directions src lacks are written as zeros in
+ * dst; act_order is raised to src's (never lowered). A src that may share memory with dst is copied
+ * first (rule S2: the result is as if src were a snapshot).
+ *
+ * @param[in]     src Value (any view).
+ * @param[in,out] dst Destination (root or view).
+ *
+ * @return DN_OK; DN_ERR_SIZE (does not broadcast); OTI_ERR_BUSY; OTI_ERR_READONLY; DN_ERR_MEMORY;
+ *         DN_ERR_ARGUMENT.
+ */
+int oarr_assign_to(const oarr_t* src, oarr_t* dst);
+
+/**
+ * @brief Basic indexing as a retained view: integers drop their axis, slices keep it, newaxis inserts
+ *        one, one ellipsis expands (NumPy rules; contracts 11.3 I1, 11.4 V1).
+ *
+ * The view shares the buffer and the meta of @p src (one more reference on each), so while it lives
+ * the root's layout is fixed (contracts 7.2). Writes through it reach the root.
+ *
+ * @param[in]  src  Array (root or view).
+ * @param[in]  nidx Number of key items, <= 64.
+ * @param[in]  idx  Items; ND_IDX_ARRAY is not allowed (DN_ERR_ARGUMENT).
+ * @param[out] res  Retained view; what it held is released.
+ *
+ * @return DN_OK; OTI_ERR_INDEX (out of range, too many indices); OTI_ERR_ARGUMENT; OTI_ERR_SHAPE
+ *         (result rank above OTI_ND_MAXDIM).
+ */
+int oarr_view_index(const oarr_t* src, int32_t nidx, const nd_index_t* idx, oarr_t* res);
+
+/**
+ * @brief Permutes the element axes as a retained view (.T, transpose()).
+ *
+ * @param[in]  src   Array.
+ * @param[in]  naxes oarr_ndim(src), or 0 with @p axes NULL to reverse the axes.
+ * @param[in]  axes  Permutation (negative values allowed), or NULL.
+ * @param[out] res   Retained view.
+ *
+ * @return DN_OK; DN_ERR_ARGUMENT (count, repeat); DN_ERR_INDEX.
+ */
+int oarr_view_transpose(const oarr_t* src, int32_t naxes, const int32_t* axes, oarr_t* res);
+
+/**
+ * @brief Reshapes the element axes as a retained view, when the strides allow it.
+ *
+ * @param[in]  src    Array.
+ * @param[in]  ndim   New rank.
+ * @param[in]  shape  New extents (one -1 allowed).
+ * @param[in]  layout Index order, ND_LAYOUT_C (NumPy's default) or ND_LAYOUT_F.
+ * @param[out] res    Retained view.
+ *
+ * @return DN_OK; OTI_ERR_LAYOUT when no view exists (oarr_reshape_copy_to() then copies);
+ *         DN_ERR_SIZE (size mismatch, rank); DN_ERR_ARGUMENT.
+ */
+int oarr_view_reshape(const oarr_t* src, int32_t ndim, const int64_t* shape, int32_t layout,
+                      oarr_t* res);
+
+/**
+ * @brief Reshapes into a new root (a copy, compact in the index order @p layout).
+ *
+ * @param[in]  src    Array.
+ * @param[in]  ndim   New rank.
+ * @param[in]  shape  New extents (one -1 allowed).
+ * @param[in]  layout Index order.
+ * @param[out] res    Result.
+ *
+ * @return As oarr_view_reshape(), without OTI_ERR_LAYOUT; DN_ERR_MEMORY.
+ */
+int oarr_reshape_copy_to(const oarr_t* src, int32_t ndim, const int64_t* shape, int32_t layout,
+                         oarr_t* res);
+
+/**
+ * @brief Indexing with any key, advanced items included (integer arrays, masks: Phase 5's
+ *        nd_index_get() on the block array), as a new root (a copy).
+ *
+ * @param[in]  src  Array.
+ * @param[in]  nidx Number of items, <= 64.
+ * @param[in]  idx  Items.
+ * @param[out] res  Result.
+ *
+ * @return DN_OK; OTI_ERR_INDEX; OTI_ERR_SHAPE (index arrays that do not broadcast); OTI_ERR_DTYPE;
+ *         DN_ERR_SIZE; DN_ERR_MEMORY; DN_ERR_ARGUMENT.
+ */
+int oarr_index_get_to(const oarr_t* src, int32_t nidx, const nd_index_t* idx, oarr_t* res);
+
+/**
+ * @brief dst[idx] = src with any key (basic: oarr_assign_to() into the region; advanced:
+ *        nd_index_set() on the block array, duplicates: the last write wins).
+ *
+ * The growth rule of oarr_assign_to() applies to @p dst; the key is checked before anything changes.
+ *
+ * @param[in,out] dst  Destination.
+ * @param[in]     nidx Number of items.
+ * @param[in]     idx  Items.
+ * @param[in]     src  Value (broadcast to the indexed shape).
+ *
+ * @return As oarr_assign_to() and oarr_index_get_to().
+ */
+int oarr_index_set(oarr_t* dst, int32_t nidx, const nd_index_t* idx, const oarr_t* src);
+
+/**
+ * @brief dst[idx] = num (a scalar broadcast to the indexed region; one element is written in place).
+ *
+ * @param[in,out] dst  Destination.
+ * @param[in]     nidx Number of items.
+ * @param[in]     idx  Items.
+ * @param[in]     num  Scalar.
+ *
+ * @return As oarr_index_set().
+ */
+int oarr_index_set_o(oarr_t* dst, int32_t nidx, const nd_index_t* idx, const otinum_t* num);
+
+/**
+ * @brief dst[idx] = val (a real: every direction of the region becomes zero; never grows).
+ *
+ * @param[in,out] dst  Destination.
+ * @param[in]     nidx Number of items.
+ * @param[in]     idx  Items.
+ * @param[in]     val  Value.
+ *
+ * @return As oarr_index_set().
+ */
+int oarr_index_set_r(oarr_t* dst, int32_t nidx, const nd_index_t* idx, coeff_t val);
+
+/**
+ * @brief Reshapes a canonical root in place, in F index order (a relabel: no data moves). Views of the
+ *        root keep their own shapes.
+ *
+ * @param[in,out] arr   Root, compact in F order (every `_to` result).
+ * @param[in]     ndim  New rank.
+ * @param[in]     shape New extents (one -1 allowed); same element count.
+ *
+ * @return DN_OK; DN_ERR_ARGUMENT (not a root); OTI_ERR_LAYOUT (not compact in F order); DN_ERR_SIZE.
+ */
+int oarr_reshape_root(oarr_t* arr, int32_t ndim, const int64_t* shape);
+
+/**
+ * @brief Tells whether the layout of an array is pinned: a view, or a root with live views, other
+ *        references or exports (it then receives results through oarr_assign_to(), see above).
+ *
+ * @param[in] arr Array (NULL gives 0).
+ *
+ * @return 1 when pinned, else 0.
+ */
+int oarr_is_shared(const oarr_t* arr);
+
+/**
+ * @brief Raises the shared act_order of an array to min(act, trc_order) (never lowers it): before a
+ *        writeable export of an imaginary block (contracts 7.4) or a write through an internal path.
+ *
+ * @param[in,out] arr Array with a meta (no-op otherwise).
+ * @param[in]     act Order.
+ */
+void oarr_raise_act(oarr_t* arr, ord_t act);
 
 /** @} */
 // -------------------------------------------------------------------------------------------------------

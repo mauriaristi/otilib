@@ -68,12 +68,12 @@ cdef class arro:
     @classmethod
     def zeros(cls, shape, order=0):
         """
-        Create a zero matrix of real elements (nact 0) with the given truncation order.
+        Create a zero array of real elements (nact 0) with the given truncation order.
 
         Parameters
         ----------
-        shape : tuple of int
-            Rows and columns.
+        shape : int or tuple of int
+            Shape (NumPy rules).
         order : int
             Truncation order of the zero elements, between 0 and 150.
 
@@ -91,15 +91,18 @@ cdef class arro:
         """
 
         cdef arro_t result = arro_init()
+        cdef tuple dims = _shape_of(shape)
+        cdef int64_t ext[OTI_ND_MAXDIM]
+        cdef int32_t d
 
-        if len(shape) != 2 or any(not isinstance(x, int) or x < 0 for x in shape):
+        for d in range(len(dims)):
 
-            raise ValueError("shape must contain nonnegative rows and columns")
+            ext[d] = dims[d]
 
-        # end if
+        # end for
 
         _check_order(order)
-        _aos_ok("zeros", arro_zeros_to(shape[0], shape[1], order, &result), &result)
+        _aos_ok("zeros", arro_zeros_nd_to(len(dims), ext, order, &result), &result)
         return arro.wrap(result)
 
     # end function
@@ -189,15 +192,111 @@ cdef class arro:
     @property
     def shape(self):
         """
-        Return the array's row and column counts.
+        Return the shape.
 
         Returns
         -------
-        tuple
-            Matrix shape.
+        tuple of int
+            Extents of the axes.
         """
 
-        return arro_nrows(&self.arr), arro_ncols(&self.arr)
+        return tuple([arro_shape(&self.arr, d) for d in range(arro_ndim(&self.arr))])
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    @property
+    def ndim(self):
+        """
+        Return the number of axes.
+
+        Returns
+        -------
+        int
+            ``len(self.shape)``.
+        """
+
+        return arro_ndim(&self.arr)
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    def __len__(self):
+        """
+        Return the extent of the first axis.
+
+        Returns
+        -------
+        int
+            ``self.shape[0]``.
+
+        Raises
+        ------
+        TypeError
+            For a 0-D array.
+        """
+
+        if arro_ndim(&self.arr) == 0:
+
+            raise TypeError("len() of unsized object")
+
+        # end if
+
+        return arro_shape(&self.arr, 0)
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    def __iter__(self):
+        """
+        Iterate over the first axis (copies; OTI scalars for a 1-D array).
+
+        Returns
+        -------
+        iterator
+            ``self[0], self[1], ...``.
+
+        Raises
+        ------
+        TypeError
+            For a 0-D array.
+        """
+
+        if arro_ndim(&self.arr) == 0:
+
+            raise TypeError("iteration over a 0-d array")
+
+        # end if
+
+        return _aos_iter(self)
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    def reshape(self, *shape, order="C"):
+        """
+        Give a new shape (a copy: AoS arrays have no views, contracts 11.4).
+
+        Parameters
+        ----------
+        *shape : int or tuple of int
+            New shape (one -1 allowed).
+        order : str
+            Index order, ``'C'`` (default) or ``'F'``.
+
+        Returns
+        -------
+        arro
+            The copy.
+        """
+
+        cdef object target = shape[0] if len(shape) == 1 else shape
+
+        return _aos_gather(self, _aos_grid(self).reshape(target, order=order))
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -262,7 +361,7 @@ cdef class arro:
     @property
     def T(self):
         """
-        Return a transposed AoS copy.
+        Return a transposed AoS copy (the axes reversed; a copy, contracts 11.4).
 
         Returns
         -------
@@ -271,6 +370,12 @@ cdef class arro:
         """
 
         cdef arro_t result = arro_init()
+
+        if arro_ndim(&self.arr) != 2:
+
+            return _aos_gather(self, _aos_grid(self).T)
+
+        # end if
 
         _aos_ok("transpose", arro_transpose_to(&self.arr, &result), &result)
         return arro.wrap(result)
@@ -285,15 +390,15 @@ cdef class arro:
     @property
     def nrows(self):
         """
-        Return the number of rows.
+        Return the number of rows (deprecated in 2.0.0: use ``shape``).
 
         Returns
         -------
         int
-            Row count.
+            The 1.x value for ndim <= 2.
         """
 
-        return arro_nrows(&self.arr)
+        return _deprecated_dim(self.shape, 0)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -302,15 +407,15 @@ cdef class arro:
     @property
     def ncols(self):
         """
-        Return the number of columns.
+        Return the number of columns (deprecated in 2.0.0: use ``shape``).
 
         Returns
         -------
         int
-            Column count.
+            The 1.x value for ndim <= 2.
         """
 
-        return arro_ncols(&self.arr)
+        return _deprecated_dim(self.shape, 1)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -336,12 +441,12 @@ cdef class arro:
     @property
     def real(self):
         """
-        Copy the real parts into a NumPy matrix.
+        Return the real parts as a read-only strided NumPy view of the elements (contracts 11.4).
 
         Returns
         -------
         numpy.ndarray
-            Real coefficients, shape (nrows, ncols).
+            Real coefficients, of the array's shape; ``.copy()`` gives a writable copy.
         """
 
         return _array_real(self)
@@ -457,7 +562,7 @@ cdef class arro:
             New value; the truncation order rises to the value's when it is larger.
         """
 
-        self[:, :] = rhs
+        self[...] = rhs
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -493,7 +598,7 @@ cdef class arro:
         Returns
         -------
         arro
-            Product, or None when ``out`` is given.
+            Product (``out`` itself when it is given).
         """
 
         return dot(lhs, rhs, out)
@@ -514,7 +619,7 @@ cdef class arro:
         Returns
         -------
         arro
-            Inverse, or None when ``out`` is given.
+            Inverse (``out`` itself when it is given).
         """
 
         return inv(arr, out)
@@ -535,7 +640,7 @@ cdef class arro:
         Returns
         -------
         arro
-            Transposed copy, or None when ``out`` is given.
+            Transposed copy (``out`` itself when it is given).
         """
 
         return transpose(arr, out)
@@ -1294,7 +1399,7 @@ cdef class arro:
         Returns
         -------
         arro
-            Sum, or None when ``out`` is given.
+            Sum (``out`` itself when it is given).
         """
 
         return _finish(lhs + rhs, out)

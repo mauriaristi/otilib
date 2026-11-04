@@ -408,7 +408,7 @@ static void test_memory(void){
 
     check(oarr_zeros_to(3, 2, 3, 3, &arr) == DN_OK, "zeros_to: status");
     check(oarr_nrows(&arr) == 2 && oarr_ncols(&arr) == 3 && oarr_size(&arr) == 6, "zeros_to: shape");
-    check(oarr_nact(&arr) == 3 && arr.nbases >= 3 && oarr_trc_order(&arr) == 3
+    check(oarr_nact(&arr) == 3 && arr.cap >= 3 && oarr_trc_order(&arr) == 3
           && oarr_act_order(&arr) == 0,
           "zeros_to: fields");
 
@@ -489,7 +489,7 @@ static void test_reserve(dhelpl_t dhl){
 
     // Same size, more capacity: values kept.
     check(oarr_reserve(&arr, 6, 3, 2, 2) == DN_OK, "reserve: capacity status");
-    check(arr.nbases >= 6 && oarr_nact(&arr) == 2 && oarr_trc_order(&arr) == 4,
+    check(arr.cap >= 6 && oarr_nact(&arr) == 2 && oarr_trc_order(&arr) == 4,
           "reserve: capacity fields");
     compare_vs_arrso(&arr, &a, dhl, 0.0, "reserve(capacity) keeps values");
 
@@ -2073,6 +2073,253 @@ static void test_fix1_regressions(dhelpl_t dhl){
 
 
 // *******************************************************************************************************
+/* W4 allocation integration (the 7a allocation fix): every root keeps its meta in the extra zone of its
+ * block buffer (one allocation for a small array), the meta outlives nothing it must not (views and
+ * exports), and inv / solve / det run their call-local arrays on the scratch arena. */
+static void test_alloc_integration(dhelpl_t dhl){
+
+    oarr_t a = oarr_init(), v = oarr_init(), x = oarr_init(), inv = oarr_init(), b = oarr_init();
+    otinum_t d = oti_init();
+    nd_index_t key[1];
+    ndarr_t ex;
+    uint64_t i;
+    int st;
+
+    check(oarr_zeros_nd_to(2, 2, (int64_t[]){3, 3}, ND_LAYOUT_F, 2, &a) == DN_OK, "alloc: zeros");
+    check(a.meta != NULL && (a.meta->reserved & OTI_META_EMBEDDED)
+          && (void*)a.meta == nd_buffer_extra(a.blocks.buf)
+          && nd_buffer_extra_bytes(a.blocks.buf) >= (int64_t)sizeof(oti_meta_t),
+          "alloc: the meta is embedded in the buffer's extra zone");
+
+    for (i = 0; i < 3; i++){
+        oarr_data(&a)[i + 3 * i] = 2.0 + (double)i;
+    }
+
+    oarr_data(&a)[1] = 0.5;
+    oarr_data(&a)[(1 + 0) * 9 + 4] = 1.0;
+    oarr_set_act_order(&a, 1);
+
+    // A view keeps the embedded meta alive after the root is freed (it holds the buffer too).
+    key[0].kind  = ND_IDX_INT;
+    key[0].has   = 0;
+    key[0].start = 1;
+    key[0].stop  = 0;
+    key[0].step  = 0;
+    key[0].arr   = NULL;
+    check(oarr_view_index(&a, 1, key, &v) == DN_OK && v.meta == a.meta, "alloc: view shares the meta");
+    check(oarr_copy_to(&a, &b) == DN_OK, "alloc: copy");
+    oarr_free(&a);
+    check(oarr_nact(&v) == 2 && oarr_trc_order(&v) == 2 && v.meta->refs == 1
+          && oarr_data(&v)[0] == 0.5, "alloc: the view reads its layout after the root is gone");
+
+    // An export alone keeps the buffer (and the zone) alive; the meta is released before it.
+    check(nd_export(&v.blocks, 0, &ex) == OTI_OK, "alloc: export");
+    oarr_free(&v);
+    check(((double*)ex.data)[0] == 0.5, "alloc: the export outlives the root and the view");
+    nd_release(&ex);
+
+    // inv / solve / det through the scratch path give the heap path's results.
+    st = oarr_inv_to(&b, &inv, dhl);
+    check(st == DN_OK, "alloc: inv");
+    check(oarr_matmul_OO_to(&b, &inv, &x, dhl) == DN_OK && fabs(oarr_data(&x)[0] - 1.0) < 1e-14
+          && fabs(oarr_data(&x)[4] - 1.0) < 1e-14 && fabs(oarr_data(&x)[3]) < 1e-14,
+          "alloc: A inv(A) = I (real part)");
+    check(oarr_det_to(&b, &d, dhl) == DN_OK && fabs(d.re - 2.0 * 3.0 * 4.0) < 1e-12,
+          "alloc: det of the real part");
+    check(oarr_solve_to(&b, &inv, &x, dhl) == DN_OK, "alloc: solve with matrix right-hand sides");
+    check(nd_scratch_release() == OTI_OK, "alloc: the scratch arena is empty after the calls");
+
+    oti_free(&d);
+    oarr_free(&x);
+    oarr_free(&inv);
+    oarr_free(&b);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// The OARR_CANON invariant (include/oti/dense/soa/structures.h) from the descriptor alone: the bit set
+// means a root (owns its blocks) whose element axes are compact in F order (extent-1 axes ignored) and
+// whose block stride is the element count.
+static int canon_by_hand(const oarr_t* a){
+
+    int64_t m = 1, st = 1;
+    int32_t d;
+    int empty = 0;
+
+    if (!oarr_owns(a)){
+        return 0;
+    }
+
+    for (d = 1; d < a->blocks.ndim; d++){
+
+        if (a->blocks.shape[d] == 0){
+            empty = 1;
+        } else if (a->blocks.shape[d] != 1 && a->blocks.strides[d] != st){
+            return 0;
+        }
+
+        st *= a->blocks.shape[d];
+        m  *= a->blocks.shape[d];
+
+    }
+
+    return empty || m == 0 || a->blocks.shape[0] <= 1 || a->blocks.strides[0] == m;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// The bit never claims more than the descriptor (always checked); want 1: it must be set (the fast path
+// is taken), want 0: it must be clear, want -1: only the invariant.
+static void check_canon(const oarr_t* a, int want, const char* name){
+
+    char msg[160];
+    int bit = (a->flags & OARR_CANON) != 0;
+
+    snprintf(msg, sizeof(msg), "canon flag: %s (bit implies a canonical root)", name);
+    check(!bit || canon_by_hand(a), msg);
+
+    if (want >= 0){
+
+        snprintf(msg, sizeof(msg), "canon flag: %s (bit %s)", name, want ? "set" : "clear");
+        check(bit == want, msg);
+
+    }
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Fix round 1 (W4): every path that creates, lays out or shares a dense array keeps OARR_CANON true to
+// the descriptor, and the sharing of a canonical root is still read from its buffer (views and exports
+// hold the buffer, not the struct), so a result into a shared canonical root is written in place.
+static void test_canon_flag(dhelpl_t dhl){
+
+    oarr_t a = oarr_init(), c = oarr_init(), v = oarr_init(), r = oarr_init(), t = oarr_init();
+    arro_t aos = arro_init();
+    feoarr_t fe = fearr_init();
+    nd_index_t key[2];
+    ndarr_t ex;
+    int64_t sh3[3] = {2, 3, 4}, sh2[2] = {1, 5}, sh1[1] = {12}, sh23[3] = {2, 2, 3};
+    int32_t perm[2] = {1, 0};
+    uint64_t i;
+
+    check_canon(&a, 0, "oarr_init");
+
+    // Creators: F roots set it; a C root with two axes of extent > 1 clears it; a C root that is also
+    // F compact (one axis of extent > 1, or rank <= 1) sets it.
+    check(oarr_zeros_to(2, 3, 4, 2, &a) == DN_OK, "canon flag: zeros_to");
+    check_canon(&a, 1, "zeros_to 3x4");
+    check(oarr_zeros_nd_to(1, 3, sh3, ND_LAYOUT_F, 1, &t) == DN_OK, "canon flag: zeros_nd F");
+    check_canon(&t, 1, "zeros_nd F (2, 3, 4)");
+    check(oarr_zeros_nd_to(1, 3, sh3, ND_LAYOUT_C, 1, &c) == DN_OK, "canon flag: zeros_nd C");
+    check_canon(&c, 0, "zeros_nd C (2, 3, 4)");
+    check(oarr_zeros_nd_to(1, 2, sh2, ND_LAYOUT_C, 1, &t) == DN_OK, "canon flag: zeros_nd C (1, 5)");
+    check_canon(&t, 1, "zeros_nd C (1, 5) (also F compact)");
+    check(oarr_zeros_nd_to(1, 0, sh1, ND_LAYOUT_C, 1, &t) == DN_OK, "canon flag: zeros_nd C rank 0");
+    check_canon(&t, 1, "zeros_nd C rank 0");
+
+    for (i = 0; i < oarr_size(&a) * 6; i++){
+        oarr_data(&a)[i] = 1.0 + (double)i;
+    }
+
+    oarr_set_act_order(&a, 2);
+
+    // Results: a fresh `_to` result, an aliased one (moved into res), a C input (packed), a C res.
+    check(oarr_copy_to(&a, &r) == DN_OK, "canon flag: copy_to");
+    check_canon(&r, 1, "copy_to result");
+    check(oarr_mul_rO_to(2.0, &r, &r, dhl) == DN_OK && oarr_data(&r)[5] == 12.0, "canon flag: aliased");
+    check_canon(&r, 1, "aliased mul_rO_to result");
+    check(oarr_sum_OO_to(&c, &c, &t, dhl) == DN_OK, "canon flag: sum of a C root");
+    check_canon(&t, -1, "sum of a C root");
+    check(oarr_copy_to(&a, &c) == DN_OK, "canon flag: copy into a C root");
+    check_canon(&c, -1, "copy into a C root");
+    check(oarr_index_get_to(&a, 0, NULL, &t) == DN_OK, "canon flag: index_get_to");
+    check_canon(&t, 1, "index_get_to result");
+    check(oarr_reshape_copy_to(&a, 1, sh1, ND_LAYOUT_F, &t) == DN_OK, "canon flag: reshape_copy_to");
+    check_canon(&t, 1, "reshape_copy_to F result");
+
+    // Retained views never carry it; the root keeps it (its descriptor did not change) but reads as
+    // shared, and a result into it is written in place, so the view sees it.
+    key[0].kind  = ND_IDX_INT;
+    key[0].has   = 0;
+    key[0].start = 1;
+    key[0].stop  = 0;
+    key[0].step  = 0;
+    key[0].arr   = NULL;
+    check(oarr_view_index(&a, 1, key, &v) == DN_OK, "canon flag: view_index");
+    check_canon(&v, 0, "view_index view");
+    check_canon(&a, 1, "root of a live view");
+    check(oarr_is_shared(&a) == 1, "canon flag: the root of a live view is shared");
+    check(oarr_mul_rO_to(2.0, &a, &a, dhl) == DN_OK && oarr_data(&v)[0] == 4.0,
+          "canon flag: a result into a shared canonical root is written in place (the view sees it)");
+    check(oarr_add_bases(3, &a) == OTI_ERR_BUSY, "canon flag: no growth under a view");
+    check_canon(&a, 1, "root after a refused growth");
+    oarr_free(&v);
+    check(oarr_is_shared(&a) == 0, "canon flag: not shared once the view is gone");
+    check(oarr_view_transpose(&a, 2, perm, &v) == DN_OK, "canon flag: view_transpose");
+    check_canon(&v, 0, "view_transpose view");
+    check(oarr_view_reshape(&a, 1, sh1, ND_LAYOUT_F, &v) == DN_OK, "canon flag: view_reshape");
+    check_canon(&v, 0, "view_reshape view");
+    oarr_free(&v);
+    check_canon(&v, 0, "freed view");
+
+    // Exports hold the buffer: the root keeps the bit, reads as shared, takes results in place.
+    check(nd_export(&a.blocks, 1, &ex) == OTI_OK, "canon flag: export");
+    check_canon(&a, 1, "root of a live export");
+    check(oarr_is_shared(&a) == 1, "canon flag: the root of a live export is shared");
+    check(oarr_mul_rO_to(0.5, &a, &a, dhl) == DN_OK && ((double*)ex.data)[1] == 2.0,
+          "canon flag: a result into an exported canonical root is written in place");
+    check(oarr_grow_layout(&a, 3, 2) == OTI_ERR_BUSY, "canon flag: no growth under an export");
+    nd_release(&ex);
+    check(oarr_is_shared(&a) == 0, "canon flag: not shared once the export is gone");
+
+    // A temporary view never carries it.
+    oarr_free(&t);
+    check(oarr_view_matrix(&a, 4, 3, &t) == DN_OK, "canon flag: view_matrix");
+    check_canon(&t, 0, "view_matrix temporary");
+    t = oarr_init();
+
+    // Growth and relayout keep it true.
+    check(oarr_add_bases(3, &a) == DN_OK && oarr_nact(&a) == 3, "canon flag: add_bases");
+    check_canon(&a, 1, "after add_bases");
+    check(oarr_grow_layout(&a, 4, 3) == DN_OK, "canon flag: grow_layout");
+    check_canon(&a, 1, "after grow_layout");
+    check(oarr_reserve(&a, 6, 3, 4, 3) == DN_OK, "canon flag: reserve");
+    check_canon(&a, 1, "after reserve");
+    check(oarr_reshape_root(&a, 1, sh1) == DN_OK, "canon flag: reshape_root (12,)");
+    check_canon(&a, 1, "after reshape_root (12,)");
+    check(oarr_reshape_root(&a, 3, sh23) == DN_OK, "canon flag: reshape_root (2, 2, 3)");
+    check_canon(&a, 1, "after reshape_root (2, 2, 3)");
+
+    // Gauss arrays, AoS conversions (a matrix is column-major; rank 3 a C-order root).
+    check(fearr_zeros_to(2, 3, 2, 4, 2, &fe) == DN_OK, "canon flag: fearr_zeros_to");
+    check_canon(&fe.arr, 1, "Gauss array");
+    check(arro_zeros_to(2, 3, 1, &aos) == DN_OK && arro_to_oarr(&aos, &t) == DN_OK,
+          "canon flag: AoS matrix to SoA");
+    check_canon(&t, 1, "AoS matrix to SoA");
+    check(arro_zeros_nd_to(3, sh3, 1, &aos) == DN_OK && arro_to_oarr(&aos, &t) == DN_OK,
+          "canon flag: AoS rank 3 to SoA");
+    check_canon(&t, 0, "AoS rank 3 to SoA (C order)");
+
+    oarr_free(&a);
+    check_canon(&a, 0, "freed root");
+
+    fearr_free(&fe);
+    arro_free(&aos);
+    oarr_free(&c);
+    oarr_free(&r);
+    oarr_free(&t);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 int main(int argc, char** argv){
 
     dhelpl_t dhl;
@@ -2116,6 +2363,8 @@ int main(int argc, char** argv){
         test_max_order(dhl);
         test_openmp_threads(dhl);
         test_fix1_regressions(dhl);
+        test_alloc_integration(dhl);
+        test_canon_flag(dhl);
         // The cache can be disabled from the environment (debugging the fallback): skip the check then.
         if (getenv("OTI_SS_TABLE_CACHE_MB") == NULL){
             check(sshelp_get_pair(11, 2, 3, dhl).p_tab != NULL, "k=11, 2x3 uses a cached local table");

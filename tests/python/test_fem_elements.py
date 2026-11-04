@@ -47,7 +47,7 @@ def algebra(request):
         if selected is semisparse or selected is dense:
 
             fem.set_global_algebra(sparse)
-            pytest.skip(f"{selected.__name__} FEM algebra is not available yet: {error}")
+            pytest.fail(f"{selected.__name__} FEM algebra is rejected by set_global_algebra: {error}")
 
         # end if
 

@@ -25,7 +25,7 @@ cdef (uint64_t,uint64_t) process_shape(object shape_in):
 
   else:
 
-    raise ValueError(" Can't create matrix with more than 2 dimensions.")
+    raise ValueError("pyoti.sparse arrays have at most 2 dimensions")
 
   # end if 
 
@@ -143,13 +143,13 @@ cpdef truncate(object humdir, object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_truncate_im_to( indx, order, &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_truncate_im( indx, order, &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if
   elif tval is matsofe:    
@@ -197,6 +197,8 @@ cpdef truncate(object humdir, object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -274,13 +276,13 @@ cpdef extract_im(object humdir, object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_extract_im_to( indx, order, &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_extract_im( indx, order, &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if
   elif tval is matsofe:    
@@ -328,6 +330,8 @@ cpdef extract_im(object humdir, object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -404,13 +408,13 @@ cpdef extract_deriv(object humdir, object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_extract_deriv_to( indx, order, &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_extract_deriv( indx, order, &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if
   elif tval is matsofe:    
@@ -458,6 +462,8 @@ cpdef extract_deriv(object humdir, object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -535,13 +541,13 @@ cpdef get_im(object humdir, object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_get_im_to( indx, order, &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_get_im_o( indx, order, &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if
   elif tval is matsofe:    
@@ -589,6 +595,8 @@ cpdef get_im(object humdir, object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -667,13 +675,13 @@ cpdef get_deriv(object humdir, object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_get_deriv_to( indx, order, &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_get_deriv_o( indx, order, &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if
   elif tval is matsofe:    
@@ -721,6 +729,8 @@ cpdef get_deriv(object humdir, object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -793,13 +803,13 @@ cpdef get_order_im(ord_t order, object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_get_order_im_to( order, &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_get_order_im( order, &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if
   elif tval is matsofe:    
@@ -848,10 +858,55 @@ cpdef get_order_im(ord_t order, object val, object out = None):
     return res
   # end if 
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
 
 
 
+
+
+#*****************************************************************************************************
+cdef (uint64_t,uint64_t,uint8_t) process_shape_k(object shape_in):
+  """
+  PURPOSE: The (nrows, ncols) of the 2-D struct and the logical shape kind of a NumPy shape: an int or a
+           1-tuple is 1-D (kind 1, stored n x 1), () is 0-D (kind 2, stored 1 x 1), a 2-tuple is 2-D.
+  """
+
+  cdef uint64_t nrows, ncols
+  cdef uint8_t  kind = 0
+
+  if isinstance(shape_in, (int, np.integer)):
+
+    nrows = shape_in
+    ncols = 1
+    kind  = 1
+
+  elif ( len(shape_in) == 0 ):
+
+    nrows = 1
+    ncols = 1
+    kind  = 2
+
+  elif ( len(shape_in) == 1 ):
+
+    nrows = shape_in[0]
+    ncols = 1
+    kind  = 1
+
+  elif ( len(shape_in) == 2 ):
+
+    nrows = shape_in[0]
+    ncols = shape_in[1]
+
+  else:
+
+    raise ValueError("pyoti.sparse arrays have at most 2 dimensions")
+
+  # end if
+
+  return (nrows, ncols, kind)
+#-----------------------------------------------------------------------------------------------------
 
 
 #*****************************************************************************************************

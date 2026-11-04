@@ -28,7 +28,7 @@
 
 /// Status of a non-owning view as `res`: dense's choice (note build-orch/w3-notes/dense.md, fix1).
 #ifndef VIEW_RES_STATUS
-#define VIEW_RES_STATUS OTI_ERR_BUSY
+#define VIEW_RES_STATUS DN_ERR_SIZE   // 7b: a view `res` of another shape is a shape error
 #endif
 
 static int n_failed = 0;
@@ -77,7 +77,7 @@ static int soa_unchanged(const oarr_t* a, const oarr_t* ref, const coeff_t* data
     if (oarr_data(a) != data0 || oarr_nact(a) != oarr_nact(ref) || oarr_nrows(a) != oarr_nrows(ref)
         || oarr_ncols(a) != oarr_ncols(ref) || oarr_trc_order(a) != oarr_trc_order(ref)
         || oarr_act_order(a) != oarr_act_order(ref) || a->blocks.shape[0] != ref->blocks.shape[0]
-        || a->nbases != ref->nbases){
+        || a->cap != ref->cap){
         return 0;
     }
     for (b = 0; b < nb; b++){

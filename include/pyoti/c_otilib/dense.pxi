@@ -130,25 +130,36 @@ cdef extern from "oti/dense.h" nogil:
     int oti_logb_to(const otinum_t* num,coeff_t base, otinum_t* res, dhelpl_t dhl)
 
     # soa/structures.h
+    cdef enum:
+        OARR_GAUSS
+        OARR_VIEW
+        OARR_CANON
+
     ctypedef struct oarr_t:
         # ndarr_t blocks (declared later; use the accessors)
         # oti_meta_t* meta (declared later; use the accessors)
-        bases_t nbases
+        bases_t cap
+        int32_t flags
 
     ctypedef struct oarr_lu_t:
         oarr_t A
         int* p_ipiv
 
     coeff_t* oarr_data(const oarr_t* a)
+    ndarr_t* oarr_blocks(oarr_t* a)
+    int32_t oarr_ndim(const oarr_t* a)
+    int64_t oarr_shape(const oarr_t* a, int32_t d)
     uint64_t oarr_nrows(const oarr_t* a)
     uint64_t oarr_ncols(const oarr_t* a)
     uint64_t oarr_size(const oarr_t* a)
+    bases_t oarr_capacity(const oarr_t* a)
+    int oarr_is_view(const oarr_t* a)
     int64_t oarr_bstride(const oarr_t* a)
     bases_t oarr_nact(const oarr_t* a)
     ord_t oarr_trc_order(const oarr_t* a)
     ord_t oarr_act_order(const oarr_t* a)
-    void oarr_set_act_order(oarr_t* a, ord_t act)
     int oarr_owns(const oarr_t* a)
+    void oarr_set_act_order(oarr_t* a, ord_t act)
 
     # soa/base.h
     uint64_t oarr_block_index(bases_t k, ord_t p, ndir_t i)
@@ -175,6 +186,26 @@ cdef extern from "oti/dense.h" nogil:
     int oarr_truncate_order_to(ord_t order, const oarr_t* arr, oarr_t* res)
     int oarr_get_order_im_to(ord_t order, const oarr_t* arr, oarr_t* res)
     int oarr_compact_to(const oarr_t* arr, oarr_t* res)
+    int oarr_zeros_nd_to(bases_t nact, int32_t ndim, const int64_t* shape, int32_t layout,
+                         ord_t trc_order, oarr_t* res)
+    int oarr_from_real_nd_to(const ndarr_t* data, ord_t trc_order, int32_t layout, oarr_t* res)
+    int oarr_from_oti_to(const otinum_t* num, oarr_t* res)
+    int oarr_get_elem_to(const oarr_t* arr, int32_t n, const int64_t* index, otinum_t* res)
+    int oarr_grow_layout(oarr_t* arr, bases_t nact, ord_t trc_order)
+    int oarr_assign_to(const oarr_t* src, oarr_t* dst)
+    int oarr_view_index(const oarr_t* src, int32_t nidx, const nd_index_t* idx, oarr_t* res)
+    int oarr_view_transpose(const oarr_t* src, int32_t naxes, const int32_t* axes, oarr_t* res)
+    int oarr_view_reshape(const oarr_t* src, int32_t ndim, const int64_t* shape, int32_t layout,
+                          oarr_t* res)
+    int oarr_reshape_copy_to(const oarr_t* src, int32_t ndim, const int64_t* shape, int32_t layout,
+                             oarr_t* res)
+    int oarr_index_get_to(const oarr_t* src, int32_t nidx, const nd_index_t* idx, oarr_t* res)
+    int oarr_index_set(oarr_t* dst, int32_t nidx, const nd_index_t* idx, const oarr_t* src)
+    int oarr_index_set_o(oarr_t* dst, int32_t nidx, const nd_index_t* idx, const otinum_t* num)
+    int oarr_index_set_r(oarr_t* dst, int32_t nidx, const nd_index_t* idx, coeff_t val)
+    int oarr_reshape_root(oarr_t* arr, int32_t ndim, const int64_t* shape)
+    int oarr_is_shared(const oarr_t* arr)
+    void oarr_raise_act(oarr_t* arr, ord_t act)
 
     # soa/algebra.h
     void oarr_kernel_mul_acc(const coeff_t* A, ord_t alo, ord_t ahi, const coeff_t* B, ord_t blo,
@@ -237,9 +268,14 @@ cdef extern from "oti/dense.h" nogil:
         pass
 
     otinum_t* arro_data(const arro_t* a)
+    ndarr_t* arro_elems(arro_t* a)
+    int32_t arro_ndim(const arro_t* a)
+    int64_t arro_shape(const arro_t* a, int32_t d)
     uint64_t arro_nrows(const arro_t* a)
     uint64_t arro_ncols(const arro_t* a)
     uint64_t arro_size(const arro_t* a)
+    int arro_reshape(int32_t ndim, const int64_t* shape, arro_t* arr)
+    int arro_zeros_nd_to(int32_t ndim, const int64_t* shape, ord_t trc_order, arro_t* res)
     arro_t arro_init()
     int arro_zeros_to(uint64_t nrows, uint64_t ncols, ord_t trc_order, arro_t* res)
     int arro_resize(uint64_t nrows, uint64_t ncols, ord_t trc_order, arro_t* arr)

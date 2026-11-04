@@ -130,18 +130,29 @@ def save(arr, filename):
 
     cdef bytes path = _io_path(filename)
     cdef int status
+    cdef uint64_t shape[2]
+    cdef tuple logical
 
     if isinstance(arr, ssotinum):
 
         status = ssoti_save(path, &(<ssotinum> arr).num)
 
-    elif isinstance(arr, oarrss):
+    elif isinstance(arr, (oarrss, arrss)):
 
-        status = oarrss_save(path, &(<oarrss> arr).arr)
+        # Version 2 records the logical shape, so 0-D and 1-D arrays round-trip (11.12).
+        logical = arr.shape
+        shape[0] = logical[0] if len(logical) > 0 else 0
+        shape[1] = logical[1] if len(logical) > 1 else 0
 
-    elif isinstance(arr, arrss):
+        if isinstance(arr, oarrss):
 
-        status = arrss_save(path, &(<arrss> arr).arr)
+            status = oarrss_save_shape(path, &(<oarrss> arr).arr, len(logical), shape)
+
+        else:
+
+            status = arrss_save_shape(path, &(<arrss> arr).arr, len(logical), shape)
+
+        # end if
 
     else:
 
@@ -234,6 +245,14 @@ def read(filename):
 
     # end if
 
+    if info.type != SSIO_TYPE_SCALAR and info.ndim > 2:
+
+        # The one v2 header represents n-D shapes; the arrays get them in Phase 8.
+        raise ValueError("'%s' holds a %d-D semi-sparse array; pyoti.semisparse arrays have at most "
+                         "2 dimensions in this version" % (_os.fsdecode(filename), info.ndim))
+
+    # end if
+
     if info.type == SSIO_TYPE_AOS:
 
         status = arrss_read(path, &aos)
@@ -244,7 +263,7 @@ def read(filename):
 
         # end if
 
-        return arrss.wrap(aos)
+        return _nd(arrss.wrap(aos), info.ndim)
 
     # end if
 
@@ -256,7 +275,7 @@ def read(filename):
 
     # end if
 
-    return oarrss.wrap(soa)
+    return _nd(oarrss.wrap(soa), info.ndim)
 
 # end function
 # --------------------------------------------------------------------------------------------------------

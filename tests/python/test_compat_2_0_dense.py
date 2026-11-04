@@ -1,11 +1,9 @@
 """
 The 2.0.0 compatibility suite of ``pyoti.dense`` (contracts section 11, breaking-changes list 11.14).
 
-Every test asserts the 2.0.0 behaviour (the "after" column of the contracts). Tests whose behaviour
-lands with Phase 7b carry ``@pytest.mark.xfail(strict=True, reason="2.0.0 behaviour, Phase 7b")``: the
-suite passes today, and a test that starts to pass (XPASS) fails loudly, which is the signal to remove
-its marker. Behaviour that is already 2.0.0 carries no marker. The names ``row n`` in the docstrings
-refer to the numbered items of the breaking-changes list (11.14).
+Every test asserts the 2.0.0 behaviour (the "after" column of the contracts). The Phase 7b features
+have landed, so no test carries an expected-failure marker. The names ``row n`` in the docstrings refer
+to the numbered items of the breaking-changes list (11.14).
 """
 
 import warnings
@@ -18,7 +16,6 @@ import pyoti.dense as dn
 import pyoti.fem as fem
 import pyoti.sparse as sp
 
-PENDING = pytest.mark.xfail(strict=True, reason="2.0.0 behaviour, Phase 7b")
 LIVE = "live block views"
 
 # Files written by the last 1.x writer (version 1): an order-2 array of shape (2, 3) with two bases and
@@ -122,18 +119,18 @@ def _same_state(first, second):
 
 
 KEYS_3X4 = [
-    pytest.param(1, id="int", marks=PENDING),
-    pytest.param((1, slice(None)), id="int-colon", marks=PENDING),
-    pytest.param((slice(None), 2), id="colon-int", marks=PENDING),
-    pytest.param(-1, id="negative-int", marks=PENDING),
-    pytest.param((-2, slice(None)), id="negative-int-colon", marks=PENDING),
-    pytest.param((Ellipsis, 0), id="ellipsis-int", marks=PENDING),
+    pytest.param(1, id="int"),
+    pytest.param((1, slice(None)), id="int-colon"),
+    pytest.param((slice(None), 2), id="colon-int"),
+    pytest.param(-1, id="negative-int"),
+    pytest.param((-2, slice(None)), id="negative-int-colon"),
+    pytest.param((Ellipsis, 0), id="ellipsis-int"),
     pytest.param((slice(1, 2), slice(None)), id="row-slice"),
     pytest.param((slice(None), slice(2, 3)), id="column-slice"),
     pytest.param((slice(None, None, -1), slice(0, 4, 2)), id="reversed-strided"),
-    pytest.param((None, slice(None)), id="newaxis", marks=PENDING),
-    pytest.param((slice(None), None, 1), id="newaxis-middle", marks=PENDING),
-    pytest.param((Ellipsis, None), id="ellipsis-newaxis", marks=PENDING),
+    pytest.param((None, slice(None)), id="newaxis"),
+    pytest.param((slice(None), None, 1), id="newaxis-middle"),
+    pytest.param((Ellipsis, None), id="ellipsis-newaxis"),
 ]
 
 
@@ -161,7 +158,6 @@ def test_basic_indexing_matches_numpy(key):
 
 
 # ********************************************************************************************************
-@PENDING
 @pytest.mark.parametrize("seed", range(12))
 def test_basic_indexing_random_keys_on_nd_arrays(seed):
     """
@@ -238,7 +234,6 @@ def test_integer_keys_give_scalars():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_scalar_result_of_nd_array():
     """
     Row 1: one integer per axis of a 3-D array gives an OTI scalar with the right value.
@@ -303,7 +298,6 @@ def test_float_and_string_keys_raise(key):
 
 
 # ********************************************************************************************************
-@PENDING
 def test_len_and_iteration():
     """
     Row 1: ``len(A) == A.shape[0]`` and ``iter(A)`` yields ``A[0], A[1], ...``: sub-arrays with one axis
@@ -337,7 +331,6 @@ def test_len_and_iteration():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_zero_dimensional_len_and_iteration():
     """
     Row 1: ``len()`` and iteration of a 0-D array raise ``TypeError``.
@@ -362,7 +355,6 @@ def test_zero_dimensional_len_and_iteration():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_object_array_has_the_shape_of_the_array():
     """
     Row 1: ``np.array(A, dtype=object)`` is an object array of shape ``A.shape`` holding OTI scalars.
@@ -381,17 +373,17 @@ def test_object_array_has_the_shape_of_the_array():
 
 # ********************************************************************************************************
 @pytest.mark.parametrize("call, shape", [
-    pytest.param(lambda: dn.zeros(4), (4,), id="zeros-int", marks=PENDING),
-    pytest.param(lambda: dn.zeros((4,)), (4,), id="zeros-1-tuple", marks=PENDING),
-    pytest.param(lambda: dn.ones(4), (4,), id="ones-int", marks=PENDING),
-    pytest.param(lambda: dn.array(np.arange(1.0, 5.0)), (4,), id="array-1d", marks=PENDING),
-    pytest.param(lambda: dn.array([1.0, 2.0, 3.0]), (3,), id="array-list", marks=PENDING),
-    pytest.param(lambda: dn.array(2.5), (), id="array-scalar", marks=PENDING),
-    pytest.param(lambda: dn.zeros(()), (), id="zeros-0d", marks=PENDING),
+    pytest.param(lambda: dn.zeros(4), (4,), id="zeros-int"),
+    pytest.param(lambda: dn.zeros((4,)), (4,), id="zeros-1-tuple"),
+    pytest.param(lambda: dn.ones(4), (4,), id="ones-int"),
+    pytest.param(lambda: dn.array(np.arange(1.0, 5.0)), (4,), id="array-1d"),
+    pytest.param(lambda: dn.array([1.0, 2.0, 3.0]), (3,), id="array-list"),
+    pytest.param(lambda: dn.array(2.5), (), id="array-scalar"),
+    pytest.param(lambda: dn.zeros(()), (), id="zeros-0d"),
     pytest.param(lambda: dn.array([[1.0], [2.0]]), (2, 1), id="array-column"),
     pytest.param(lambda: dn.zeros((2, 3)), (2, 3), id="zeros-2d"),
     pytest.param(lambda: dn.eye(3), (3, 3), id="eye"),
-    pytest.param(lambda: dn.zeros((2, 3, 4)), (2, 3, 4), id="zeros-3d", marks=PENDING),
+    pytest.param(lambda: dn.zeros((2, 3, 4)), (2, 3, 4), id="zeros-3d"),
 ])
 
 
@@ -415,7 +407,6 @@ def test_creators_return_numpy_shapes(call, shape):
 
 
 # ********************************************************************************************************
-@PENDING
 def test_one_dimensional_creator_indexes_with_one_integer():
     """
     Row 2: an array created from 1-D data is indexed with one integer; ``x[2, 0]`` raises
@@ -437,7 +428,6 @@ def test_one_dimensional_creator_indexes_with_one_integer():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_zero_dimensional_array_values():
     """
     Row 2: ``array(2.5)`` is 0-D: ``shape == ()``, ``size == 1``, and it holds the value.
@@ -479,7 +469,6 @@ def test_nrows_ncols_keep_their_values_for_low_dimensions():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_nrows_ncols_raise_for_nd_arrays():
     """
     Row 10: ``nrows`` / ``ncols`` raise ``AttributeError`` for ndim > 2; use ``shape``.
@@ -510,7 +499,6 @@ def test_nrows_ncols_raise_for_nd_arrays():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_column_into_one_dimensional_target_raises():
     """
     Row 3: assignment broadcasts as NumPy does: an ``(n, 1)`` column no longer fits an ``(n,)`` target.
@@ -575,7 +563,6 @@ def test_row_assignment_into_a_one_dimensional_target():
 
 
 # ********************************************************************************************************
-@PENDING
 @pytest.mark.parametrize("seed", range(10))
 def test_assignment_broadcasts_like_numpy(seed):
     """
@@ -631,7 +618,6 @@ def test_assignment_broadcasts_like_numpy(seed):
 
 
 # ********************************************************************************************************
-@PENDING
 @pytest.mark.parametrize("operation", ["shift", "reverse"])
 def test_assignment_from_an_overlapping_view_is_a_snapshot(operation):
     """
@@ -664,7 +650,6 @@ def test_assignment_from_an_overlapping_view_is_a_snapshot(operation):
 
 
 # ********************************************************************************************************
-@PENDING
 def test_basic_slices_are_views():
     """
     Row 4: in ``pyoti.dense`` (``omat``) basic slices are views: a write through the slice reaches the
@@ -689,7 +674,6 @@ def test_basic_slices_are_views():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_views_of_views_reach_the_root():
     """
     Row 4: a slice of a slice is still a view of the root.
@@ -708,7 +692,6 @@ def test_views_of_views_reach_the_root():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_transpose_is_a_view():
     """
     Row 4: ``.T`` and ``transpose()`` of a 2-D array are views, and ``.T`` of a 1-D array returns it
@@ -735,13 +718,15 @@ def test_transpose_is_a_view():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_reshape_is_a_view_when_possible():
     """
-    Row 4: ``reshape`` of a compact array is a view; the values follow NumPy's reshape.
+    Row 4: ``reshape`` is a view when NumPy's reshape of the same strides would be one (a C-layout array
+    reshaped in C order), and a copy with NumPy's values otherwise (the default ``'F'`` layout reshaped in
+    C order).
     """
 
-    array, real = _make((3, 4), order=1)
+    real = np.random.default_rng(0).standard_normal((3, 4))
+    array = dn.array(real, layout="C")
     reshaped = array.reshape((2, 6))
 
     assert reshaped.shape == (2, 6)
@@ -751,12 +736,16 @@ def test_reshape_is_a_view_when_possible():
 
     assert array[0, 0].real == -1.0
 
+    fortran = dn.array(real)
+    copied = fortran.reshape((2, 6))
+
+    np.testing.assert_array_equal(_real(copied), real.reshape(2, 6))
+
 # end function
 # --------------------------------------------------------------------------------------------------------
 
 
 # ********************************************************************************************************
-@PENDING
 def test_chained_assignment_writes_into_the_root():
     """
     Row 4 / S3: ``A[1:3][0] = v`` writes into ``A`` when the first subscript returns a view.
@@ -811,7 +800,6 @@ def test_derived_arrays_are_copies():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_real_export_is_read_only():
     """
     Row 5: ``.real`` is a read-only view in every shape, including the singleton shapes that were
@@ -840,7 +828,6 @@ def test_real_export_is_read_only():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_real_export_shares_memory_and_copy_is_independent():
     """
     Row 5: ``.real`` shares memory with the array (no copy); ``.real.copy()`` is writable and
@@ -863,7 +850,6 @@ def test_real_export_shares_memory_and_copy_is_independent():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_get_block_is_read_only_unless_writeable():
     """
     Row 5: ``get_block(d)`` is a read-only view by default and ``get_block(d, writeable=True)`` is a
@@ -896,7 +882,6 @@ def test_get_block_is_read_only_unless_writeable():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_get_block_for_an_imaginary_direction_writeable_raises_the_order():
     """
     Row 5: ``get_block(d, writeable=True)`` for ``d != 0`` makes the block exist (the active order rises
@@ -915,7 +900,6 @@ def test_get_block_for_an_imaginary_direction_writeable_raises_the_order():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_csr_real_is_read_only_and_get_real_writeable_reaches_the_matrix():
     """
     Row 5: ``csr_matrix.real`` is read-only (``data`` cannot be written); ``get_real(writeable=True)``
@@ -946,7 +930,7 @@ def test_csr_real_is_read_only_and_get_real_writeable_reaches_the_matrix():
 @pytest.mark.parametrize("data, indices, indptr", [
     pytest.param([1.0, 2.0, 3.0], [0, 1, 1], [0, 2, 3], id="sorted"),
     pytest.param([1.0, 2.0, 3.0], [1, 0, 1], [0, 2, 3], id="unsorted"),
-    pytest.param([1.0, 2.0, 3.0], [0, 0, 1], [0, 2, 3], id="duplicates", marks=PENDING),
+    pytest.param([1.0, 2.0, 3.0], [0, 0, 1], [0, 2, 3], id="duplicates"),
 ])
 
 
@@ -1010,11 +994,11 @@ def test_root_growth_without_views():
 
 # ********************************************************************************************************
 @pytest.mark.parametrize("source", [
-    pytest.param("row", id="row", marks=PENDING),
-    pytest.param("transpose", id="transpose", marks=PENDING),
-    pytest.param("real", id="real", marks=PENDING),
+    pytest.param("row", id="row"),
+    pytest.param("transpose", id="transpose"),
+    pytest.param("real", id="real"),
     pytest.param("block", id="get-block"),
-    pytest.param("slice", id="slice", marks=PENDING),
+    pytest.param("slice", id="slice"),
 ])
 
 
@@ -1052,7 +1036,6 @@ def test_growth_with_a_live_view_or_export_raises_buffererror(source):
 
 
 # ********************************************************************************************************
-@PENDING
 def test_growth_message_names_the_remedy():
     """
     Row 6 / G2: the refusal says how to size the array first (``reserve`` / ``nbases=`` / ``bases=`` /
@@ -1079,7 +1062,6 @@ def test_growth_message_names_the_remedy():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_write_through_a_view_that_fits_reaches_the_root_and_never_grows():
     """
     Row 6 / G1: writing through a view object never changes the layout: a value that fits is written to
@@ -1115,7 +1097,6 @@ def test_write_through_a_view_that_fits_reaches_the_root_and_never_grows():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_reserve_sizes_the_layout_up_front():
     """
     Row 6 / G4: ``reserve(nbases=, order=)`` grows the layout immediately; afterwards assembly through
@@ -1140,7 +1121,6 @@ def test_reserve_sizes_the_layout_up_front():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_reserve_with_live_views_raises():
     """
     Row 6 / G4: ``reserve`` grows the layout, so it raises ``BufferError`` with a live view.
@@ -1162,7 +1142,6 @@ def test_reserve_with_live_views_raises():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_set_methods_follow_the_growth_rule():
     """
     Row 6 / G1: ``set_im`` and ``set_deriv`` grow an unshared root and raise ``BufferError`` with a live
@@ -1190,7 +1169,6 @@ def test_set_methods_follow_the_growth_rule():
 
 
 # ********************************************************************************************************
-@PENDING
 @pytest.mark.parametrize("order", [1, 2, 3])
 def test_nbases_reserves_the_layout(order):
     """
@@ -1250,7 +1228,6 @@ def test_nbases_reservation_keeps_views_stable():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_nbases_too_large_for_the_budget_raises_memoryerror():
     """
     Row 7: a hint too large for the memory budget fails with ``MemoryError`` before allocating.
@@ -1280,7 +1257,6 @@ def test_scalar_creators_ignore_nbases():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_elm_help_allocate_sizes_every_field():
     """
     Row 7: ``elm_help.allocate(ndim, nbasis, nip, nbases=K, order=P)`` creates every helper field with
@@ -1314,7 +1290,6 @@ def test_elm_help_allocate_sizes_every_field():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_dot_of_one_dimensional_arrays():
     """
     Row 8: ``dot(x, y)`` of 1-D arrays is the inner product, an OTI scalar; ``x @ y`` and
@@ -1336,7 +1311,6 @@ def test_dot_of_one_dimensional_arrays():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_matrix_vector_products_drop_the_vector_axis():
     """
     Row 8: ``dot(A, x)`` and ``A @ x`` are ``(m,)``, ``dot(x, A)`` and ``x @ A`` are ``(n,)``
@@ -1402,8 +1376,8 @@ def test_dot_product_pairs_the_flattened_entries():
 
 # ********************************************************************************************************
 @pytest.mark.parametrize("lshape, rshape, expected", [
-    pytest.param((4,), (4, 3), (3,), id="row-by-matrix", marks=PENDING),
-    pytest.param((3, 4), (4,), (3,), id="matrix-by-column", marks=PENDING),
+    pytest.param((4,), (4, 3), (3,), id="row-by-matrix"),
+    pytest.param((3, 4), (4,), (3,), id="matrix-by-column"),
     pytest.param((3, 4), (4, 2), (3, 2), id="matrix-by-matrix"),
 ])
 
@@ -1435,7 +1409,6 @@ def test_trunc_dot_is_a_truncated_matrix_product(lshape, rshape, expected):
 
 
 # ********************************************************************************************************
-@PENDING
 def test_solve_with_a_one_dimensional_right_hand_side():
     """
     Row 8 / k14: ``solve(A, b)`` with ``A (n, n)`` and ``b (n,)`` gives ``(n,)``; with ``b (n, k)`` it
@@ -1460,7 +1433,6 @@ def test_solve_with_a_one_dimensional_right_hand_side():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_solve_batched_matrices_with_a_vector():
     """
     Row 8 / k14: three ``2 x 2`` matrices with ``b.shape == (2,)`` give ``(3, 2)`` (NumPy 2's
@@ -1482,7 +1454,6 @@ def test_solve_batched_matrices_with_a_vector():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_csr_products_and_solves_follow_the_shape_of_b():
     """
     Row 8 / k14: ``csr @ b`` is ``(m,)`` for ``b (n,)`` and ``(m, k)`` for ``b (n, k)``;
@@ -1506,7 +1477,6 @@ def test_csr_products_and_solves_follow_the_shape_of_b():
 
 
 # ********************************************************************************************************
-@PENDING
 @pytest.mark.parametrize("shape", [(), (4,), (2, 3), (2, 3, 4)])
 def test_saved_files_are_version_2_and_round_trip(tmp_path, shape):
     """
@@ -1569,7 +1539,6 @@ def test_v1_files_read_with_their_stored_two_dimensional_shape(tmp_path):
 
 
 # ********************************************************************************************************
-@PENDING
 def test_v1_files_are_rewritten_as_version_2(tmp_path):
     """
     Row 9 / 11.12: saving an array read from a version-1 file writes version 2, and the file reads back
@@ -1626,7 +1595,6 @@ def test_v1_fixture_values(tmp_path):
 
 
 # ********************************************************************************************************
-@PENDING
 def test_layout_keyword_selects_c_or_f():
     """
     Row 12: the creators accept ``layout=`` (``'C'`` / ``'F'``); the values do not depend on it.
@@ -1707,7 +1675,6 @@ def test_gauss_arrays_keep_the_matrix_rule():
 
 
 # ********************************************************************************************************
-@PENDING
 def test_gauss_real_is_a_read_only_view():
     """
     Row 5 / 11.8: ``G.real`` of a dense Gauss array is a read-only ``(nip, nrows, ncols)`` view.
@@ -1787,7 +1754,6 @@ def test_fem_helper_accepts_vectors_and_columns(shape):
 
 
 # ********************************************************************************************************
-@PENDING
 def test_empty_tuple_key_of_a_zero_dimensional_array_gives_a_scalar():
     """
     Row 1: ``A[()]`` of a 0-D array is an OTI scalar.
@@ -1797,6 +1763,378 @@ def test_empty_tuple_key_of_a_zero_dimensional_array_gives_a_scalar():
 
     assert isinstance(scalar, dn.otinum)
     assert scalar.real == 2.5
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def _holder(shape):
+    """
+    Build an ``out`` holder of the given shape, sized up front for one imaginary direction at order two.
+
+    Rule S1b hands the C function a view of the holder, and a view must never need to grow.
+
+    Parameters
+    ----------
+    shape : tuple of int
+        Shape of the holder.
+
+    Returns
+    -------
+    object
+        The zero holder.
+    """
+
+    return dn.zeros(shape, nbases=1, order=2)
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def _values(obj):
+    """
+    Collect the numbers of an array as flat NumPy arrays: the real part and the first derivative.
+
+    Parameters
+    ----------
+    obj : object
+        Array.
+
+    Returns
+    -------
+    list of numpy.ndarray
+        The flattened numbers.
+    """
+
+    return [_real(obj).reshape(-1), _real(obj.get_deriv([1])).reshape(-1)]
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+@pytest.mark.parametrize("extra", [1, 2])
+@pytest.mark.parametrize("name", ["sum", "sub", "mul"])
+def test_out_with_leading_unit_axes_elementwise(name, extra):
+    """
+    Rule S1b: an elementwise ``out`` whose shape is the result shape with extra leading axes of extent 1
+    is accepted and receives the result.
+
+    Parameters
+    ----------
+    name : str
+        Binary operation.
+    extra : int
+        Number of leading axes of extent 1.
+    """
+
+    left, _ = _make((2, 3), 1)
+    right, _ = _make((2, 3), 2)
+    expected = getattr(dn, name)(left, right)
+    shape = (1,) * extra + (2, 3)
+    holder = _holder(shape)
+
+    getattr(dn, name)(left, right, out=holder)
+
+    assert holder.shape == shape
+
+    for got, want in zip(_values(holder), _values(expected)):
+
+        np.testing.assert_allclose(got, want)
+
+    # end for
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+@pytest.mark.parametrize("name", [
+    pytest.param('neg'),
+    pytest.param('exp'),
+])
+def test_out_with_leading_unit_axes_unary(name):
+    """
+    Rule S1b: a unary function accepts an ``out`` with an extra leading axis of extent 1.
+
+    Parameters
+    ----------
+    name : str
+        Unary function.
+    """
+
+    value, _ = _make((2, 3), 3)
+    expected = getattr(dn, name)(value)
+    shape = (1,) + (2, 3)
+    holder = _holder(shape)
+
+    getattr(dn, name)(value, out=holder)
+
+    assert holder.shape == shape
+
+    for got, want in zip(_values(holder), _values(expected)):
+
+        np.testing.assert_allclose(got, want)
+
+    # end for
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+@pytest.mark.parametrize("shape", [
+    pytest.param((2, 1, 3)),
+    pytest.param((2, 2, 3)),
+    pytest.param((3, 2)),
+    pytest.param((1, 2, 4)),
+])
+def test_out_that_is_not_the_result_shape_with_leading_ones_is_rejected(shape):
+    """
+    Rule S1b: only extra leading axes of extent 1 are tolerated; any other ``out`` shape (an inner or
+    trailing extent-1 axis, a different extent) raises ``ValueError``.
+
+    Parameters
+    ----------
+    shape : tuple of int
+        Shape of the rejected holder.
+    """
+
+    left, _ = _make((2, 3), 1)
+    right, _ = _make((2, 3), 2)
+    holder = _holder(shape)
+
+    with pytest.raises(ValueError):
+
+        dn.sum(left, right, out=holder)
+
+    # end with
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+# ********************************************************************************************************
+@pytest.mark.parametrize("name", ["dot", "matmul"])
+def test_out_with_leading_unit_axes_matrix_products(name):
+    """
+    Rule S1b: ``dot`` and ``matmul`` accept an ``out`` with extra leading axes of extent 1, for a matrix
+    times a matrix and for a matrix times a vector.
+
+    Parameters
+    ----------
+    name : str
+        Product function.
+    """
+
+    matrix, _ = _make((2, 3), 1)
+    other, _ = _make((3, 4), 2)
+    vector, _ = _make((3,), 3)
+
+    for operand, shape in ((other, (2, 4)), (vector, (2,))):
+
+        expected = getattr(dn, name)(matrix, operand)
+        holder = _holder((1,) + shape)
+
+        getattr(dn, name)(matrix, operand, out=holder)
+
+        assert holder.shape == (1,) + shape
+
+        for got, want in zip(_values(holder), _values(expected)):
+
+            np.testing.assert_allclose(got, want)
+
+        # end for
+
+    # end for
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def test_assignment_with_leading_unit_axes():
+    """
+    Rule S1b (assignment): a target with extra leading axes of extent 1 takes a value without them, and
+    a value with extra leading axes of extent 1 fits a target without them (rule S1 broadcasting).
+    """
+
+    value, _ = _make((2, 3), 4)
+    target = _holder((1,) + (2, 3))
+
+    target[...] = value
+
+    for got, want in zip(_values(target), _values(value)):
+
+        np.testing.assert_allclose(got, want)
+
+    # end for
+
+    wide, _ = _make((1,) + (2, 3), 5)
+    narrow = _holder((2, 3))
+
+    narrow[...] = wide
+
+    for got, want in zip(_values(narrow), _values(wide)):
+
+        np.testing.assert_allclose(got, want)
+
+    # end for
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+@pytest.mark.parametrize("function", [
+    pytest.param('norm'),
+    pytest.param('dot_product'),
+])
+def test_reductions_reject_an_out_with_unit_axes(function):
+    """
+    Rule S1b: reductions (``norm``, ``dot_product``) do not accept an array ``out`` with extra axes of
+    extent 1, as NumPy's reductions do not (``TypeError`` or ``ValueError``).
+
+    Parameters
+    ----------
+    function : str
+        Reduction.
+    """
+
+    value, _ = _make((2, 3), 6)
+    holder = _holder((1,))
+
+    with pytest.raises((TypeError, ValueError)):
+
+        if function == "norm":
+
+            dn.norm(value, out=holder)
+
+        else:
+
+            dn.dot_product(value, value, out=holder)
+
+        # end if
+
+    # end with
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def _grown_pair():
+    """
+    Build two operands whose sum needs more bases and a higher order than either operand.
+
+    Returns
+    -------
+    omat, omat, omat
+        The operands (shape ``(2, 3)``, bases ``(1,)`` at order 2 and ``(2,)`` at order 3) and their sum.
+    """
+
+    left, _ = _make((2, 3), 1)
+    right = dn.e(2, order=3) * dn.array(np.ones((2, 3)))
+
+    return left, right, dn.sum(left, right)
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def test_out_grows_an_unshared_root():
+    """
+    Row 6 / G1.3: ``out=`` follows the root rule: a root nothing else holds grows to the result's
+    layout (``trunc order`` and bases) and receives the result.
+    """
+
+    left, right, expected = _grown_pair()
+    holder = dn.zeros((2, 3))
+
+    dn.sum(left, right, out=holder)
+
+    assert holder.order == expected.order
+    assert holder.active_bases == expected.active_bases
+    _same_state(holder, expected)
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+@pytest.mark.parametrize("source", [
+    pytest.param("row"),
+    pytest.param("transpose"),
+    pytest.param("real"),
+    "block",
+])
+def test_out_that_must_grow_with_a_live_view_raises_buffererror(source):
+    """
+    Row 6 / G1.3, G2: ``out=`` a root with a live view or export, when the result does not fit its
+    layout, raises ``BufferError`` with the phrase ``live block views`` and leaves the root unchanged.
+
+    Parameters
+    ----------
+    source : str
+        Kind of live view or export.
+    """
+
+    left, right, _ = _grown_pair()
+    holder = dn.zeros((2, 3))
+    held = {"row": lambda: holder[0], "transpose": lambda: holder.T, "real": lambda: holder.real,
+            "block": lambda: holder.get_block(0)}[source]()
+
+    with pytest.raises(BufferError, match=LIVE):
+
+        dn.sum(left, right, out=holder)
+
+    # end with
+
+    assert holder.order == 0
+    assert holder.active_bases == ()
+    del held
+
+    dn.sum(left, right, out=holder)
+
+    assert holder.order == 3
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def test_out_that_is_a_view_writes_through_when_the_result_fits_and_never_clips():
+    """
+    Row 6 / G1.3: ``out=`` a view never changes the layout: a result that fits the shared layout reaches
+    the root (the other rows stay untouched), a result that does not fit raises ``BufferError`` and
+    nothing is clipped.
+    """
+
+    left, _ = _make((2, 3), 1)
+    right, _ = _make((2, 3), 2)
+    root = dn.zeros((2, 3), nbases=1, order=2)
+    root[1] = dn.array(np.full(3, 7.0))
+    view = root[0]
+
+    dn.sum(left[0], right[0], out=view)
+
+    np.testing.assert_allclose(_real(root)[0], _real(left)[0] + _real(right)[0])
+    np.testing.assert_allclose(_real(root)[1], 7.0)
+    np.testing.assert_allclose(_real(root.get_deriv([1]))[0],
+                               _real(left.get_deriv([1]))[0] + _real(right.get_deriv([1]))[0])
+
+    too_high = dn.e(1, order=3) * dn.array(np.ones(3))
+
+    with pytest.raises(BufferError):
+
+        dn.sum(left[0], too_high, out=view)
+
+    # end with
+
+    assert root.order == 2
+    assert root.active_bases == (1,)
 
 # end function
 # --------------------------------------------------------------------------------------------------------

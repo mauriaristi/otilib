@@ -1792,7 +1792,7 @@ def test_gauss_unary_out_holder(name):
     expected = getattr(sp, name)(sparse_value)
     out = ss.ssotife(0.0, nip=nip, bases=bases, order=order)
 
-    assert getattr(ss, name)(value, out=out) is None
+    assert getattr(ss, name)(value, out=out) is out
     _assert_scalar_fe_matches(out, expected, bases, order)
 
 # end function

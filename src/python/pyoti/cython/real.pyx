@@ -7,6 +7,7 @@ include "real/include.pxi"
 
 # ndarray interop (PLAN-ndarray.md, Phase 4): nd_from_object / nd_to_numpy and the private _ndtest.
 include "real/ndarray/base.pxi"
+include "real/ndarray/key2d.pxi"
 include "real/ndarray/ndtest.pxi"
 
 # Append real array structure.

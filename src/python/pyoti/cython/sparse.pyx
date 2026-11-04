@@ -40,6 +40,7 @@ include "sparse/array/math_to.pxi"
 
 # Utilities.
 include "sparse/array/utils.pxi"
+include "sparse/array/io_v2.pxi"
 
 # Gauss capabilities.
 include "sparse/array/gauss.pxi"

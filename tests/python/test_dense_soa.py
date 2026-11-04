@@ -3,7 +3,6 @@ Compare dense SoA arrays with the sparse oracle and check block views.
 """
 
 import gc
-import weakref
 
 import numpy as np
 import pytest
@@ -110,7 +109,8 @@ def test_soa_conversion_and_elementwise():
 # ********************************************************************************************************
 def test_soa_real_and_block_view():
     """
-    Ensure direction blocks share memory, stay Fortran-ordered, and retain the parent.
+    Ensure direction blocks share memory, stay Fortran-ordered, and keep the memory alive after the
+    array object is gone (the export retains the buffer, not the Python object).
     """
 
     real = np.arange(6.0).reshape(2, 3)
@@ -123,13 +123,24 @@ def test_soa_real_and_block_view():
     assert np.array_equal(zero.get_block(dn.rawdir(0, 0)), zero.get_block(0))
     assert view.shape == (2, 3)
     assert view.flags.f_contiguous
-    view[1, 2] = 0.75
+
+    with pytest.raises(ValueError):
+
+        view[1, 2] = 0.75
+
+    # end with
+
+    writable = zero.get_block(1, writeable=True)
+    assert np.shares_memory(writable, view)
+    writable[1, 2] = 0.75
     assert zero[1, 2].get_im(1) == pytest.approx(0.75)
-    reference = weakref.ref(zero)
     del zero
     gc.collect()
-    assert reference() is not None
+
+    noise = [np.full(100000, 9.0) for _ in range(4)]
+
     assert view[1, 2] == pytest.approx(0.75)
+    assert len(noise) == 4
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -525,7 +536,7 @@ def test_soa_lu_factor_holder_and_repeated_solves():
                                    for i in range(4)], order=2)
         rhs = dn.omat.from_sparse(rhs_source)
         solution = dn.omat.zeros((4, 1))
-        assert dn.lu_solve(factor, rhs, out=solution) is None
+        assert dn.lu_solve(factor, rhs, out=solution) is solution
         _same(solution, sparse.solve(source, rhs_source))
 
     # end for
@@ -671,32 +682,39 @@ def test_block_view_refuses_growth_of_its_array():
 # ********************************************************************************************************
 def test_block_view_refuses_out_into_its_array():
     """
-    Refuse ``out=`` into an array with a live block view (the buffer would be swapped), and allow
-    it again once the view is gone.
+    Refuse an ``out=`` result that does not fit the layout of an array with a live block view (the
+    buffer would be swapped), write a result that fits in place (contracts 7.3, G1.3), and allow growth
+    again once the view is gone.
     """
 
     matrix, view = _array_with_view()
+    larger = dn.e(5, order=3) * matrix
 
     with pytest.raises(BufferError, match="live block views"):
 
-        dn.exp(matrix, out=matrix)
+        dn.exp(larger, out=matrix)
 
     # end with
 
     with pytest.raises(BufferError):
 
-        dn.lu_factor(dn.omat.from_real(np.eye(3), order=1), out=matrix)
+        dn.lu_factor(dn.omat.from_real(np.eye(3), order=3), out=matrix)
 
     # end with
 
     assert view[0, 0] == pytest.approx(2.0)
     assert matrix[0, 0].get_im(1) == pytest.approx(2.0)
+    assert (matrix.nact, matrix.order) == (1, 1)
+
+    assert dn.exp(matrix, out=matrix) is matrix
+    assert matrix[0, 0].real == pytest.approx(1.0)
+    assert view[0, 0] == pytest.approx(2.0)
 
     del view
     gc.collect()
 
-    assert dn.exp(matrix, out=matrix) is None
-    assert matrix[0, 0].real == pytest.approx(1.0)
+    assert dn.exp(larger, out=matrix) is matrix
+    assert (matrix.nact, matrix.order) == (5, 3)
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -736,13 +754,21 @@ def test_dropped_block_view_allows_growth():
 # ********************************************************************************************************
 def test_block_view_keeps_write_through_and_same_layout_assignment():
     """
-    Keep the view writable, and allow assignments that do not change nact or the truncation order.
+    Keep the writeable export writing through, refuse writes through the default read-only view, and
+    allow assignments that do not change nact or the truncation order.
     """
 
     matrix, view = _array_with_view()
 
-    view[1, 2] = 0.75
+    with pytest.raises(ValueError):
+
+        view[1, 2] = 0.75
+
+    # end with
+
+    matrix.get_block(1, writeable=True)[1, 2] = 0.75
     assert matrix[1, 2].get_im(1) == pytest.approx(0.75)
+    assert view[1, 2] == pytest.approx(0.75)
 
     matrix[2, 2] = dn.e(1, order=1)
     assert view[2, 2] == pytest.approx(1.0)
@@ -775,7 +801,7 @@ def test_soa_add_and_list_repr_like_matso():
     holder = dn.omat.zeros((2, 2), order=1)
 
     assert np.array_equal(dn.omat.add(left, right).real, left.real + right.real)
-    assert dn.omat.add(left, right, out=holder) is None
+    assert dn.omat.add(left, right, out=holder) is holder
     assert np.array_equal(holder.real, left.real + right.real)
     assert left.list_repr().startswith("omat< shape: (2, 2)")
 

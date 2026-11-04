@@ -708,6 +708,8 @@ int lilo_add(lilo_t* lil, uint64_t i, uint64_t j, const otinum_t* val, dhelpl_t 
 int lilo_add_block(lilo_t* lil, const uint64_t* rows, uint64_t nr, const uint64_t* cols,
                    uint64_t nc, const oarr_t* blk, dhelpl_t dhl){
 
+    DNOB_IN1(blk, NULL, lilo_add_block(lil, rows, nr, cols, nc, c_.in[0], dhl));
+
     uint64_t a, b, m = oarr_size(blk);
     ord_t top = (oarr_act_order(blk) < oarr_trc_order(blk)) ? oarr_act_order(blk) : oarr_trc_order(blk);
     const coeff_t* im;
@@ -956,6 +958,8 @@ int lilo_sorted(const lilo_t* lil, uint64_t* perm, int64_t* indptr){
 // *******************************************************************************************************
 int lilo_to_csr(const lilo_t* lil, oarr_t* val, int64_t* indices, int64_t* indptr){
 
+    DNOB_IN1(NULL, val, lilo_to_csr(lil, c_.res, indices, indptr));
+
     uint64_t n = lil->nnz, t, e;
     uint64_t* perm;
     ord_t trc = 0, act = 0, p;
@@ -1086,6 +1090,8 @@ int csro_check(const csro_t* K){
 // *******************************************************************************************************
 int csro_to_dense(const csro_t* K, oarr_t* res){
 
+    DNOB_IN1(NULL, res, csro_to_dense(K, c_.res));
+
     const oarr_t* V = K->p_val;
     uint64_t nnz = oarr_size(V), r, size;
     size_t nb, b;
@@ -1137,6 +1143,8 @@ int csro_to_dense(const csro_t* K, oarr_t* res){
 
 // *******************************************************************************************************
 int csro_matmul_to(const csro_t* K, const oarr_t* x, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(x, res, csro_matmul_to(K, c_.in[0], c_.res, dhl));
 
     const oarr_t* V = K->p_val;
     bases_t k = (oarr_nact(V) > oarr_nact(x)) ? oarr_nact(V) : oarr_nact(x);
@@ -1196,6 +1204,8 @@ int csro_matmul_to(const csro_t* K, const oarr_t* x, oarr_t* res, dhelpl_t dhl){
 
 // *******************************************************************************************************
 int csro_solve_init(const csro_t* K, const oarr_t* b, oarr_t* u){
+
+    DNOB_IN1(b, u, csro_solve_init(K, c_.in[0], c_.res));
 
     const oarr_t* V = K->p_val;
     bases_t k = (oarr_nact(V) > oarr_nact(b)) ? oarr_nact(V) : oarr_nact(b);

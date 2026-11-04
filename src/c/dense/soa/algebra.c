@@ -73,7 +73,7 @@ static inline void dnoa_set_act_function(oarr_t* res){
 
 
 // *******************************************************************************************************
-// Destination of a result over (nact, trc, nrows x ncols): `res` itself, or a call-local array that
+// Destination of a result over (nact, trc) of element shape S: `res` itself, or a call-local array that
 // replaces `res` at the end (dnoa_out_end()).
 typedef struct {
     coeff_t*    p_r; ///< Where the result is written.
@@ -90,8 +90,8 @@ typedef struct {
 // Prepares the destination. With `local` set the result is built in a new array and `res` is not
 // touched until dnoa_out_end(); otherwise `res` is shaped now (its values become unspecified). On a
 // failure `res` is unchanged and nothing is allocated.
-static int dnoa_out_begin(dnoa_out_t* out, oarr_t* res, int local, bases_t nact, ord_t trc,
-                          uint64_t nrows, uint64_t ncols){
+static int dnoa_out_begin_s(dnoa_out_t* out, oarr_t* res, int local, bases_t nact, ord_t trc,
+                            const dnob_shape_t* S){
 
     uint64_t size;
     int status;
@@ -101,7 +101,7 @@ static int dnoa_out_begin(dnoa_out_t* out, oarr_t* res, int local, bases_t nact,
     out->nact  = nact;
     out->trc   = trc;
 
-    if (dnob_shape_size(nrows, ncols, &size) != DN_OK || dnob_nreals(nact, trc, size, &out->n) != DN_OK){
+    if (dnob_shape_size_s(S, &size) != DN_OK || dnob_nreals(nact, trc, size, &out->n) != DN_OK){
         return DN_ERR_MEMORY;
     }
 
@@ -113,7 +113,7 @@ static int dnoa_out_begin(dnoa_out_t* out, oarr_t* res, int local, bases_t nact,
             return OTI_ERR_BUSY;
         }
 
-        status = dnob_result_shape(&out->own, nact, nrows, ncols, trc, NULL);
+        status = dnob_result_shape_s(&out->own, nact, S, trc, NULL);
 
         if (status != DN_OK){
             return status;
@@ -126,10 +126,38 @@ static int dnoa_out_begin(dnoa_out_t* out, oarr_t* res, int local, bases_t nact,
 
     }
 
-    status = dnob_result_shape(res, nact, nrows, ncols, trc, NULL);
+    status = dnob_result_shape_s(res, nact, S, trc, NULL);
     out->p_r = oarr_data(res);
 
     return status;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// dnoa_out_begin_s() for the element shape of `like` (an elementwise result keeps its operands' shape).
+static int dnoa_out_begin(dnoa_out_t* out, oarr_t* res, int local, bases_t nact, ord_t trc,
+                          const oarr_t* like){
+
+    dnob_shape_t S = dnob_shape_of(like);
+
+    S.layout = ND_LAYOUT_F;
+
+    return dnoa_out_begin_s(out, res, local, nact, trc, &S);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// dnoa_out_begin_s() for the matrix shape nrows x ncols.
+static int dnoa_out_begin2(dnoa_out_t* out, oarr_t* res, int local, bases_t nact, ord_t trc,
+                           uint64_t nrows, uint64_t ncols){
+
+    dnob_shape_t S = dnob_shape2(nrows, ncols);
+
+    return dnoa_out_begin_s(out, res, local, nact, trc, &S);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -230,7 +258,7 @@ static int dnoa_axpby_to(coeff_t sa, const oarr_t* a, coeff_t sb, const oarr_t* 
     dnoa_out_t out;
     int local, status;
 
-    if (oarr_nrows(a) != oarr_nrows(b) || oarr_ncols(a) != oarr_ncols(b)){
+    if (!dnob_same_shape(a, b)){
         return DN_ERR_SIZE;
     }
 
@@ -238,7 +266,7 @@ static int dnoa_axpby_to(coeff_t sa, const oarr_t* a, coeff_t sb, const oarr_t* 
     local = (dnoa_aliases(res, a) && !dnoa_layout_is(a, k, trc))
             || (dnoa_aliases(res, b) && !dnoa_layout_is(b, k, trc));
 
-    status = dnoa_out_begin(&out, res, local, k, trc, oarr_nrows(a), oarr_ncols(a));
+    status = dnoa_out_begin(&out, res, local, k, trc, a);
 
     if (status != DN_OK){
         return status;
@@ -268,7 +296,7 @@ static int dnoa_axpby_oO_to(coeff_t sn, const otinum_t* num, coeff_t sa, const o
     int status;
 
     status = dnoa_out_begin(&out, res, dnoa_aliases(res, arr) && !dnoa_layout_is(arr, k, trc), k, trc,
-                            oarr_nrows(arr), oarr_ncols(arr));
+                            arr);
 
     if (status != DN_OK){
         return status;
@@ -341,8 +369,11 @@ static int dnoa_affine_to(coeff_t scale, const oarr_t* arr, coeff_t shift, oarr_
 
     if (shift != 0.0){
 
-        for (x = 0; x < oarr_size(res); x++){
-            oarr_data(res)[x] += shift;
+        coeff_t* d = oarr_data(res);
+        size_t m = (size_t)oarr_size(res);
+
+        for (x = 0; x < m; x++){
+            d[x] += shift;
         }
 
     }
@@ -360,6 +391,8 @@ static int dnoa_affine_to(coeff_t scale, const oarr_t* arr, coeff_t shift, oarr_
 // *******************************************************************************************************
 int oarr_sum_OO_to(const oarr_t* arr1, const oarr_t* arr2, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN2B(arr1, arr2, res, oarr_sum_OO_to(c_.in[0], c_.in[1], c_.res, dhl));
+
     (void)dhl;
 
     return dnoa_axpby_to(1.0, arr1, 1.0, arr2, res);
@@ -370,6 +403,8 @@ int oarr_sum_OO_to(const oarr_t* arr1, const oarr_t* arr2, oarr_t* res, dhelpl_t
 
 // *******************************************************************************************************
 int oarr_sum_oO_to(const otinum_t* num, const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(arr1, res, oarr_sum_oO_to(num, c_.in[0], c_.res, dhl));
 
     (void)dhl;
 
@@ -382,6 +417,8 @@ int oarr_sum_oO_to(const otinum_t* num, const oarr_t* arr1, oarr_t* res, dhelpl_
 // *******************************************************************************************************
 int oarr_sum_rO_to(coeff_t val, const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_sum_rO_to(val, c_.in[0], c_.res, dhl));
+
     (void)dhl;
 
     return dnoa_affine_to(1.0, arr1, val, res);
@@ -392,6 +429,8 @@ int oarr_sum_rO_to(coeff_t val, const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
 // *******************************************************************************************************
 int oarr_sub_OO_to(const oarr_t* arr1, const oarr_t* arr2, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN2B(arr1, arr2, res, oarr_sub_OO_to(c_.in[0], c_.in[1], c_.res, dhl));
 
     (void)dhl;
 
@@ -404,6 +443,8 @@ int oarr_sub_OO_to(const oarr_t* arr1, const oarr_t* arr2, oarr_t* res, dhelpl_t
 // *******************************************************************************************************
 int oarr_sub_oO_to(const otinum_t* num, const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_sub_oO_to(num, c_.in[0], c_.res, dhl));
+
     (void)dhl;
 
     return dnoa_axpby_oO_to(1.0, num, -1.0, arr1, res);
@@ -414,6 +455,8 @@ int oarr_sub_oO_to(const otinum_t* num, const oarr_t* arr1, oarr_t* res, dhelpl_
 
 // *******************************************************************************************************
 int oarr_sub_rO_to(coeff_t val, const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(arr1, res, oarr_sub_rO_to(val, c_.in[0], c_.res, dhl));
 
     (void)dhl;
 
@@ -426,6 +469,8 @@ int oarr_sub_rO_to(coeff_t val, const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int oarr_sub_Oo_to(const oarr_t* arr1, const otinum_t* num, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_sub_Oo_to(c_.in[0], num, c_.res, dhl));
+
     (void)dhl;
 
     return dnoa_axpby_oO_to(-1.0, num, 1.0, arr1, res);
@@ -436,6 +481,8 @@ int oarr_sub_Oo_to(const oarr_t* arr1, const otinum_t* num, oarr_t* res, dhelpl_
 
 // *******************************************************************************************************
 int oarr_sub_Or_to(const oarr_t* arr1, coeff_t val, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(arr1, res, oarr_sub_Or_to(c_.in[0], val, c_.res, dhl));
 
     (void)dhl;
 
@@ -448,18 +495,20 @@ int oarr_sub_Or_to(const oarr_t* arr1, coeff_t val, oarr_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int oarr_mul_OO_to(const oarr_t* arr1, const oarr_t* arr2, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN2B(arr1, arr2, res, oarr_mul_OO_to(c_.in[0], c_.in[1], c_.res, dhl));
+
     bases_t k = dnoa_max_bases(oarr_nact(arr1), oarr_nact(arr2));
     ord_t trc = dnoa_max_ord(oarr_trc_order(arr1), oarr_trc_order(arr2));
     dnoa_out_t out;
     int status;
 
-    if (oarr_nrows(arr1) != oarr_nrows(arr2) || oarr_ncols(arr1) != oarr_ncols(arr2)){
+    if (!dnob_same_shape(arr1, arr2)){
         return DN_ERR_SIZE;
     }
 
     // The product accumulates while it reads the operands: an aliased result is built locally.
     status = dnoa_out_begin(&out, res, dnoa_aliases(res, arr1) || dnoa_aliases(res, arr2), k, trc,
-                            oarr_nrows(arr1), oarr_ncols(arr1));
+                            arr1);
 
     if (status != DN_OK){
         return status;
@@ -484,6 +533,8 @@ int oarr_mul_OO_to(const oarr_t* arr1, const oarr_t* arr2, oarr_t* res, dhelpl_t
 
 // *******************************************************************************************************
 int oarr_mul_oO_to(const otinum_t* num, const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(arr1, res, oarr_mul_oO_to(num, c_.in[0], c_.res, dhl));
 
     bases_t k = dnoa_max_bases(num->nact, oarr_nact(arr1));
     ord_t trc = dnoa_max_ord(num->trc_order, oarr_trc_order(arr1));
@@ -510,8 +561,7 @@ int oarr_mul_oO_to(const otinum_t* num, const oarr_t* arr1, oarr_t* res, dhelpl_
         memcpy(C + 1, num->p_im, (size_t)nimag * sizeof(coeff_t));
     }
 
-    status = dnoa_out_begin(&out, res, dnoa_aliases(res, arr1), k, trc, oarr_nrows(arr1),
-                            oarr_ncols(arr1));
+    status = dnoa_out_begin(&out, res, dnoa_aliases(res, arr1), k, trc, arr1);
 
     if (status != DN_OK){
 
@@ -541,6 +591,8 @@ int oarr_mul_oO_to(const otinum_t* num, const oarr_t* arr1, oarr_t* res, dhelpl_
 // *******************************************************************************************************
 int oarr_mul_rO_to(coeff_t val, const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_mul_rO_to(val, c_.in[0], c_.res, dhl));
+
     (void)dhl;
 
     return dnoa_affine_to(val, arr1, 0.0, res);
@@ -552,10 +604,12 @@ int oarr_mul_rO_to(coeff_t val, const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int oarr_div_OO_to(const oarr_t* arr1, const oarr_t* arr2, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN2B(arr1, arr2, res, oarr_div_OO_to(c_.in[0], c_.in[1], c_.res, dhl));
+
     oarr_t inv = oarr_init();
     int status;
 
-    if (oarr_nrows(arr1) != oarr_nrows(arr2) || oarr_ncols(arr1) != oarr_ncols(arr2)){
+    if (!dnob_same_shape(arr1, arr2)){
         return DN_ERR_SIZE;
     }
 
@@ -580,6 +634,8 @@ int oarr_div_OO_to(const oarr_t* arr1, const oarr_t* arr2, oarr_t* res, dhelpl_t
 // *******************************************************************************************************
 int oarr_div_oO_to(const otinum_t* num, const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_div_oO_to(num, c_.in[0], c_.res, dhl));
+
     oarr_t inv = oarr_init();
     int status = oarr_pow_to(arr1, -1.0, &inv, dhl);
 
@@ -602,6 +658,8 @@ int oarr_div_oO_to(const otinum_t* num, const oarr_t* arr1, oarr_t* res, dhelpl_
 // *******************************************************************************************************
 int oarr_div_rO_to(coeff_t val, const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_div_rO_to(val, c_.in[0], c_.res, dhl));
+
     int status = oarr_pow_to(arr1, -1.0, res, dhl);
 
     if (status == DN_OK){
@@ -616,6 +674,8 @@ int oarr_div_rO_to(coeff_t val, const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
 // *******************************************************************************************************
 int oarr_div_Oo_to(const oarr_t* arr1, const otinum_t* num, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(arr1, res, oarr_div_Oo_to(c_.in[0], num, c_.res, dhl));
 
     otinum_t inv = oti_init();
     int status = oti_pow_to(num, -1.0, &inv, dhl);
@@ -639,6 +699,8 @@ int oarr_div_Oo_to(const oarr_t* arr1, const otinum_t* num, oarr_t* res, dhelpl_
 // *******************************************************************************************************
 int oarr_div_Or_to(const oarr_t* arr1, coeff_t val, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_div_Or_to(c_.in[0], val, c_.res, dhl));
+
     return oarr_mul_rO_to(1.0 / val, arr1, res, dhl);
 
 }
@@ -647,6 +709,8 @@ int oarr_div_Or_to(const oarr_t* arr1, coeff_t val, oarr_t* res, dhelpl_t dhl){
 
 // *******************************************************************************************************
 int oarr_neg_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(arr1, res, oarr_neg_to(c_.in[0], c_.res, dhl));
 
     (void)dhl;
 
@@ -846,6 +910,8 @@ static int dnoa_feval_all(const coeff_t* derivs, const coeff_t* A, bases_t k, or
 // *******************************************************************************************************
 int oarr_feval_to(const coeff_t* derivs, const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_feval_to(derivs, c_.in[0], c_.res, dhl));
+
     bases_t k = oarr_nact(arr1);
     ord_t trc = oarr_trc_order(arr1), act = oarr_act_order(arr1);
     uint64_t m = oarr_size(arr1);
@@ -859,7 +925,7 @@ int oarr_feval_to(const coeff_t* derivs, const oarr_t* arr1, oarr_t* res, dhelpl
 
         uint64_t e;
 
-        status = oarr_zeros_to(k, oarr_nrows(arr1), oarr_ncols(arr1), trc, res);
+        status = oarr_zeros_nd_to(k, oarr_ndim(arr1), arr1->blocks.shape + 1, ND_LAYOUT_F, trc, res);
 
         for (e = 0; e < m && status == DN_OK; e++){
             oarr_data(res)[e] = derivs[e];
@@ -893,8 +959,7 @@ int oarr_feval_to(const coeff_t* derivs, const oarr_t* arr1, oarr_t* res, dhelpl
     W1 = W;
     W2 = (nw == 2) ? W + n : NULL;
 
-    status = dnoa_out_begin(&out, res, dnoa_aliases(res, arr1), k, trc, oarr_nrows(arr1),
-                            oarr_ncols(arr1));
+    status = dnoa_out_begin(&out, res, dnoa_aliases(res, arr1), k, trc, arr1);
 
     if (status != DN_OK){
 
@@ -993,6 +1058,8 @@ static int dnoa_function_to(const oarr_t* arr1, void (*fn)(coeff_t, ord_t, coeff
 // *******************************************************************************************************
 int oarr_exp_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_exp_to(c_.in[0], c_.res, dhl));
+
     return dnoa_function_to(arr1, der_r_exp, 0.0, res, dhl);
 
 }
@@ -1001,6 +1068,8 @@ int oarr_exp_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
 // *******************************************************************************************************
 int oarr_log_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(arr1, res, oarr_log_to(c_.in[0], c_.res, dhl));
 
     return dnoa_function_to(arr1, der_r_log, 0.0, res, dhl);
 
@@ -1011,6 +1080,8 @@ int oarr_log_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int oarr_log10_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_log10_to(c_.in[0], c_.res, dhl));
+
     return dnoa_function_to(arr1, der_r_log10, 0.0, res, dhl);
 
 }
@@ -1019,6 +1090,8 @@ int oarr_log10_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
 // *******************************************************************************************************
 int oarr_sqrt_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(arr1, res, oarr_sqrt_to(c_.in[0], c_.res, dhl));
 
     return dnoa_function_to(arr1, der_r_sqrt, 0.0, res, dhl);
 
@@ -1029,6 +1102,8 @@ int oarr_sqrt_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int oarr_cbrt_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_cbrt_to(c_.in[0], c_.res, dhl));
+
     return dnoa_function_to(arr1, NULL, 1.0 / 3.0, res, dhl);
 
 }
@@ -1037,6 +1112,8 @@ int oarr_cbrt_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
 // *******************************************************************************************************
 int oarr_sin_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(arr1, res, oarr_sin_to(c_.in[0], c_.res, dhl));
 
     return dnoa_function_to(arr1, der_r_sin, 0.0, res, dhl);
 
@@ -1047,6 +1124,8 @@ int oarr_sin_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int oarr_cos_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_cos_to(c_.in[0], c_.res, dhl));
+
     return dnoa_function_to(arr1, der_r_cos, 0.0, res, dhl);
 
 }
@@ -1055,6 +1134,8 @@ int oarr_cos_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
 // *******************************************************************************************************
 int oarr_tan_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(arr1, res, oarr_tan_to(c_.in[0], c_.res, dhl));
 
     return dnoa_function_to(arr1, der_r_tan, 0.0, res, dhl);
 
@@ -1065,6 +1146,8 @@ int oarr_tan_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int oarr_asin_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_asin_to(c_.in[0], c_.res, dhl));
+
     return dnoa_function_to(arr1, der_r_asin, 0.0, res, dhl);
 
 }
@@ -1073,6 +1156,8 @@ int oarr_asin_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
 // *******************************************************************************************************
 int oarr_acos_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(arr1, res, oarr_acos_to(c_.in[0], c_.res, dhl));
 
     return dnoa_function_to(arr1, der_r_acos, 0.0, res, dhl);
 
@@ -1083,6 +1168,8 @@ int oarr_acos_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int oarr_atan_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_atan_to(c_.in[0], c_.res, dhl));
+
     return dnoa_function_to(arr1, der_r_atan, 0.0, res, dhl);
 
 }
@@ -1091,6 +1178,8 @@ int oarr_atan_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
 // *******************************************************************************************************
 int oarr_sinh_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(arr1, res, oarr_sinh_to(c_.in[0], c_.res, dhl));
 
     return dnoa_function_to(arr1, der_r_sinh, 0.0, res, dhl);
 
@@ -1101,6 +1190,8 @@ int oarr_sinh_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int oarr_cosh_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_cosh_to(c_.in[0], c_.res, dhl));
+
     return dnoa_function_to(arr1, der_r_cosh, 0.0, res, dhl);
 
 }
@@ -1109,6 +1200,8 @@ int oarr_cosh_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
 // *******************************************************************************************************
 int oarr_tanh_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(arr1, res, oarr_tanh_to(c_.in[0], c_.res, dhl));
 
     return dnoa_function_to(arr1, der_r_tanh, 0.0, res, dhl);
 
@@ -1119,6 +1212,8 @@ int oarr_tanh_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int oarr_asinh_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_asinh_to(c_.in[0], c_.res, dhl));
+
     return dnoa_function_to(arr1, der_r_asinh, 0.0, res, dhl);
 
 }
@@ -1127,6 +1222,8 @@ int oarr_asinh_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
 // *******************************************************************************************************
 int oarr_acosh_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(arr1, res, oarr_acosh_to(c_.in[0], c_.res, dhl));
 
     return dnoa_function_to(arr1, der_r_acosh, 0.0, res, dhl);
 
@@ -1137,6 +1234,8 @@ int oarr_acosh_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int oarr_atanh_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_atanh_to(c_.in[0], c_.res, dhl));
+
     return dnoa_function_to(arr1, der_r_atanh, 0.0, res, dhl);
 
 }
@@ -1146,6 +1245,8 @@ int oarr_atanh_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int oarr_erf_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_erf_to(c_.in[0], c_.res, dhl));
+
     return dnoa_function_to(arr1, der_r_erf, 0.0, res, dhl);
 
 }
@@ -1154,6 +1255,8 @@ int oarr_erf_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
 // *******************************************************************************************************
 int oarr_pow_to(const oarr_t* arr1, coeff_t e, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(arr1, res, oarr_pow_to(c_.in[0], e, c_.res, dhl));
 
     return dnoa_function_to(arr1, NULL, e, res, dhl);
 
@@ -1167,6 +1270,8 @@ int oarr_pow_to(const oarr_t* arr1, coeff_t e, oarr_t* res, dhelpl_t dhl){
 
 // *******************************************************************************************************
 int oarr_matmul_OO_to(const oarr_t* arr1, const oarr_t* arr2, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN2(arr1, arr2, res, oarr_matmul_OO_to(c_.in[0], c_.in[1], c_.res, dhl));
 
     bases_t k = dnoa_max_bases(oarr_nact(arr1), oarr_nact(arr2));
     ord_t trc = dnoa_max_ord(oarr_trc_order(arr1), oarr_trc_order(arr2)), q;
@@ -1220,8 +1325,8 @@ int oarr_matmul_OO_to(const oarr_t* arr1, const oarr_t* arr2, oarr_t* res, dhelp
 
     }
 
-    status = dnoa_out_begin(&out, res, dnoa_aliases(res, arr1) || dnoa_aliases(res, arr2), k, trc,
-                            nrows, ncols);
+    status = dnoa_out_begin2(&out, res, dnoa_aliases(res, arr1) || dnoa_aliases(res, arr2), k, trc,
+                             nrows, ncols);
 
     if (status != DN_OK){
 
@@ -1259,6 +1364,8 @@ int oarr_matmul_OO_to(const oarr_t* arr1, const oarr_t* arr2, oarr_t* res, dhelp
 // *******************************************************************************************************
 int oarr_transpose_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(arr1, res, oarr_transpose_to(c_.in[0], c_.res, dhl));
+
     bases_t k = oarr_nact(arr1);
     ord_t trc = oarr_trc_order(arr1), act = oarr_act_order(arr1);
     uint64_t nrows = oarr_nrows(arr1), ncols = oarr_ncols(arr1), size = oarr_size(arr1), r, c;
@@ -1272,7 +1379,7 @@ int oarr_transpose_to(const oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
         return DN_ERR_SIZE;
     }
 
-    status = dnoa_out_begin(&out, res, dnoa_aliases(res, arr1), k, trc, ncols, nrows);
+    status = dnoa_out_begin2(&out, res, dnoa_aliases(res, arr1), k, trc, ncols, nrows);
 
     if (status != DN_OK){
         return status;

@@ -1,18 +1,16 @@
 #-----------------------------------------------------------------------------------------------------
 # *****************************************************************************************************
-cdef int _dmat_slice_item(nd_index_t* item, object sl, int64_t n) except -1:
+cdef int _dmat_range_item(nd_index_t* item, int64_t start, int64_t stop, int64_t step) except -1:
   """
-  PURPOSE:      A Python slice, applied to an axis of extent n, as a normalized ndarray index item.
+  PURPOSE:      A normalized (slice.indices) start / stop / step triple as a ndarray index item.
 
-  DESCRIPTION:  The slice is normalized by Python (slice.indices), then written so that the NumPy
-                normalization of nd_view_index gives back exactly the same elements (an empty slice
-                is 0:0, and a stop of "before 0" is left out).
+  DESCRIPTION:  Written so that the NumPy normalization of nd_view_index gives back exactly the same
+                elements (an empty slice is 0:0, and a stop of "before 0" is left out).
   """
   #***************************************************************************************************
 
-  cdef int64_t start, stop, step, length, last
+  cdef int64_t length, last
 
-  start, stop, step = sl.indices(n)
   length = len(range(start, stop, step))
 
   item.kind = ND_IDX_SLICE
@@ -43,6 +41,38 @@ cdef int _dmat_slice_item(nd_index_t* item, object sl, int64_t n) except -1:
   # end if
 
   return 0
+
+#-----------------------------------------------------------------------------------------------------
+
+# *****************************************************************************************************
+cdef int _dmat_slice_item(nd_index_t* item, object sl, int64_t n) except -1:
+  """
+  PURPOSE:      A Python slice, applied to an axis of extent n, as a normalized ndarray index item.
+  """
+  #***************************************************************************************************
+
+  cdef int64_t start, stop, step
+
+  start, stop, step = sl.indices(n)
+
+  return _dmat_range_item(item, start, stop, step)
+
+#-----------------------------------------------------------------------------------------------------
+
+# *****************************************************************************************************
+def _dmat_iter(dmat D):
+  """
+  PURPOSE:      The rows of D, one axis fewer (floats for a 1-D matrix): D[0], D[1], ...
+  """
+  #***************************************************************************************************
+
+  cdef int64_t i
+
+  for i in range(D.nd.shape[0]):
+
+    yield D[i]
+
+  # end for
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -137,13 +167,67 @@ cdef class dmat:
 
   #***************************************************************************************************
   @property
+  def T(self):
+    """
+    PURPOSE:      The transpose (a copy; a 1-D or 0-D array is its own transpose, as in NumPy).
+    """
+    #*************************************************************************************************
+
+    return transpose(self)
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def reshape(self, *shape, order = 'C'):
+    """
+    PURPOSE:      A copy with another shape of at most 2 dimensions (reshape(3, 4), reshape((3, 4)),
+                  reshape(-1)); one extent may be -1. Only order='C' (the row-major order of NumPy).
+    """
+    #*************************************************************************************************
+
+    if order != 'C':
+
+      raise ValueError("reshape: only order='C' is supported")
+
+    # end if
+
+    dims = reshape_shape(shape, self.size, "pyoti.real")
+
+    return array(np.ascontiguousarray(self.to_numpy()).reshape(dims))
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  @property
   def shape(self):
     """
     PURPOSE:      Return the shape of the stored matrix.
     """
     #*************************************************************************************************
 
-    return (self.arr.nrows,self.arr.ncols)
+    if self._lk == 0:
+
+      return (self.nd.shape[0], self.nd.shape[1])
+
+    elif self._lk == 1:
+
+      return (self.nd.shape[0],)
+
+    # end if
+
+    return ()
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  @property
+  def ndim(self):
+    """
+    PURPOSE:      Return the number of dimensions of the logical shape (0, 1 or 2).
+    """
+    #*************************************************************************************************
+
+    return 2 - self._lk
 
   #---------------------------------------------------------------------------------------------------
 
@@ -151,11 +235,13 @@ cdef class dmat:
   @property
   def nrows(self):
     """
-    PURPOSE:      Return the number of rows of the stored matrix.
+    PURPOSE:      Return the number of rows of the stored matrix (deprecated: use shape; 1-D: n, 0-D: 1).
     """
     #*************************************************************************************************
 
-    return self.arr.nrows
+    warnings.warn("nrows is deprecated, use shape", DeprecationWarning, stacklevel=2)
+
+    return self.nd.shape[0]
 
   #---------------------------------------------------------------------------------------------------
 
@@ -163,11 +249,13 @@ cdef class dmat:
   @property
   def ncols(self):
     """
-    PURPOSE:      Return the number of columns of the stored matrix.
+    PURPOSE:      Return the number of columns of the stored matrix (deprecated: use shape; 1-D, 0-D: 1).
     """
     #*************************************************************************************************
 
-    return self.arr.ncols
+    warnings.warn("ncols is deprecated, use shape", DeprecationWarning, stacklevel=2)
+
+    return self.nd.shape[1]
 
   #---------------------------------------------------------------------------------------------------
 
@@ -179,7 +267,41 @@ cdef class dmat:
     """
     #*************************************************************************************************
 
-    return self.arr.size
+    return self.nd.shape[0]*self.nd.shape[1]
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def __len__(self):
+    """
+    PURPOSE:      Length of the first axis; a 0-D matrix has none.
+    """
+    #*************************************************************************************************
+
+    if self._lk == 2:
+
+      raise TypeError("len() of a 0-d dmat")
+
+    # end if
+
+    return self.nd.shape[0]
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def __iter__(self):
+    """
+    PURPOSE:      Iterate over the first axis (rows with one axis fewer; floats for a 1-D matrix).
+    """
+    #*************************************************************************************************
+
+    if self._lk == 2:
+
+      raise TypeError("iteration over a 0-d dmat")
+
+    # end if
+
+    return _dmat_iter(self)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -226,10 +348,11 @@ cdef class dmat:
 
   #***************************************************************************************************
   @staticmethod
-  cdef dmat create_view(ndarr_t* view):
+  cdef dmat create_view(ndarr_t* view, uint8_t lk = 0):
     """
     PURPOSE:      C-level constructor over a retained 2-D F64 descriptor (a view of some dmat, or
-                  any retained array). The object takes the reference: view is left empty.
+                  any retained array). The object takes the reference: view is left empty. lk is the
+                  logical shape kind (0: 2-D, 1: 1-D stored n x 1, 2: 0-D stored 1 x 1).
 
     """
     #*************************************************************************************************
@@ -238,6 +361,7 @@ cdef class dmat:
 
     nd_move(view, &mat.nd)
     mat.FLAGS = 1
+    mat._lk   = lk
     mat._bind()
 
     return mat
@@ -383,20 +507,114 @@ cdef class dmat:
     #*************************************************************************************************
 
     cdef ndarr_t view
+    cdef ndarr_t kept
 
     nd_init_empty(&view)
+    nd_init_empty(&kept)
 
     try:
 
       self._slice(ii, jj, &view)
 
-      return dmat.create_view(&view)
+      # nd_view_index gives a temporary that only borrows self's reference: pin the memory.
+      _nd_status("dmat", nd_view_retain(&view, &kept), &self.nd)
+
+      return dmat.create_view(&kept)
 
     finally:
 
-      nd_release(&view)    # no-op once create_view took the reference
+      nd_release(&kept)    # no-op once create_view took the reference
 
     # end try
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cdef object _view_rng(self, tuple r):
+    """
+    PURPOSE:      The view selected by a key2d result r (ranges of the 2-D struct, logical shape) as
+                  a dmat of that logical shape; it shares the memory.
+
+    DESCRIPTION:  A 1-D result of a row key is 1 x k in the 2-D struct: it is transposed (a view) to
+                  the stored k x 1 form.
+
+    """
+    #*************************************************************************************************
+
+    cdef nd_index_t idx[2]
+    cdef ndarr_t block
+    cdef ndarr_t tmp
+    cdef ndarr_t kept
+    cdef uint8_t lk = 0
+    cdef object shape = r[6]
+
+    if shape is not None:
+
+      lk = 2 - len(shape)
+
+    # end if
+
+    nd_init_empty(&block)
+    nd_init_empty(&tmp)
+    nd_init_empty(&kept)
+
+    try:
+
+      _dmat_range_item(&idx[0], r[0], r[1], r[2])
+      _dmat_range_item(&idx[1], r[3], r[4], r[5])
+
+      _nd_status("dmat", nd_view_index(&self.nd, 2, idx, &block), &self.nd)
+
+      if lk == 1 and block.shape[0] == 1 and block.shape[1] != 1:
+
+        _nd_status("dmat", nd_view_transpose(&block, 0, NULL, &tmp), &self.nd)
+        _nd_status("dmat", nd_view_retain(&tmp, &kept), &self.nd)
+
+      else:
+
+        _nd_status("dmat", nd_view_retain(&block, &kept), &self.nd)
+
+      # end if
+
+      return dmat.create_view(&kept, lk)
+
+    finally:
+
+      nd_release(&kept)    # no-op once create_view took the reference
+
+    # end try
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cdef int _logical(self, ndarr_t* out) except -1:
+    """
+    PURPOSE:      A temporary view of the matrix with its LOGICAL shape: nd itself (2-D), nd without
+                  its column axis (1-D) or without both axes (0-D). It borrows self's reference.
+
+    """
+    #*************************************************************************************************
+
+    cdef int32_t axes[2]
+
+    if self._lk == 0:
+
+      _nd_status("dmat", nd_view_index(&self.nd, 0, NULL, out), &self.nd)
+
+    elif self._lk == 1:
+
+      axes[0] = 1
+      _nd_status("dmat", nd_view_squeeze(&self.nd, 1, axes, out), &self.nd)
+
+    else:
+
+      axes[0] = 0
+      axes[1] = 1
+      _nd_status("dmat", nd_view_squeeze(&self.nd, 2, axes, out), &self.nd)
+
+    # end if
+
+    return 0
 
   #---------------------------------------------------------------------------------------------------
 
@@ -430,7 +648,10 @@ cdef class dmat:
     """
     #*************************************************************************************************
 
-    nd_getbuffer(&self.nd, 1, buffer, flags, self)
+    cdef ndarr_t lv
+
+    self._logical(&lv)
+    nd_getbuffer(&lv, 1, buffer, flags, self)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -455,7 +676,11 @@ cdef class dmat:
     """
     #*************************************************************************************************
 
-    return nd_dlpack_call(&self.nd, 1, stream, max_version, dl_device, copy)
+    cdef ndarr_t lv
+
+    self._logical(&lv)
+
+    return nd_dlpack_call(&lv, 1, stream, max_version, dl_device, copy)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -486,9 +711,7 @@ cdef class dmat:
     # tail =  ")"
     # return (head + body + tail)
 
-    cdef np.ndarray[double, ndim=2] A = self.to_numpy()
-
-    return repr(A)
+    return repr(self.to_numpy())
 
   #---------------------------------------------------------------------------------------------------
 
@@ -525,370 +748,211 @@ cdef class dmat:
 
     # return (head + body + tail)
 
-    cdef np.ndarray[double, ndim=2] A = self.to_numpy()
-
-    return str(A)
+    return str(self.to_numpy())
 
   #---------------------------------------------------------------------------------------------------
 
 
 
   #***************************************************************************************************
-  def __getitem__(self, val):
+  cdef tuple _key(self, object val):
     """
-    PURPOSE: Get the value of an element of the item, or a view of a block (it shares the memory).
+    PURPOSE:      The NumPy key val resolved on the logical shape (key2d): ranges of the 2-D struct
+                  and the logical result shape (None: one integer per axis, a scalar element).
     """
     #*************************************************************************************************
 
-    cdef object full = slice(None, None, None)
+    return key2d(val, 2 - self._lk, self.nd.shape[0], self.nd.shape[1], "pyoti.real")
 
-    tval = type(val)
+  #---------------------------------------------------------------------------------------------------
 
-    if tval == int:
+  #***************************************************************************************************
+  cdef int _target(self, tuple r, ndarr_t* out) except -1:
+    """
+    PURPOSE:      The block selected by a key2d result as a temporary view of its logical shape (the
+                  shape an assignment broadcasts to). It borrows self's reference.
+    """
+    #*************************************************************************************************
 
-      if val < self.nd.shape[0]:
+    cdef nd_index_t idx[2]
+    cdef ndarr_t block
+    cdef int32_t axes[2]
+    cdef object shape = r[6]
 
-        return self._view(slice(val, val+1, None), full)
+    nd_init_empty(&block)
 
-      else:
+    _dmat_range_item(&idx[0], r[0], r[1], r[2])
+    _dmat_range_item(&idx[1], r[3], r[4], r[5])
 
-        raise IndexError("Index out of bounds.")
+    _nd_status("dmat", nd_view_index(&self.nd, 2, idx, &block), &self.nd)
 
-      # end if
+    if shape is None or len(shape) == 0:
 
-    elif tval == slice: #slice of multiple items
+      axes[0] = 0
+      axes[1] = 1
+      _nd_status("dmat", nd_view_squeeze(&block, 2, axes, out), &self.nd)
 
-      return self._view(val, full)
+    elif len(shape) == 1:
 
-    elif tval == tuple:
-
-      if len(val) == 2:
-
-        tval0 = type(val[0])
-        tval1 = type(val[1])
-
-        if   tval0 == int and tval1 == int:
-
-          self._check_ij(val[0], val[1])
-          return (<double*>self.nd.data)[val[0]*self.nd.strides[0] + val[1]*self.nd.strides[1]]
-
-        elif tval0 == int and tval1 == slice:
-
-          if val[0] < self.nd.shape[0]:
-
-            return self._view(slice(val[0], val[0]+1, None), val[1])
-
-          else:
-
-            raise IndexError("Index out of bounds.")
-
-          # end if
-
-        elif tval0 == slice and tval1 == int:
-
-          if val[1] < self.nd.shape[1]:
-
-            return self._view(val[0], slice(val[1], val[1]+1, None))
-
-          else:
-
-            raise IndexError("Index out of bounds.")
-
-          # end if
-
-        elif tval0 == slice and tval1 == slice:
-
-          return self._view(val[0], val[1])
-
-        else:
-
-          raise IndexError("ERROR: double index ( , ) only integers, slices (`:`) are valid indices")
-
-        # end if
-
-      else:
-
-        raise IndexError("ERROR: Getting integration points by index is not yet supported.")
-
-      # end if
+      axes[0] = 1 if block.shape[1] == 1 else 0
+      _nd_status("dmat", nd_view_squeeze(&block, 1, axes, out), &self.nd)
 
     else:
 
-      raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
+      _nd_status("dmat", nd_view_index(&block, 0, NULL, out), &self.nd)
 
     # end if
+
+    return 0
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def __getitem__(self, val):
+    """
+    PURPOSE: NumPy basic indexing on the logical shape (ndim <= 2): an integer drops its axis, a slice
+             keeps it, one ellipsis expands, negative indices count from the end. One integer per
+             axis gives a float; anything else gives a view that shares the memory.
+    """
+    #*************************************************************************************************
+
+    cdef int64_t i, j
+    cdef tuple r
+
+    if (self._lk == 0 and type(val) is tuple and len(val) == 2 and type(val[0]) is int
+        and type(val[1]) is int):
+
+      # The fast path of element access (assembly loops).
+      try:
+
+        i = val[0]
+        j = val[1]
+
+      except OverflowError:
+
+        raise IndexError("index {} is out of bounds for an array of shape {}".format(
+                         val, self.shape)) from None
+
+      # end try
+
+      if i < 0:
+
+        i += self.nd.shape[0]
+
+      # end if
+
+      if j < 0:
+
+        j += self.nd.shape[1]
+
+      # end if
+
+      if i < 0 or i >= self.nd.shape[0] or j < 0 or j >= self.nd.shape[1]:
+
+        raise IndexError("index ({}, {}) is out of bounds for a dmat of shape {}".format(
+                         val[0], val[1], self.shape))
+
+      # end if
+
+      return (<double*>self.nd.data)[i*self.nd.strides[0] + j*self.nd.strides[1]]
+
+    # end if
+
+    r = self._key(val)
+
+    if r[6] is None:
+
+      return (<double*>self.nd.data)[<int64_t>r[0]*self.nd.strides[0] + <int64_t>r[3]*self.nd.strides[1]]
+
+    # end if
+
+    return self._view_rng(r)
 
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   def __setitem__(self, val, value):
     """
-    PURPOSE: Set an element of the item to the specified value.
+    PURPOSE: A[key] = value with NumPy's assignment rule (S1): the value (a real, a dmat or anything
+             array_like) is broadcast to the shape of A[key]: trailing axes aligned, extent 1
+             stretched, extra leading axes of extent 1 dropped. The right side is read as if copied
+             first (S2: a[1:] = a[:-1] and a[::-1] = a work).
     """
     #*************************************************************************************************
 
-    tvalue = type(value)
-
-    if ( tvalue == dmat ):
-
-      self.__setitem__R( val, value )
-
-    elif ( tvalue in number_types ):
-
-      self.__setitem__r( val, value )
-
-    else:
-
-      raise IndexError("ERROR: Cant set item of type {0} in matso object.".format(tvalue))
-
-    # end if
-
-  #---------------------------------------------------------------------------------------------------
-
-  #***************************************************************************************************
-  cdef __setitem__r(self, object val, coeff_t value):
-    """
-    PURPOSE: Set item from real value.
-    """
-    #*************************************************************************************************
-
-    cdef object full = slice(None, None, None)
     cdef ndarr_t dst
-    cdef object ii, jj
+    cdef ndarr_t src
+    cdef dmat V
+    cdef tuple r
+    cdef object shape
+    cdef object values
+    cdef double x
     cdef int status
 
-    tval = type(val)
+    r = self._key(val)
+    shape = r[6]
 
-    if tval == int:
+    if shape is None and type(value) in number_types:
 
-      if val < self.nd.shape[0]:
+      (<double*>self.nd.data)[<int64_t>r[0]*self.nd.strides[0] + <int64_t>r[3]*self.nd.strides[1]] = value
 
-        ii = slice(val, val+1, None)
-        jj = full
-
-      else:
-
-        raise IndexError("Index out of bounds.")
-
-      # end if
-
-    elif tval == slice: #slice of multiple items
-
-      ii = val
-      jj = full
-
-    elif tval == tuple:
-
-      if len(val) == 2:
-
-        tval0 = type(val[0])
-        tval1 = type(val[1])
-
-        if ( tval0 == int and tval1 == int ):
-
-          self._check_ij(val[0], val[1])
-          (<double*>self.nd.data)[val[0]*self.nd.strides[0] + val[1]*self.nd.strides[1]] = value
-          return
-
-        elif (tval0 == int and tval1 == slice):
-
-          if val[0] < self.nd.shape[0]:
-
-            ii = slice(val[0], val[0]+1, None)
-            jj = val[1]
-
-          else:
-
-            raise IndexError("Index out of bounds.")
-
-          # end if
-
-        elif (tval0 == slice and tval1 == int):
-
-          if val[1] < self.nd.shape[1]:
-
-            ii = val[0]
-            jj = slice(val[1], val[1]+1, None)
-
-          else:
-
-            raise IndexError("Index out of bounds.")
-
-          # end if
-
-        elif (tval0 == slice and tval1 == slice):
-
-          ii = val[0]
-          jj = val[1]
-
-        else:
-
-          raise IndexError("ERROR: double index ( , ) only integers, slices (`:`) are valid indices")
-
-        # end if
-
-      else:
-
-        raise IndexError("ERROR: Getting integration points by index is not yet supported.")
-
-      # end if
-
-    else:
-
-      raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
+      return
 
     # end if
 
     nd_init_empty(&dst)
+    nd_init_empty(&src)
 
-    try:
+    self._target(r, &dst)
 
-      self._slice(ii, jj, &dst)
+    if type(value) in number_types:
+
+      x = value
 
       with nogil:
 
-        status = nd_fill(_nd_ctx, &dst, value)
+        status = nd_fill(_nd_ctx, &dst, x)
 
       # end with
 
       _nd_status("dmat", status, &dst)
 
-    finally:
-
-      nd_release(&dst)
-
-    # end try
-
-  #---------------------------------------------------------------------------------------------------
-
-  #***************************************************************************************************
-  cdef __setitem__R(self,  object val, dmat value):
-    """
-    PURPOSE: Set item from real array. The block and the value must have the same shape.
-    """
-    #*************************************************************************************************
-
-    cdef object full = slice(None, None, None)
-    cdef ndarr_t dst
-    cdef object ii, jj
-    cdef int status
-
-    tval = type(val)
-
-    if tval == int:
-
-      if val < self.nd.shape[0]:
-
-        ii = slice(val, val+1, None)
-        jj = full
-
-      else:
-
-        raise IndexError("Index out of bounds.")
-
-      # end if
-
-    elif tval == slice: #slice of multiple items
-
-      ii = val
-      jj = full
-
-    elif tval == tuple:
-
-      if len(val) == 2:
-
-        tval0 = type(val[0])
-        tval1 = type(val[1])
-
-        if ( tval0 == int and tval1 == int ):
-
-          if val[0] < self.nd.shape[0] and val[1] < self.nd.shape[1]:
-
-            ii = slice(val[0], val[0]+1, None)
-            jj = slice(val[1], val[1]+1, None)
-
-          else:
-
-            raise IndexError("Index out of bounds.")
-
-          # end if
-
-        elif (tval0 == int and tval1 == slice):
-
-          if val[0] < self.nd.shape[0]:
-
-            ii = slice(val[0], val[0]+1, None)
-            jj = val[1]
-
-          else:
-
-            raise IndexError("Index out of bounds.")
-
-          # end if
-
-        elif (tval0 == slice and tval1 == int):
-
-          if val[1] < self.nd.shape[1]:
-
-            ii = val[0]
-            jj = slice(val[1], val[1]+1, None)
-
-          else:
-
-            raise IndexError("Index out of bounds.")
-
-          # end if
-
-        elif (tval0 == slice and tval1 == slice):
-
-          ii = val[0]
-          jj = val[1]
-
-        else:
-
-          raise IndexError("ERROR: double index ( , ) only integers, slices (`:`) are valid indices")
-
-        # end if
-
-      else:
-
-        raise IndexError("ERROR: Getting integration points by index is not yet supported.")
-
-      # end if
-
-    else:
-
-      raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
+      return
 
     # end if
 
-    nd_init_empty(&dst)
+    if type(value) is dmat:
 
-    try:
+      V = value
 
-      self._slice(ii, jj, &dst)
+    else:
 
-      if dst.shape[0] != value.nd.shape[0] or dst.shape[1] != value.nd.shape[1]:
+      try:
 
-        raise ValueError("Wrong dimensions for input array: cannot assign a ({}, {}) matrix to a "
-                         "({}, {}) block.".format(value.nd.shape[0], value.nd.shape[1],
-                                                  dst.shape[0], dst.shape[1]))
+        values = np.asarray(value, dtype=np.float64)
 
-      # end if
+      except (TypeError, ValueError):
 
-      with nogil:
+        raise IndexError("ERROR: Cant set item of type {0} in dmat object.".format(type(value))) from None
 
-        status = nd_assign(_nd_ctx, &value.nd, &dst)
+      # end try
 
-      # end with
+      V = zeros(values.shape)
+      V.to_numpy()[...] = values
 
-      _nd_status("dmat", status, &dst)
+    # end if
 
-    finally:
+    assign_plan(V.shape, () if shape is None else shape)
 
-      nd_release(&dst)
+    V._logical(&src)
 
-    # end try
+    with nogil:
+
+      status = nd_assign(_nd_ctx, &src, &dst)
+
+    # end with
+
+    _nd_status("dmat", status, &dst)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -903,11 +967,23 @@ cdef class dmat:
     self._sync()
     cdef darr_t newmat = darr_neg(&self.arr)
 
-    return dmat.create(&newmat)
+    return _dmat_k(dmat.create(&newmat), self._lk)
   #---------------------------------------------------------------------------------------------------
 
 
 
+
+  #***************************************************************************************************
+  def __abs__(self):
+    """
+    PURPOSE: Absolute value overload (abs(self)).
+    """
+    #*************************************************************************************************
+
+    # The C darr_abs calls the integer abs() (frozen C layer): NumPy does it.
+    return array(np.abs(self.to_numpy()))
+
+  #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   def __add__(self, other):
@@ -918,6 +994,7 @@ cdef class dmat:
 
     cdef darr_t res
     cdef dmat lhs,rhs
+    cdef uint8_t kind = 0
 
     tlhs = type(self)
     trhs = type(other)
@@ -925,16 +1002,24 @@ cdef class dmat:
     if (tlhs == trhs):
 
       lhs = self
+      rhs = other
+
+      if not _dmat_same_shape(lhs, rhs):
+
+        return _dmat_mixed(_op.add, lhs, rhs)
+
+      # end if
 
       lhs._sync()
-      rhs = other
       rhs._sync()
 
       res = darr_sum_RR(&lhs.arr,&rhs.arr)
+      kind = lhs._lk
 
     elif (tlhs in number_types):
 
       rhs = other
+      kind = rhs._lk
 
       rhs._sync()
       res = darr_sum_rR(self, &rhs.arr)
@@ -942,6 +1027,7 @@ cdef class dmat:
     elif (trhs in number_types):
 
       lhs = self
+      kind = lhs._lk
 
       lhs._sync()
       res = darr_sum_rR(other, &lhs.arr)
@@ -952,7 +1038,7 @@ cdef class dmat:
 
     # end if
 
-    return dmat.create(&res)
+    return _dmat_k(dmat.create(&res), kind)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -978,6 +1064,7 @@ cdef class dmat:
 
     cdef darr_t res
     cdef dmat lhs,rhs
+    cdef uint8_t kind = 0
 
     tlhs = type(self)
     trhs = type(other)
@@ -985,16 +1072,24 @@ cdef class dmat:
     if (tlhs == trhs):
 
       lhs = self
+      rhs = other
+
+      if not _dmat_same_shape(lhs, rhs):
+
+        return _dmat_mixed(_op.sub, lhs, rhs)
+
+      # end if
 
       lhs._sync()
-      rhs = other
       rhs._sync()
 
       res = darr_sub_RR(&lhs.arr,&rhs.arr)
+      kind = lhs._lk
 
     elif (tlhs in number_types):
 
       rhs = other
+      kind = rhs._lk
 
       rhs._sync()
       res = darr_sub_rR(self, &rhs.arr)
@@ -1002,6 +1097,7 @@ cdef class dmat:
     elif (trhs in number_types):
 
       lhs = self
+      kind = lhs._lk
 
       lhs._sync()
       res = darr_sub_Rr( &lhs.arr, other)
@@ -1012,7 +1108,7 @@ cdef class dmat:
 
     # end if
 
-    return dmat.create(&res)
+    return _dmat_k(dmat.create(&res), kind)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -1038,6 +1134,7 @@ cdef class dmat:
 
     cdef darr_t res
     cdef dmat lhs,rhs
+    cdef uint8_t kind = 0
 
     tlhs = type(self)
     trhs = type(other)
@@ -1045,16 +1142,24 @@ cdef class dmat:
     if (tlhs == trhs):
 
       lhs = self
+      rhs = other
+
+      if not _dmat_same_shape(lhs, rhs):
+
+        return _dmat_mixed(_op.mul, lhs, rhs)
+
+      # end if
 
       lhs._sync()
-      rhs = other
       rhs._sync()
 
       res = darr_mul_RR(&lhs.arr,&rhs.arr)
+      kind = lhs._lk
 
     elif (tlhs in number_types):
 
       rhs = other
+      kind = rhs._lk
 
       rhs._sync()
       res = darr_mul_rR(self, &rhs.arr)
@@ -1062,6 +1167,7 @@ cdef class dmat:
     elif (trhs in number_types):
 
       lhs = self
+      kind = lhs._lk
 
       lhs._sync()
       res = darr_mul_rR(other, &lhs.arr)
@@ -1072,7 +1178,7 @@ cdef class dmat:
 
     # end if
 
-    return dmat.create(&res)
+    return _dmat_k(dmat.create(&res), kind)
 
 
   #---------------------------------------------------------------------------------------------------
@@ -1099,6 +1205,7 @@ cdef class dmat:
 
     cdef darr_t res
     cdef dmat lhs,rhs
+    cdef uint8_t kind = 0
 
     tlhs = type(self)
     trhs = type(other)
@@ -1106,16 +1213,24 @@ cdef class dmat:
     if (tlhs == trhs):
 
       lhs = self
+      rhs = other
+
+      if not _dmat_same_shape(lhs, rhs):
+
+        return _dmat_mixed(_op.truediv, lhs, rhs)
+
+      # end if
 
       lhs._sync()
-      rhs = other
       rhs._sync()
 
       res = darr_div_RR(&lhs.arr,&rhs.arr)
+      kind = lhs._lk
 
     elif (tlhs in number_types):
 
       rhs = other
+      kind = rhs._lk
 
       rhs._sync()
       res = darr_div_rR(self, &rhs.arr)
@@ -1123,6 +1238,7 @@ cdef class dmat:
     elif (trhs in number_types):
 
       lhs = self
+      kind = lhs._lk
 
       lhs._sync()
       res = darr_div_Rr( &lhs.arr, other)
@@ -1133,19 +1249,40 @@ cdef class dmat:
 
     # end if
 
-    return dmat.create(&res)
+    return _dmat_k(dmat.create(&res), kind)
 
 
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  cpdef np.ndarray[double, ndim=2] to_numpy(self):
+  def __matmul__(self, other):
     """
-    PURPOSE: Interface to numpy representation.
+    PURPOSE: Matrix multiplication overload (self @ other); the shape rules of dot (11.3).
     """
     #*************************************************************************************************
 
-    return nd_to_numpy(&self.nd, 1)
+    if type(self) is dmat and type(other) is dmat:
+
+      return _dmat_dot(self, other, None)
+
+    # end if
+
+    return NotImplemented
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cpdef np.ndarray to_numpy(self):
+    """
+    PURPOSE: Interface to numpy representation: a writable zero-copy view of the logical shape.
+    """
+    #*************************************************************************************************
+
+    cdef ndarr_t lv
+
+    self._logical(&lv)
+
+    return nd_to_numpy(&lv, 1)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -1172,26 +1309,39 @@ cdef class dmat:
 
     cdef darr_t res = darr_copy(&self.arr)
 
-    return dmat.create(&res)
+    return _dmat_k(dmat.create(&res), self._lk)
 
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  cpdef set(self, coeff_t val):
+  cpdef set(self, object rhs):
     """
-    PURPOSE: Set all elements to val.
+    PURPOSE: ``A.set(rhs)`` is ``A[...] = rhs`` (rule S1c): rhs (a number, a dmat, an array_like)
+             broadcasts to the shape of A as NumPy does.
     """
     #*************************************************************************************************
 
     cdef int status
+    cdef coeff_t val
 
-    with nogil:
+    if type(rhs) is float or type(rhs) is int:
 
-      status = nd_fill(_nd_ctx, &self.nd, val)
+      # The FEM loops call set(0) per element: fill directly.
+      val = rhs
 
-    # end with
+      with nogil:
 
-    _nd_status("dmat", status, &self.nd)
+        status = nd_fill(_nd_ctx, &self.nd, val)
+
+      # end with
+
+      _nd_status("dmat", status, &self.nd)
+
+      return
+
+    # end if
+
+    self[...] = rhs
 
   #---------------------------------------------------------------------------------------------------
 
@@ -1201,5 +1351,159 @@ cdef class dmat:
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
+#-----------------------------------------------------------------------------------------------------
+# *****************************************************************************************************
+cdef inline bint _dmat_same_shape(dmat a, dmat b):
+  """
+  PURPOSE:      True when two dmat have the same logical shape (and so the same 2-D struct).
+  """
+  #***************************************************************************************************
+
+  return a._lk == b._lk and a.nd.shape[0] == b.nd.shape[0] and a.nd.shape[1] == b.nd.shape[1]
+
+#-----------------------------------------------------------------------------------------------------
+
+# *****************************************************************************************************
+cdef inline dmat _dmat_k(dmat d, uint8_t lk):
+  """
+  PURPOSE:      Give a freshly created dmat its logical shape kind (0: 2-D, 1: 1-D, 2: 0-D) and return it.
+  """
+  #***************************************************************************************************
+
+  d._lk = lk
+
+  return d
+
+#-----------------------------------------------------------------------------------------------------
+
+# *****************************************************************************************************
+def _dmat_mixed(object op, dmat lhs, dmat rhs):
+  """
+  PURPOSE:      An elementwise operation between two dmat of different logical shapes. A matrix with a
+                single element acts as a scalar; the result has NumPy's broadcast shape of the two
+                operands ((4,) + (1, 1) is (1, 4)). Anything else is an error: a 2-D C struct broadcasts
+                only between equal shapes and single elements (11.2).
+  """
+  #***************************************************************************************************
+
+  cdef bint lone = lhs.nd.shape[0]*lhs.nd.shape[1] == 1
+  cdef bint rone = rhs.nd.shape[0]*rhs.nd.shape[1] == 1
+
+  if not lone and not rone:
+
+    raise ValueError("operands have different shapes {} and {} and could not be broadcast together: "
+                     "broadcasting between shapes is supported by pyoti.dense only".format(
+                     lhs.shape, rhs.shape))
+
+  # end if
+
+  shape = tuple(np.broadcast_shapes(lhs.shape, rhs.shape))
+
+  if len(shape) > 2:
+
+    raise ValueError("pyoti.real arrays have at most 2 dimensions: the result of operands of shapes "
+                     "{} and {} would have shape {}".format(lhs.shape, rhs.shape, shape))
+
+  # end if
+
+  if lone and (not rone or lhs._lk >= rhs._lk):
+
+    res = op((<double*>lhs.nd.data)[0], rhs)
+
+  else:
+
+    res = op(lhs, (<double*>rhs.nd.data)[0])
+
+  # end if
+
+  if res.shape != shape:
+
+    res = res.reshape(shape)
+
+  # end if
+
+  return res
+
+#-----------------------------------------------------------------------------------------------------
 
 
+
+
+
+
+# *****************************************************************************************************
+cdef dmat _dmat_out_shape(object out, tuple shape):
+  """
+  PURPOSE:      The holder of an out= argument for a result of logical shape `shape` (rule S1b): out
+                itself when its shape is the result shape, or a zero-copy dmat of the result shape over
+                out's memory when out's shape is the result shape with extra leading axes of extent 1
+                (writes through it reach out; the caller still returns the original out).
+  """
+  #***************************************************************************************************
+
+  cdef dmat O
+  cdef ndarr_t tmp
+  cdef ndarr_t kept
+  cdef int64_t dims[2]
+  cdef int64_t nr, nc
+  cdef uint8_t lk
+  cdef tuple oshape
+
+  if type(out) is not dmat:
+
+    raise TypeError("out must be a dmat, got {}".format(type(out).__name__))
+
+  # end if
+
+  O = out
+  oshape = O.shape
+
+  if oshape == shape:
+
+    return O
+
+  # end if
+
+  lead = len(oshape) - len(shape)
+
+  if lead < 1 or oshape[lead:] != shape or any(n != 1 for n in oshape[:lead]):
+
+    raise ValueError("out has shape {}, expected {}".format(oshape, shape))
+
+  # end if
+
+  # Same elements, fewer leading unit axes: the result's stored 2-D form over out's memory.
+  lk = 2 - len(shape)
+  nr = 1 if lk == 2 else (shape[0])
+  nc = shape[1] if lk == 0 else 1
+  dims[0] = nr
+  dims[1] = nc
+
+  nd_init_empty(&tmp)
+  nd_init_empty(&kept)
+
+  try:
+
+    _nd_status("dmat", nd_view_reshape(&O.nd, 2, dims, ND_LAYOUT_C, &tmp), &O.nd)
+    _nd_status("dmat", nd_view_retain(&tmp, &kept), &O.nd)
+
+    return dmat.create_view(&kept, lk)
+
+  finally:
+
+    nd_release(&kept)
+
+  # end try
+
+#-----------------------------------------------------------------------------------------------------
+
+# *****************************************************************************************************
+cdef dmat _dmat_out(object out, dmat like):
+  """
+  PURPOSE:      The holder of out= for a result that has the shape of `like` (see _dmat_out_shape).
+  """
+  #***************************************************************************************************
+
+  return _dmat_out_shape(out, like.shape)
+
+#-----------------------------------------------------------------------------------------------------

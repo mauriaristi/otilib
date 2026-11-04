@@ -359,6 +359,8 @@ cdef class matsofe:
     cdef int64_t starti, stopi, stepi
     cdef int64_t startj, stopj, stepj
 
+    val = gauss_key(val, self.arr.nrows, self.arr.ncols)
+
     tval = type(val)
     
     if tval == int:
@@ -489,6 +491,8 @@ cdef class matsofe:
     """
     #*************************************************************************************************
     global dhl
+
+    indices = gauss_key(indices, self.arr.nrows, self.arr.ncols)
 
     tvalue = type(value)
 

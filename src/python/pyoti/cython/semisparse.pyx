@@ -14,6 +14,7 @@ from pyoti.core cimport dHelp, get_cython_dHelp
 from pyoti.core import expand_imdir as _expand_direction
 from pyoti.sparse cimport sotinum, matso
 from numbers import Real
+import operator as _operator
 from math import comb
 from time import perf_counter as _perf_counter
 
@@ -23,6 +24,7 @@ cdef dhelpl_t _dhl = _helper.dhl
 
 
 include "semisparse/utils.pxi"
+include "semisparse/shape.pxi"
 include "semisparse/scalar/base.pxi"
 include "semisparse/soa/base.pxi"
 include "semisparse/aos/base.pxi"

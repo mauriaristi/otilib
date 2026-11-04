@@ -8,6 +8,9 @@ cdef extern from "oti/dense.h" nogil:
     cdef enum:
         DNIO_HEADER_BYTES
         DNIO_VERSION
+        DNIO_MAXDIM
+        DNIO_LAYOUT_F
+        DNIO_LAYOUT_C
         DNIO_TYPE_SCALAR
         DNIO_TYPE_AOS
         DNIO_TYPE_SOA
@@ -34,6 +37,10 @@ cdef extern from "oti/dense.h" nogil:
         uint64_t nrows
         uint64_t ncols
         uint64_t payload
+        int32_t ndim
+        int32_t layout
+        uint64_t head_bytes
+        uint64_t shape[DNIO_MAXDIM]
 
     const char* dnio_strerror(int status)
     int dnio_peek(const char* filename, dnio_info_t* p_info)

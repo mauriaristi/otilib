@@ -288,6 +288,54 @@ static void dnaa_set_layout(ndarr_t* d, uint64_t nrows, uint64_t ncols){
 
 
 // *******************************************************************************************************
+// Writes the compact row-major layout of an element shape S (ndim extents) over the `re` fields.
+static void dnaa_set_shape(ndarr_t* d, int32_t ndim, const int64_t* shape){
+
+    int64_t st = ARRO_W;
+    int32_t k;
+
+    d->ndim  = ndim;
+    d->dtype = OTI_F64;
+
+    for (k = ndim - 1; k >= 0; k--){
+
+        d->shape[k]   = shape[k];
+        d->strides[k] = st;
+        st *= (shape[k] > 0) ? shape[k] : 1;
+
+    }
+
+    nd_update_flags(d);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Tells whether two arrays have the same element shape.
+static int dnaa_same_shape(const arro_t* a, const arro_t* b){
+
+    int32_t d;
+
+    if (a->elems.ndim != b->elems.ndim){
+        return 0;
+    }
+
+    for (d = 0; d < a->elems.ndim; d++){
+
+        if (a->elems.shape[d] != b->elems.shape[d]){
+            return 0;
+        }
+
+    }
+
+    return 1;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 // A new store of `size` slots holding no element yet (n = 0), wrapped in a retained descriptor of shape
 // (nrows, ncols). On a failure (DN_ERR_MEMORY) nothing remains allocated.
 static int dnaa_store_new(uint64_t nrows, uint64_t ncols, uint64_t size, ndarr_t* out){
@@ -494,18 +542,71 @@ int arro_resize(uint64_t nrows, uint64_t ncols, ord_t trc_order, arro_t* arr){
 
 
 // *******************************************************************************************************
+int arro_reshape(int32_t ndim, const int64_t* shape, arro_t* arr){
+
+    uint64_t size = 1;
+    int32_t d;
+
+    if (arr == NULL || ndim < 0 || ndim > OTI_ND_MAXDIM - 1 || (ndim > 0 && shape == NULL)){
+        return DN_ERR_SIZE;
+    }
+
+    for (d = 0; d < ndim; d++){
+
+        if (shape[d] < 0 || (shape[d] != 0 && size > UINT64_MAX / (uint64_t)shape[d])){
+            return DN_ERR_SIZE;
+        }
+
+        size *= (uint64_t)shape[d];
+
+    }
+
+    if (size != arro_size(arr)){
+        return DN_ERR_SIZE;
+    }
+
+    dnaa_set_shape(&arr->elems, ndim, shape);
+
+    return DN_OK;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// The result of an elementwise function of arr1: res resized to arr1's size, then given arr1's shape.
+static int dnaa_resize_like(const arro_t* arr1, ord_t trc_order, arro_t* res){
+
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), trc_order, res);
+
+    if (status == DN_OK && arro_ndim(arr1) != 2){
+        dnaa_set_shape(&res->elems, arro_ndim(arr1), arr1->elems.shape);
+    }
+
+    return status;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 int arro_zeros_to(uint64_t nrows, uint64_t ncols, ord_t trc_order, arro_t* res){
 
-    uint64_t e;
+    uint64_t e, n;
+    otinum_t* d;
     int status = arro_resize(nrows, ncols, trc_order, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    for (e = 0; e < arro_size(res); e++){
+    // Size and data read once: the loop calls a function the compiler cannot see through.
+    n = arro_size(res);
+    d = arro_data(res);
 
-        status = oti_create_empty_to(0, trc_order, &arro_data(res)[e]);
+    for (e = 0; e < n; e++){
+
+        status = oti_create_empty_to(0, trc_order, &d[e]);
 
         if (status != DN_OK){
             return status;
@@ -529,15 +630,19 @@ int arro_copy_to(const arro_t* arr1, arro_t* res){
         return DN_OK;
     }
 
-    status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    for (e = 0; e < arro_size(arr1); e++){
+    const otinum_t* x = arro_data(arr1);
+    otinum_t* d = arro_data(res);
+    uint64_t n = arro_size(arr1);
 
-        status = oti_copy_to(&arro_data(arr1)[e], &arro_data(res)[e]);
+    for (e = 0; e < n; e++){
+
+        status = oti_copy_to(&x[e], &d[e]);
 
         if (status != DN_OK){
             return status;
@@ -634,8 +739,11 @@ arrso_t arro_to_arrso(const arro_t* arr1, dhelpl_t dhl){
         return res;
     }
 
-    for (e = 0; e < arro_size(arr1); e++){
-        res.p_data[e] = oti_to_soti(&arro_data(arr1)[e], dhl);
+    const otinum_t* x = arro_data(arr1);
+    uint64_t n = arro_size(arr1);
+
+    for (e = 0; e < n; e++){
+        res.p_data[e] = oti_to_soti(&x[e], dhl);
     }
 
     res.nrows = arro_nrows(arr1);
@@ -650,7 +758,44 @@ arrso_t arro_to_arrso(const arro_t* arr1, dhelpl_t dhl){
 
 
 // *******************************************************************************************************
+int arro_zeros_nd_to(int32_t ndim, const int64_t* shape, ord_t trc_order, arro_t* res){
+
+    uint64_t nr = 1, nc = 1;
+    int32_t d;
+    int status;
+
+    if (ndim < 0 || ndim > OTI_ND_MAXDIM - 1 || (ndim > 0 && shape == NULL)){
+        return DN_ERR_SIZE;
+    }
+
+    for (d = 0; d < ndim; d++){
+
+        if (shape[d] < 0){
+            return DN_ERR_SIZE;
+        }
+
+        if (d == 0){
+            nr = (uint64_t)shape[0];
+        } else if (shape[d] != 0 && nc > (uint64_t)INT64_MAX / (uint64_t)shape[d]){
+            return DN_ERR_MEMORY;
+        } else {
+            nc *= (uint64_t)shape[d];
+        }
+
+    }
+
+    status = arro_zeros_to(nr, nc, trc_order, res);
+
+    return (status == DN_OK) ? arro_reshape(ndim, shape, res) : status;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 int arro_to_oarr(const arro_t* arr1, oarr_t* res){
+
+    DNOB_IN1(NULL, res, arro_to_oarr(arr1, c_.res));
 
     uint64_t e, i, j, s, size = arro_size(arr1), bp[_MAXORDER_OTI + 1];
     bases_t k = 0;
@@ -666,8 +811,14 @@ int arro_to_oarr(const arro_t* arr1, oarr_t* res){
 
     }
 
-    // The capacity rule and the zero fill of exactly the new layout (never the old layout of res).
-    status = oarr_zeros_to(k, arro_nrows(arr1), arro_ncols(arr1), trc, res);
+    // The capacity rule and the zero fill of exactly the new layout (never the old layout of res). A
+    // matrix becomes a column-major SoA array (1.x); any other rank a C-order one, whose flat element
+    // order is the AoS row-major order (same for ranks 0 and 1).
+    if (arro_ndim(arr1) == 2){
+        status = oarr_zeros_to(k, arro_nrows(arr1), arro_ncols(arr1), trc, res);
+    } else {
+        status = oarr_zeros_nd_to(k, arro_ndim(arr1), arr1->elems.shape, ND_LAYOUT_C, trc, res);
+    }
 
     if (status != DN_OK){
         return status;
@@ -680,17 +831,23 @@ int arro_to_oarr(const arro_t* arr1, oarr_t* res){
     }
 
     // Element (i, j), row-major here, goes to i + j*nrows of every column-major block. A smaller
-    // nact or lower trc is a prefix of the layout: the order-p coefficients keep their index.
+    // nact or lower trc is a prefix of the layout: the order-p coefficients keep their index. The
+    // shapes and data pointers are read once (the loop calls functions the compiler cannot see).
+    const otinum_t* xd = arro_data(arr1);
+    coeff_t* rd = oarr_data(res);
+    uint64_t nr = arro_nrows(arr1), nc = arro_ncols(arr1);
+    int mat = arro_ndim(arr1) == 2;
+
     for (e = 0; e < size; e++){
 
-        const otinum_t* x = &arro_data(arr1)[e];
+        const otinum_t* x = &xd[e];
 
-        i = e / arro_ncols(arr1);
-        j = e % arro_ncols(arr1);
-        s = i + j * arro_nrows(arr1);
+        i = e / nc;
+        j = e % nc;
+        s = mat ? i + j * nr : e;
 
-        oarr_data(res)[s] = x->re;
-        top            = (x->trc_order < trc) ? x->trc_order : trc;
+        rd[s] = x->re;
+        top   = (x->trc_order < trc) ? x->trc_order : trc;
 
         for (p = 1; p <= top; p++){
 
@@ -698,7 +855,7 @@ int arro_to_oarr(const arro_t* arr1, oarr_t* res){
             src = sshelp_order_offset(x->nact, p);
 
             for (idx = 0; idx < np; idx++){
-                oarr_data(res)[(bp[p] + idx) * size + s] = x->p_im[src + idx];
+                rd[(bp[p] + idx) * size + s] = x->p_im[src + idx];
             }
 
         } // end for
@@ -714,12 +871,50 @@ int arro_to_oarr(const arro_t* arr1, oarr_t* res){
 // *******************************************************************************************************
 int arro_from_oarr(const oarr_t* arr1, arro_t* res){
 
+    DNOB_IN1(arr1, NULL, arro_from_oarr(c_.in[0], res));
+
+    // Ranks above 2: read through a C-order copy relabelled as a vector (its flat order is the AoS
+    // row-major order; a canonical array is column-major), then given the shape back.
+    if (oarr_ndim(arr1) > 2){
+
+        oarr_t t = oarr_init();
+        dnob_shape_t S = dnob_shape_of(arr1), V;
+        int st;
+
+        S.layout = ND_LAYOUT_C;
+        V.sdim   = 1;
+        V.layout = ND_LAYOUT_F;
+        V.ext[0] = oarr_size(arr1);
+        st       = dnob_pack(arr1, &S, &t);
+
+        if (st == DN_OK){
+
+            dnob_set_layout(&t, (uint64_t)t.blocks.shape[0], &V);
+            st = arro_from_oarr(&t, res);
+
+        }
+
+        if (st == DN_OK){
+            st = arro_reshape(oarr_ndim(arr1), arr1->blocks.shape + 1, res);
+        }
+
+        oarr_free(&t);
+
+        return st;
+
+    }
+
     uint64_t e, i, j, s, size = oarr_size(arr1), bp[_MAXORDER_OTI + 1];
     ord_t p, trc = oarr_trc_order(arr1);
     ndir_t np, idx, off;
     int status;
 
     status = arro_resize(oarr_nrows(arr1), oarr_ncols(arr1), trc, res);
+
+    // Ranks 0 and 1 keep their shape (the matricization is n x 1 / 1 x 1, the same flat order).
+    if (status == DN_OK && oarr_ndim(arr1) != 2){
+        status = arro_reshape(oarr_ndim(arr1), arr1->blocks.shape + 1, res);
+    }
 
     if (status != DN_OK){
         return status;
@@ -729,30 +924,37 @@ int arro_from_oarr(const oarr_t* arr1, arro_t* res){
         bp[p] = 1 + sshelp_order_offset(oarr_nact(arr1), p);
     }
 
+    // Shapes, layout and data pointers read once (the loop calls functions the compiler cannot see).
+    otinum_t* rd = arro_data(res);
+    const coeff_t* xd = oarr_data(arr1);
+    uint64_t nr = oarr_nrows(arr1), nc = oarr_ncols(arr1);
+    bases_t k = oarr_nact(arr1);
+    ord_t act = (oarr_act_order(arr1) < trc) ? oarr_act_order(arr1) : trc;
+
     for (e = 0; e < size; e++){
 
-        otinum_t* x = &arro_data(res)[e];
+        otinum_t* x = &rd[e];
 
-        i = e / oarr_ncols(arr1);
-        j = e % oarr_ncols(arr1);
-        s = i + j * oarr_nrows(arr1);
+        i = e / nc;
+        j = e % nc;
+        s = i + j * nr;
 
-        status = oti_create_empty_to(oarr_nact(arr1), trc, x);
+        status = oti_create_empty_to(k, trc, x);
 
         if (status != DN_OK){
             return status;
         }
 
-        x->re        = oarr_data(arr1)[s];
-        x->act_order = (oarr_act_order(arr1) < trc) ? oarr_act_order(arr1) : trc;
+        x->re        = xd[s];
+        x->act_order = act;
 
         for (p = 1; p <= trc; p++){
 
-            np  = sshelp_ndir_order(oarr_nact(arr1), p);
-            off = sshelp_order_offset(oarr_nact(arr1), p);
+            np  = sshelp_ndir_order(k, p);
+            off = sshelp_order_offset(k, p);
 
             for (idx = 0; idx < np; idx++){
-                x->p_im[off + idx] = oarr_data(arr1)[(bp[p] + idx) * size + s];
+                x->p_im[off + idx] = xd[(bp[p] + idx) * size + s];
             }
 
         } // end for
@@ -771,11 +973,11 @@ int arro_sum_OO_to(const arro_t* arr1, const arro_t* arr2, arro_t* res, dhelpl_t
     dnaa_job_t j;
     int status;
 
-    if (arro_nrows(arr1) != arro_nrows(arr2) || arro_ncols(arr1) != arro_ncols(arr2)){
+    if (!dnaa_same_shape(arr1, arr2)){
         return DN_ERR_SIZE;
     }
 
-    status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -800,11 +1002,11 @@ int arro_sub_OO_to(const arro_t* arr1, const arro_t* arr2, arro_t* res, dhelpl_t
     dnaa_job_t j;
     int status;
 
-    if (arro_nrows(arr1) != arro_nrows(arr2) || arro_ncols(arr1) != arro_ncols(arr2)){
+    if (!dnaa_same_shape(arr1, arr2)){
         return DN_ERR_SIZE;
     }
 
-    status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -829,11 +1031,11 @@ int arro_mul_OO_to(const arro_t* arr1, const arro_t* arr2, arro_t* res, dhelpl_t
     dnaa_job_t j;
     int status;
 
-    if (arro_nrows(arr1) != arro_nrows(arr2) || arro_ncols(arr1) != arro_ncols(arr2)){
+    if (!dnaa_same_shape(arr1, arr2)){
         return DN_ERR_SIZE;
     }
 
-    status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -858,11 +1060,11 @@ int arro_div_OO_to(const arro_t* arr1, const arro_t* arr2, arro_t* res, dhelpl_t
     dnaa_job_t j;
     int status;
 
-    if (arro_nrows(arr1) != arro_nrows(arr2) || arro_ncols(arr1) != arro_ncols(arr2)){
+    if (!dnaa_same_shape(arr1, arr2)){
         return DN_ERR_SIZE;
     }
 
-    status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -887,7 +1089,7 @@ int arro_sum_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_
     dnaa_job_t j;
     otinum_t local = oti_init();
     const otinum_t* p_num = dnaa_stable(num, arr1, res, &local);
-    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0,
+    int status = (p_num == NULL) ? DN_ERR_MEMORY : dnaa_resize_like(arr1, 0,
                                                                res);
 
     if (status != DN_OK){
@@ -916,7 +1118,7 @@ int arro_sum_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_
 int arro_sum_rO_to(coeff_t val, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -941,7 +1143,7 @@ int arro_sub_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_
     dnaa_job_t j;
     otinum_t local = oti_init();
     const otinum_t* p_num = dnaa_stable(num, arr1, res, &local);
-    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0,
+    int status = (p_num == NULL) ? DN_ERR_MEMORY : dnaa_resize_like(arr1, 0,
                                                                res);
 
     if (status != DN_OK){
@@ -970,7 +1172,7 @@ int arro_sub_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_
 int arro_sub_rO_to(coeff_t val, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -995,7 +1197,7 @@ int arro_sub_Oo_to(const arro_t* arr1, const otinum_t* num, arro_t* res, dhelpl_
     dnaa_job_t j;
     otinum_t local = oti_init();
     const otinum_t* p_num = dnaa_stable(num, arr1, res, &local);
-    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0,
+    int status = (p_num == NULL) ? DN_ERR_MEMORY : dnaa_resize_like(arr1, 0,
                                                                res);
 
     if (status != DN_OK){
@@ -1024,7 +1226,7 @@ int arro_sub_Oo_to(const arro_t* arr1, const otinum_t* num, arro_t* res, dhelpl_
 int arro_sub_Or_to(const arro_t* arr1, coeff_t val, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1049,7 +1251,7 @@ int arro_mul_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_
     dnaa_job_t j;
     otinum_t local = oti_init();
     const otinum_t* p_num = dnaa_stable(num, arr1, res, &local);
-    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0,
+    int status = (p_num == NULL) ? DN_ERR_MEMORY : dnaa_resize_like(arr1, 0,
                                                                res);
 
     if (status != DN_OK){
@@ -1078,7 +1280,7 @@ int arro_mul_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_
 int arro_mul_rO_to(coeff_t val, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1103,7 +1305,7 @@ int arro_div_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_
     dnaa_job_t j;
     otinum_t local = oti_init();
     const otinum_t* p_num = dnaa_stable(num, arr1, res, &local);
-    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0,
+    int status = (p_num == NULL) ? DN_ERR_MEMORY : dnaa_resize_like(arr1, 0,
                                                                res);
 
     if (status != DN_OK){
@@ -1132,7 +1334,7 @@ int arro_div_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_
 int arro_div_rO_to(coeff_t val, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1157,7 +1359,7 @@ int arro_div_Oo_to(const arro_t* arr1, const otinum_t* num, arro_t* res, dhelpl_
     dnaa_job_t j;
     otinum_t local = oti_init();
     const otinum_t* p_num = dnaa_stable(num, arr1, res, &local);
-    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0,
+    int status = (p_num == NULL) ? DN_ERR_MEMORY : dnaa_resize_like(arr1, 0,
                                                                res);
 
     if (status != DN_OK){
@@ -1186,7 +1388,7 @@ int arro_div_Oo_to(const arro_t* arr1, const otinum_t* num, arro_t* res, dhelpl_
 int arro_div_Or_to(const arro_t* arr1, coeff_t val, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1209,7 +1411,7 @@ int arro_div_Or_to(const arro_t* arr1, coeff_t val, arro_t* res, dhelpl_t dhl){
 int arro_neg_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1231,7 +1433,7 @@ int arro_neg_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_exp_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1253,7 +1455,7 @@ int arro_exp_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_log_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1275,7 +1477,7 @@ int arro_log_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_log10_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1297,7 +1499,7 @@ int arro_log10_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_sqrt_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1319,7 +1521,7 @@ int arro_sqrt_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_cbrt_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1341,7 +1543,7 @@ int arro_cbrt_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_sin_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1363,7 +1565,7 @@ int arro_sin_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_cos_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1385,7 +1587,7 @@ int arro_cos_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_tan_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1407,7 +1609,7 @@ int arro_tan_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_asin_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1429,7 +1631,7 @@ int arro_asin_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_acos_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1451,7 +1653,7 @@ int arro_acos_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_atan_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1473,7 +1675,7 @@ int arro_atan_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_sinh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1495,7 +1697,7 @@ int arro_sinh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_cosh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1517,7 +1719,7 @@ int arro_cosh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_tanh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1539,7 +1741,7 @@ int arro_tanh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_asinh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1561,7 +1763,7 @@ int arro_asinh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_acosh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1583,7 +1785,7 @@ int arro_acosh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_atanh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1605,7 +1807,7 @@ int arro_atanh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_erf_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1627,7 +1829,7 @@ int arro_erf_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 int arro_pow_to(const arro_t* arr1, coeff_t ex, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1650,7 +1852,7 @@ int arro_pow_to(const arro_t* arr1, coeff_t ex, arro_t* res, dhelpl_t dhl){
 int arro_truncate_im_to(imdir_t idx, ord_t order, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1672,7 +1874,7 @@ int arro_truncate_im_to(imdir_t idx, ord_t order, const arro_t* arr1, arro_t* re
 int arro_truncate_order_to(ord_t order, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1694,7 +1896,7 @@ int arro_truncate_order_to(ord_t order, const arro_t* arr1, arro_t* res, dhelpl_
 int arro_get_order_im_to(ord_t order, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1716,7 +1918,7 @@ int arro_get_order_im_to(ord_t order, const arro_t* arr1, arro_t* res, dhelpl_t 
 int arro_compact_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
     dnaa_job_t j;
-    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
+    int status = dnaa_resize_like(arr1, 0, res);
 
     if (status != DN_OK){
         return status;
@@ -1849,13 +2051,17 @@ int arro_transpose_to(const arro_t* arr1, arro_t* res){
         return status;
     }
 
-    status = arro_zeros_to(arro_ncols(arr1), arro_nrows(arr1), 0, &tmp);
+    const otinum_t* x = arro_data(arr1);
+    uint64_t nr = arro_nrows(arr1), nc = arro_ncols(arr1);
+    otinum_t* d;
 
-    for (i = 0; i < arro_nrows(arr1) && status == DN_OK; i++){
+    status = arro_zeros_to(nc, nr, 0, &tmp);
+    d      = arro_data(&tmp);
 
-        for (j = 0; j < arro_ncols(arr1) && status == DN_OK; j++){
-            status = oti_copy_to(&arro_data(arr1)[j + i * arro_ncols(arr1)],
-                                 &arro_data(&tmp)[i + j * arro_nrows(arr1)]);
+    for (i = 0; i < nr && status == DN_OK; i++){
+
+        for (j = 0; j < nc && status == DN_OK; j++){
+            status = oti_copy_to(&x[j + i * nc], &d[i + j * nr]);
         } // end for
 
     } // end for

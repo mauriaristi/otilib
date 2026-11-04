@@ -17,7 +17,7 @@
 // -------------------------------------------------------------------------------------------------------
 
 /**
- * @name Dense file format, version 1
+ * @name Dense file format, versions 1 and 2
  *
  * All multi-byte values are stored in the byte order of the host that wrote the file (flagged in
  * the header; a file is only read back on a host of the same byte order (DNIO_ERR_FORMAT otherwise,
@@ -29,18 +29,25 @@
  * | offset | size | field |
  * |---|---|---|
  * | 0  | 4 | magic: 0x93 'O' 'T' 'D' (semi-sparse 0x93 'O' 'T' 'S', sparse 0x93 'O' 'T' 'I') |
- * | 4  | 2 | format version (uint16, DNIO_VERSION = 1) |
+ * | 4  | 2 | format version (uint16): 1 (1.x) or 2 (DNIO_VERSION, written since 2.0.0) |
  * | 6  | 1 | type tag: DNIO_TYPE_SCALAR = 1, DNIO_TYPE_AOS = 2, DNIO_TYPE_SOA = 3 |
  * | 7  | 1 | byte order: DNIO_LITTLE_ENDIAN = 1, DNIO_BIG_ENDIAN = 2 |
  * | 8  | 1 | bytes per coefficient (8) |
- * | 9  | 1 | reserved, zero |
+ * | 9  | 1 | v1: zero. v2: layout of the payload elements, DNIO_LAYOUT_F = 1 or DNIO_LAYOUT_C = 2 |
  * | 10 | 1 | truncation order (AoS: largest over the elements) |
  * | 11 | 1 | active order (AoS: largest over the elements) |
  * | 12 | 4 | nact, the number of active bases k (uint32; AoS: largest over the elements) |
- * | 16 | 8 | number of rows (uint64; 1 for a scalar) |
- * | 24 | 8 | number of columns (uint64; 1 for a scalar) |
- * | 32 | 8 | payload size in bytes (uint64); the file is exactly 64 + payload bytes long |
- * | 40 | 24 | reserved, zero |
+ * | 16 | 8 | number of rows (uint64; 1 for a scalar). v2: the matricized shape, S[0] (1 for 0-D) |
+ * | 24 | 8 | number of columns (uint64; 1 for a scalar). v2: the product of S[1..] (1 for 0-D, 1-D) |
+ * | 32 | 8 | payload size in bytes (uint64) |
+ * | 40 | 4 | v1: zero. v2: ndim, the rank of the element shape S (uint32, 0 .. DNIO_MAXDIM) |
+ * | 44 | 20 | reserved, zero |
+ * | 64 | 8 * ndim | v2 only: the extents S[0 .. ndim-1] (uint64 each) |
+ *
+ * The header is 64 bytes in v1 and 64 + 8 * ndim bytes in v2; the file is exactly header + payload
+ * bytes long. A v1 file has the 2-D shape (nrows, ncols): a 1.x (n, 1) file reads back as (n, 1),
+ * never as (n,) (contracts 11.12). A v2 scalar has ndim 0; v2 SoA files are written in F layout and
+ * read in either layout (the array then has that layout); AoS records are in C order (flag C).
  *
  * Payload, by type. The "order blocks" are the imaginary coefficients of orders 1..trc, order p
  * holding N_p(k) = C(k+p-1, p) directions in global index order (the dense layout of otinum_t), so
@@ -48,8 +55,9 @@
  *
  * - Scalar: the real part (1 double), then the order blocks (one double per direction, order 1
  *   first): 1 + sshelp_ndir_total(k, trc) doubles in all.
- * - SoA: 1 + sshelp_ndir_total(k, trc) blocks of nrows * ncols doubles, each column-major (element
- *   (r, c) at r + c*nrows). Block 0 is the real part; block 1 + sshelp_order_offset(k, p) + i is
+ * - SoA: 1 + sshelp_ndir_total(k, trc) blocks of nrows * ncols doubles, each compact in the order of
+ *   the layout flag (v1 and v2 F: column-major, element (r, c) of a matrix at r + c*nrows). Block 0
+ *   is the real part; block 1 + sshelp_order_offset(k, p) + i is
  *   direction i of order p. nact is shared by every element.
  * - AoS: nrows * ncols records in memory order (row-major, element (i, j) is record j + i*ncols).
  *   A record is an 8-byte header (uint8 trc, uint8 act, uint16 k, 4 zero bytes), then its real
@@ -63,7 +71,10 @@
  */
 
 #define DNIO_HEADER_BYTES   64  ///< Size of the file header.
-#define DNIO_VERSION         1  ///< Format version written by this library.
+#define DNIO_VERSION         2  ///< Format version written by this library (reads 1 and 2).
+#define DNIO_MAXDIM         31  ///< Largest ndim of a v2 file (OTI_ND_MAXDIM - 1, the dense limit).
+#define DNIO_LAYOUT_F        1  ///< v2 layout flag: column-major elements inside each block.
+#define DNIO_LAYOUT_C        2  ///< v2 layout flag: row-major elements (and the AoS record order).
 
 #define DNIO_TYPE_SCALAR     1  ///< File holds an otinum_t.
 #define DNIO_TYPE_AOS        2  ///< File holds an arro_t.
@@ -105,9 +116,13 @@ typedef struct {
     ord_t  trc_order; ///< Truncation order (AoS: largest over the elements).
     ord_t  act_order; ///< Active order (AoS: largest over the elements).
     uint32_t    nact; ///< Number of active bases (AoS: largest over the elements).
-    uint64_t   nrows; ///< Number of rows (1 for a scalar).
-    uint64_t   ncols; ///< Number of columns (1 for a scalar).
+    uint64_t   nrows; ///< Number of rows (1 for a scalar); v2: the matricized shape.
+    uint64_t   ncols; ///< Number of columns (1 for a scalar); v2: the matricized shape.
     uint64_t payload; ///< Payload size in bytes.
+    int32_t     ndim; ///< Rank of the element shape (v1: 2).
+    int32_t   layout; ///< DNIO_LAYOUT_F or DNIO_LAYOUT_C (v1: F for SoA, C for AoS records).
+    uint64_t head_bytes; ///< Header size: 64 (v1) or 64 + 8 * ndim (v2).
+    uint64_t shape[DNIO_MAXDIM]; ///< Extents of the element shape (v1: nrows, ncols).
 } dnio_info_t;        ///< Header of a dense file.
 
 

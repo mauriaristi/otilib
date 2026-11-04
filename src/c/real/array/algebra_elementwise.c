@@ -69,7 +69,7 @@ void darr_abs_to(darr_t* arr1, darr_t* aRes){
 
     for (i = 0; i < arr1->size; i++){
 
-        aRes->p_data[i] = abs(arr1->p_data[i]);
+        aRes->p_data[i] = fabs(arr1->p_data[i]);
         
     }    
 
@@ -83,7 +83,7 @@ void darr_self_abs( darr_t* res){
 
     for (i = 0; i < res->size; i++){
 
-        res->p_data[i] = abs(res->p_data[i]) ;
+        res->p_data[i] = fabs(res->p_data[i]);
         
     }    
 
@@ -98,7 +98,7 @@ darr_t darr_abs(darr_t* arr1){
 
     for (i = 0; i < aRes.size; i++){
 
-        aRes.p_data[i] = abs(aRes.p_data[i]);
+        aRes.p_data[i] = fabs(aRes.p_data[i]);
         
     }    
 

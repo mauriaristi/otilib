@@ -784,15 +784,15 @@ cdef class _dnfe:
     @property
     def active_bases(self):
         """
-        Active global bases, [1, ..., nact].
+        Active global bases, (1, ..., nact) (a tuple, as for omat; get_active_bases() gives a list).
 
         Returns
         -------
-        list of int
+        tuple of int
             Active bases.
         """
 
-        return list(range(1, oarr_nact(&self.fe.arr) + 1))
+        return tuple(range(1, oarr_nact(&self.fe.arr) + 1))
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -837,7 +837,8 @@ cdef class _dnfe:
     @property
     def real(self):
         """
-        Real part at every point.
+        Real part at every point: a read-only NumPy view of the embedded array (contracts 11.8, 11.11);
+        ``.copy()`` gives a writable copy.
 
         Returns
         -------
@@ -845,7 +846,15 @@ cdef class _dnfe:
             Shape (nip,) for a scalar, (nip, nrows, ncols) for an array.
         """
 
-        return _fe_block(self, 0)
+        cdef object view = _arr_export(&self.fe.arr, 0, False)
+
+        if not _fe_is_array(self):
+
+            return view.reshape((fearr_nip(&self.fe),))
+
+        # end if
+
+        return view
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -2237,11 +2246,11 @@ cdef class omatfe(_dnfe):
         """
 
         cdef int64_t k = _fe_point(ip, fearr_nip(&self.fe))
-        cdef oarr_t res = oarr_init()
+        cdef omat res = omat.__new__(omat)
 
-        _soa_ok("get_ip", fearr_get_ip_to(k, &self.fe, &res), &res)
+        _soa_ok("get_ip", fearr_get_ip_to(k, &self.fe, &res.arr), &res.arr)
 
-        return omat.wrap(res)
+        return res
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -2625,7 +2634,7 @@ cdef int _fe_check_nip(object nip) except -1:
 
 
 # ********************************************************************************************************
-def _fe_zeros(shape, bases, order, nip):
+def _fe_zeros(shape, bases, order, nip, nbases=0):
     """
     Create an omatfe of zeros at nip integration points.
 
@@ -2639,6 +2648,8 @@ def _fe_zeros(shape, bases, order, nip):
         Truncation order.
     nip : int
         Number of integration points (> 0).
+    nbases : int
+        Bases to reserve (contracts 11.7: the layout is dense over 1..nbases at least).
 
     Returns
     -------
@@ -2646,7 +2657,7 @@ def _fe_zeros(shape, bases, order, nip):
         New Gauss-point array.
     """
 
-    cdef bases_t nact = _nact_of(bases)
+    cdef bases_t nact = _reserved_nact(nbases, bases)
     cdef feoarr_t res = fearr_init()
 
     if isinstance(shape, (int, np.integer)):
@@ -2769,7 +2780,7 @@ def gauss_integrate(val, w, out=None):
     """
 
     cdef _dnfe v, g
-    cdef oarr_t res = oarr_init()
+    cdef omat res
     cdef otinum_t num = oti_init()
     cdef int status
 
@@ -2790,16 +2801,17 @@ def gauss_integrate(val, w, out=None):
 
     v = val
     g = w
-    _soa_ok("gauss_integrate", fearr_integrate_to(&v.fe, &g.fe, &res, _dhl), &res)
+    res = omat.__new__(omat)
+    _soa_ok("gauss_integrate", fearr_integrate_to(&v.fe, &g.fe, &res.arr, _dhl), &res.arr)
 
     if _fe_is_array(v):
 
-        return _fe_store(omat.wrap(res), out)
+        return _fe_store(res, out)
 
     # end if
 
-    status = oarr_get_item_to(0, 0, &res, &num)
-    oarr_free(&res)
+    status = oarr_get_item_to(0, 0, &res.arr, &num)
+    oarr_free(&res.arr)
 
     if status != DN_OK:
 

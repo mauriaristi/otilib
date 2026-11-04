@@ -288,9 +288,10 @@ def wrap(line, indent=4, width=106):
     parts = first.split(", ")
     lines, current = [], parts[0]
 
-    for part in parts[1:]:
+    for k, part in enumerate(parts[1:], 1):
 
-        if len(current) + 2 + len(part) <= width:
+        # A line that is not the last ends with the comma of its last part.
+        if len(current) + 2 + len(part) + (k < len(parts) - 1) <= width:
 
             current = current + ", " + part
 

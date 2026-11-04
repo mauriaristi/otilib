@@ -256,6 +256,10 @@ void oti_ws_release(void){
 
     sshelp_ws_free((dnsm_tls_wsp != NULL) ? dnsm_tls_wsp : &dnsm_tls_ws);
 
+    // This thread's scratch arena too (the call-local arrays of inv / solve / det): OTI_ERR_BUSY, and
+    // nothing freed, while one of its blocks is still in use.
+    (void)nd_scratch_release();
+
 }
 // -------------------------------------------------------------------------------------------------------
 

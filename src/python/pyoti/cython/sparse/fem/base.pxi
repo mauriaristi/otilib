@@ -1,3 +1,40 @@
+#*****************************************************************************************************
+cdef inline object _vget(matso a, uint64_t j):
+  """
+  PURPOSE:  Element j of a nodal vector given as a (n, 1) column or as a 1-D (n,) array (11.2: the fem
+            entry points accept both).
+  """
+  #***************************************************************************************************
+
+  if a._lk == 0:
+
+    return a[j, 0]
+
+  # end if
+
+  return a[j]
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+cdef inline object _mget(matso a, uint64_t i, uint64_t j):
+  """
+  PURPOSE:  Element (i, j) of the 2-D struct of a: a 1-D (n,) array is the column (j == 0).
+  """
+  #***************************************************************************************************
+
+  if a._lk == 0:
+
+    return a[i, j]
+
+  # end if
+
+  return a[i]
+
+#-----------------------------------------------------------------------------------------------------
+
+
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -289,25 +326,21 @@ cdef class elm_help:
     """
      
     cdef uint64_t i, j
-    cdef uint8_t res_flag = 1
     cdef matso res
 
     if out is None:
-      res_flag = 0
-      res = out
+      res = zeros( (self.nbasis,1) )
     else:
-      res = zeros( (self.nbasis,1) ) 
+      res = out
     # end if 
 
     # Get element nodal values
     for i in range(self.nbasis):      
       j = elem_indices[i]
-      res[ i, 0 ] = a[ j, 0 ]
+      res[ i, 0 ] = _vget(a, j)
     # end for
 
-    if res_flag:
-      return res
-    # end if 
+    return res
 
   #---------------------------------------------------------------------------------------------------
 
@@ -330,9 +363,9 @@ cdef class elm_help:
       
       j = elem_indices[i]
 
-      self.x[ i, 0 ] = x[ j, 0 ]
-      self.y[ i, 0 ] = y[ j, 0 ]
-      self.z[ i, 0 ] = z[ j, 0 ]
+      self.x[ i, 0 ] = _vget(x, j)
+      self.y[ i, 0 ] = _vget(y, j)
+      self.z[ i, 0 ] = _vget(z, j)
 
     # end for
 
@@ -353,7 +386,7 @@ cdef class elm_help:
     cdef uint64_t i, j, ii, ncols
     cdef matso res 
 
-    ncols = arr.shape[1]
+    ncols = arr.arr.ncols
 
     if out is not None:
       res = out
@@ -368,15 +401,13 @@ cdef class elm_help:
       
         ii = elem_indices[i]
 
-        res[ i, j ] = arr[ ii, j ]
+        res[ i, j ] = _mget(arr, ii, j)
       
       # end for 
 
     # end for
 
-    if out is None:
-      return res
-    # end if 
+    return res
 
   #---------------------------------------------------------------------------------------------------
 
@@ -405,7 +436,7 @@ cdef class elm_help:
     cdef uint64_t i, j, ii, ncols
     cdef matso res 
 
-    ncols = arr.shape[1]
+    ncols = arr.arr.ncols
 
     if out is not None:
       res = out
@@ -420,15 +451,13 @@ cdef class elm_help:
 
       for j in range(ncols):
       
-        res[ i, j ] = arr[ ii, j ]
+        res[ i, j ] = _mget(arr, ii, j)
       
       # end for 
 
     # end for
 
-    if out is None:
-      return res
-    # end if 
+    return res
 
   #---------------------------------------------------------------------------------------------------
 

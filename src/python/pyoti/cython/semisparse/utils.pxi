@@ -616,17 +616,46 @@ cdef void _raise_soa_order(oarrss value, ord_t order) except *:
 
 
 # ********************************************************************************************************
+cdef bint _out_fits(tuple out_shape, tuple shape):
+    """
+    Whether an ``out`` of a shape may receive a result of another shape (exact, or rule S1b).
+
+    Parameters
+    ----------
+    out_shape : tuple
+        Logical shape of ``out``.
+    shape : tuple
+        Logical shape of the result.
+
+    Returns
+    -------
+    bool
+        True for equal shapes, or when ``out_shape`` is ``shape`` with extra leading extent-1 axes.
+    """
+
+    cdef Py_ssize_t extra = len(out_shape) - len(shape)
+
+    return extra >= 0 and out_shape[extra:] == shape and all(n == 1 for n in out_shape[:extra])
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
 cdef object _assign_out(object out, object result):
     """
     Move a freshly computed result into a caller-provided ``out`` holder.
 
-    The native structures of both objects are swapped, so ``out`` keeps its identity and takes the
-    result; the temporary result releases the old buffers.
+    The native structures of both objects are swapped, so ``out`` keeps its identity, its logical
+    shape and takes the result; the temporary result releases the old buffers. ``out`` may have the
+    result's shape or extra leading axes of extent 1 (rule S1b). When ``out`` has live exports
+    (``.real``, ``get_block``), the values are copied into its buffer if the layout is unchanged;
+    otherwise the call raises ``BufferError`` (rule G1.3) and ``out`` is left untouched.
 
     Parameters
     ----------
     out : ssotinum or oarrss or arrss
-        Result holder. Views of its old buffers become invalid.
+        Result holder.
     result : ssotinum or oarrss or arrss
         Computed result.
 
@@ -639,6 +668,10 @@ cdef object _assign_out(object out, object result):
     cdef ssotinum_t stmp
     cdef oarrss_t atmp
     cdef arrss_t btmp
+    cdef oarrss soa_out, soa_res
+    cdef arrss aos_out, aos_res
+    cdef uint64_t nrows, ncols
+    cdef int ndim
 
     if isinstance(out, ssotinum) and isinstance(result, ssotinum):
 
@@ -659,32 +692,65 @@ cdef object _assign_out(object out, object result):
 
     # end if
 
-    if isinstance(out, oarrss) and isinstance(result, oarrss):
+    if isinstance(out, (oarrss, arrss)) and isinstance(result, (oarrss, arrss)):
 
-        if out.shape != result.shape:
+        if not _out_fits(out.shape, result.shape):
 
             raise ValueError("out has shape {}, expected {}".format(out.shape, result.shape))
 
         # end if
 
-        atmp = (<oarrss>out).arr
-        (<oarrss>out).arr = (<oarrss>result).arr
-        (<oarrss>result).arr = atmp
+    # end if
+
+    if isinstance(out, oarrss) and isinstance(result, oarrss):
+
+        soa_out = out
+        soa_res = result
+        nrows = soa_out.arr.nrows
+        ncols = soa_out.arr.ncols
+
+        if _has_exports(soa_out):
+
+            if not _same_layout(&soa_out.arr, &soa_res.arr):
+
+                _check_no_exports(soa_out)
+
+            # end if
+
+            if soa_out.arr.size > 0:
+
+                memcpy(soa_out.arr.p_data, soa_res.arr.p_data,
+                       (1 + sshelp_ndir_total(soa_res.arr.nbases, soa_res.arr.trc_order))
+                       * soa_res.arr.size * sizeof(coeff_t))
+
+            # end if
+
+            soa_out.arr.act_order = soa_res.arr.act_order
+            return out
+
+        # end if
+
+        atmp = soa_out.arr
+        soa_out.arr = soa_res.arr
+        soa_res.arr = atmp
+        # The holder keeps its own (possibly S1b-padded) C dimensions; sizes are equal.
+        soa_out.arr.nrows = nrows
+        soa_out.arr.ncols = ncols
         return out
 
     # end if
 
     if isinstance(out, arrss) and isinstance(result, arrss):
 
-        if out.shape != result.shape:
-
-            raise ValueError("out has shape {}, expected {}".format(out.shape, result.shape))
-
-        # end if
-
-        btmp = (<arrss>out).arr
-        (<arrss>out).arr = (<arrss>result).arr
-        (<arrss>result).arr = btmp
+        aos_out = out
+        aos_res = result
+        nrows = aos_out.arr.nrows
+        ncols = aos_out.arr.ncols
+        btmp = aos_out.arr
+        aos_out.arr = aos_res.arr
+        aos_res.arr = btmp
+        aos_out.arr.nrows = nrows
+        aos_out.arr.ncols = ncols
         return out
 
     # end if
@@ -710,7 +776,8 @@ cdef object _finish(object result, object out):
     Returns
     -------
     object
-        ``result`` when ``out`` is None, otherwise None (the result went into ``out``).
+        ``result`` when ``out`` is None, otherwise ``out`` itself (rule S1b and C4: the holder,
+        never None).
     """
 
     if out is None:
@@ -722,12 +789,12 @@ cdef object _finish(object result, object out):
     if isinstance(out, _ssfe) or isinstance(result, _ssfe):
 
         _fe_store(result, out)
-        return None
+        return out
 
     # end if
 
     _assign_out(out, result)
-    return None
+    return out
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -1258,8 +1325,9 @@ cdef str _array_text(object value):
         Text with the header ``matso< shape: (r, c),`` and ``(i,j) element`` lines.
     """
 
-    cdef uint64_t nrows = value.shape[0]
-    cdef uint64_t ncols = value.shape[1]
+    cdef tuple shape = value.shape
+    cdef uint64_t nrows = shape[0] if len(shape) > 0 else 1
+    cdef uint64_t ncols = shape[1] if len(shape) > 1 else 1
     cdef uint64_t i, j
     cdef str out = "matso< shape: " + str(value.shape) + ", \n"
 
@@ -1269,7 +1337,8 @@ cdef str _array_text(object value):
 
         for i in range(nrows):
 
-            out += "({0:d},{1:d}) ".format(i, j) + str(value[i, j]) + "\n"
+            out += "({0:d},{1:d}) ".format(i, j) + str(
+                value[i, j] if len(shape) == 2 else (value[i] if len(shape) == 1 else value[()])) + "\n"
 
         # end for
 

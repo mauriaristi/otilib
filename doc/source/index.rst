@@ -37,6 +37,7 @@ Contents
    :caption: Contents:
 
    installation
+   migrating_to_2_0
    tutorials
    examples
    aboutus

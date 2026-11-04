@@ -53,6 +53,7 @@ static int dngs_check(uint64_t nblocks, uint64_t nrows, uint64_t ncols, uint64_t
     uint64_t size;
 
     S.sdim   = 3;
+    S.layout = ND_LAYOUT_F;
     S.ext[0] = nip;
     S.ext[1] = nrows;
     S.ext[2] = ncols;
@@ -75,11 +76,13 @@ static void dngs_label(feoarr_t* fe, uint64_t nrows, uint64_t ncols, uint64_t ni
     dnob_shape_t S;
 
     S.sdim   = 3;
+    S.layout = ND_LAYOUT_F;
     S.ext[0] = nip;
     S.ext[1] = nrows;
     S.ext[2] = ncols;
 
     dnob_set_layout(&fe->arr, (uint64_t)fe->arr.blocks.shape[0], &S);
+    fe->arr.flags |= OARR_GAUSS;
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -403,6 +406,8 @@ int fearr_set_shape(uint64_t nrows, uint64_t ncols, uint64_t nip, feoarr_t* fe){
 // *******************************************************************************************************
 int fearr_get_ip_to(uint64_t ip, const feoarr_t* fe, oarr_t* res){
 
+    DNOB_IN1(NULL, res, fearr_get_ip_to(ip, fe, c_.res));
+
     const oarr_t* a = &fe->arr;
     uint64_t nip = fearr_nip(fe), m = oarr_ncols(a), nb = dngs_nblocks(a), d, e;
     const coeff_t* S;
@@ -446,6 +451,8 @@ int fearr_get_ip_to(uint64_t ip, const feoarr_t* fe, oarr_t* res){
 
 // *******************************************************************************************************
 int fearr_set_ip(const oarr_t* val, uint64_t ip, feoarr_t* fe){
+
+    DNOB_IN1(val, NULL, fearr_set_ip(c_.in[0], ip, fe));
 
     oarr_t row = oarr_init();
     uint64_t *cols, e, m = oarr_ncols(&fe->arr);
@@ -620,6 +627,8 @@ int fearr_set_ijk_r(coeff_t val, uint64_t i, uint64_t j, uint64_t ip, feoarr_t* 
 
 // *******************************************************************************************************
 int fearr_from_oarr_to(const oarr_t* arr, uint64_t nip, feoarr_t* res){
+
+    DNOB_IN1(arr, NULL, fearr_from_oarr_to(c_.in[0], nip, res));
 
     uint64_t nb = dngs_nblocks(arr), m = oarr_size(arr), d, e, t;
     feoarr_t tmp = fearr_init();
@@ -880,6 +889,8 @@ int fearr_matmul_FF_to(const feoarr_t* a, const feoarr_t* b, feoarr_t* res, dhel
 // *******************************************************************************************************
 int fearr_matmul_FO_to(const feoarr_t* a, const oarr_t* b, feoarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(b, NULL, fearr_matmul_FO_to(a, c_.in[0], res, dhl));
+
     uint64_t n = fearr_nrows(a), q = fearr_ncols(a), m = oarr_ncols(b), nip = fearr_nip(a), nn, nm;
     oarr_t av = oarr_init();
     feoarr_t out = fearr_init();
@@ -921,6 +932,8 @@ int fearr_matmul_FO_to(const feoarr_t* a, const oarr_t* b, feoarr_t* res, dhelpl
 // *******************************************************************************************************
 int fearr_matmul_OF_to(const oarr_t* a, const feoarr_t* b, feoarr_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(a, NULL, fearr_matmul_OF_to(c_.in[0], b, res, dhl));
+
     feoarr_t bt = fearr_init(), rt = fearr_init();
     oarr_t at = oarr_init();
     int status;
@@ -957,6 +970,8 @@ int fearr_matmul_OF_to(const oarr_t* a, const feoarr_t* b, feoarr_t* res, dhelpl
 // *******************************************************************************************************
 int fearr_dot_product_FO_to(const feoarr_t* a, const oarr_t* b, feoarr_t* res,
                             dhelpl_t dhl){
+
+    DNOB_IN1(b, NULL, fearr_dot_product_FO_to(a, c_.in[0], res, dhl));
 
     uint64_t N = oarr_ncols(&a->arr);
     oarr_t bv = oarr_init(), av = oarr_init();
@@ -1000,6 +1015,7 @@ int fearr_dot_product_FF_to(const feoarr_t* a, const feoarr_t* b, feoarr_t* res,
 
     uint64_t N = oarr_ncols(&a->arr), nip = fearr_nip(a), nb, d, e, t;
     feoarr_t prod = fearr_init(), out = fearr_init();
+    oarr_t va = oarr_init(), vb = oarr_init();
     const coeff_t* S;
     coeff_t* D;
     int status;
@@ -1008,7 +1024,16 @@ int fearr_dot_product_FF_to(const feoarr_t* a, const feoarr_t* b, feoarr_t* res,
         return DN_ERR_SIZE;
     }
 
-    status = oarr_mul_OO_to(&a->arr, &b->arr, &prod.arr, dhl);
+    // Elementwise over the matricized nip x N shape: the matrix shapes of a and b may differ.
+    status = oarr_view_matrix(&a->arr, nip, N, &va);
+
+    if (status == DN_OK){
+        status = oarr_view_matrix(&b->arr, nip, N, &vb);
+    }
+
+    if (status == DN_OK){
+        status = oarr_mul_OO_to(&va, &vb, &prod.arr, dhl);
+    }
 
     if (status == DN_OK){
         status = fearr_zeros_to(oarr_nact(&prod.arr), 1, 1, nip, oarr_trc_order(&prod.arr), &out);
@@ -1052,6 +1077,8 @@ int fearr_dot_product_FF_to(const feoarr_t* a, const feoarr_t* b, feoarr_t* res,
 
 // *******************************************************************************************************
 int fearr_integrate_to(const feoarr_t* val, const feoarr_t* w, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(NULL, res, fearr_integrate_to(val, w, c_.res, dhl));
 
     oarr_t wv = oarr_init(), vv = oarr_init();
     int status;

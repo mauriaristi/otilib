@@ -15,18 +15,19 @@
 // -------------------------------------------------------------------------------------------------------
 
 /**
- * @name Semi-sparse file format, version 1
+ * @name Semi-sparse file format, versions 1 and 2
  *
  * All multi-byte values are stored in the byte order of the host that wrote the file (flagged in
  * the header; a file is only read back on a host of the same byte order: little-endian for every
- * platform the library supports). The file is a 64-byte header followed by the payload.
+ * platform the library supports). The file is a header (64 bytes in v1, 64 + 8 * ndim in v2)
+ * followed by the payload.
  *
  * Header (offsets in bytes, unused bytes are zero):
  *
  * | offset | size | field |
  * |---|---|---|
  * | 0  | 4 | magic: 0x93 'O' 'T' 'S' (sparse files start 0x93 'O' 'T' 'I') |
- * | 4  | 2 | format version (uint16, SSIO_VERSION = 1) |
+ * | 4  | 2 | format version (uint16): 1 (pyoti 1.x) or 2 (SSIO_VERSION, written since 2.0.0) |
  * | 6  | 1 | type tag: SSIO_TYPE_SCALAR = 1, SSIO_TYPE_AOS = 2, SSIO_TYPE_SOA = 3 |
  * | 7  | 1 | byte order: SSIO_LITTLE_ENDIAN = 1, SSIO_BIG_ENDIAN = 2 |
  * | 8  | 1 | bytes per coefficient (8) |
@@ -34,10 +35,13 @@
  * | 10 | 1 | truncation order (AoS: largest over the elements) |
  * | 11 | 1 | active order (AoS: largest over the elements) |
  * | 12 | 4 | number of active bases k (uint32; 0 for AoS, whose elements carry their own) |
- * | 16 | 8 | number of rows (uint64; 1 for a scalar) |
- * | 24 | 8 | number of columns (uint64; 1 for a scalar) |
- * | 32 | 8 | payload size in bytes (uint64); the file is exactly 64 + payload bytes long |
- * | 40 | 24 | reserved, zero |
+ * | 16 | 8 | number of rows (uint64; 1 for a scalar). v2: the matricized shape, S[0] (1 for 0-D) |
+ * | 24 | 8 | number of columns (uint64; 1 for a scalar). v2: the product of S[1..] (1 for 0-D, 1-D) |
+ * | 32 | 8 | payload size in bytes (uint64); the file is exactly header + payload bytes long |
+ * | 40 | 4 | v1: zero. v2: ndim, the rank of the logical shape S (uint32, 0 .. SSIO_MAX_NDIM) |
+ * | 44 | 1 | v1: zero. v2: payload layout, SSIO_LAYOUT_F = 1 (SoA, scalar) or SSIO_LAYOUT_C = 2 (AoS) |
+ * | 45 | 19 | reserved, zero |
+ * | 64 | 8 * ndim | v2 only: the extents S[0 .. ndim-1] (uint64 each) |
  *
  * Payload, by type. "Labels" are the k sorted active global bases (uint16 each, strictly
  * increasing), zero-padded up to a multiple of 8 bytes. The "order blocks" are the imaginary
@@ -55,11 +59,24 @@
  *   then its real part and order blocks as in a scalar.
  *
  * Orders above the active order must be zero; a file that says otherwise is rejected.
+ * Version 2 follows the one v2 header rule of the three formats (contracts 11.12; 'OTS' keeps byte 9
+ * for the label width, so its layout flag is byte 44): the logical shape S of the Python object over
+ * the 2-D C struct, matricized as rows = S[0] and columns = the product of S[1..], so (n) is n x 1 and
+ * () is 1 x 1. The layout flag must be the type's own (F for SoA, C for AoS; a scalar either). A
+ * version-1 file reads back with its stored 2-D shape (ndim 2; 0 for a scalar). The payload is the
+ * same in both versions. The header represents ndim up to SSIO_MAX_NDIM; the Python arrays of 2.0
+ * development read ndim <= 2 (Phase 8 the rest). The develop-only v2 layout written before this rule
+ * (ndim at byte 40, 'F' / 'C' at 41, extents at 48) is not read.
  * @{
  */
 
 #define SSIO_HEADER_BYTES   64  ///< Size of the file header.
-#define SSIO_VERSION         1  ///< Format version written by this library.
+#define SSIO_VERSION         2  ///< Format version written by this library.
+#define SSIO_VERSION_1       1  ///< Oldest format version read (pyoti 1.x).
+#define SSIO_MAX_NDIM       31  ///< Largest ndim of a version-2 file (the 'OTD' limit, DNIO_MAXDIM).
+
+#define SSIO_LAYOUT_F        1  ///< v2 layout flag: column-major payload elements (SoA, scalar).
+#define SSIO_LAYOUT_C        2  ///< v2 layout flag: row-major payload elements (AoS records).
 
 #define SSIO_TYPE_SCALAR     1  ///< File holds an ssotinum_t.
 #define SSIO_TYPE_AOS        2  ///< File holds an arrss_t.
@@ -103,6 +120,10 @@ typedef struct {
     uint64_t  nrows;  ///< Number of rows (1 for a scalar).
     uint64_t  ncols;  ///< Number of columns (1 for a scalar).
     uint64_t payload; ///< Payload size in bytes.
+    int         ndim; ///< Logical ndim (version 1: 2 for arrays, 0 for a scalar).
+    int       layout; ///< SSIO_LAYOUT_F or SSIO_LAYOUT_C (version 1: F for SoA, C otherwise).
+    uint64_t head_bytes; ///< Header size: 64 (version 1) or 64 + 8 * ndim (version 2).
+    uint64_t shape[SSIO_MAX_NDIM]; ///< Logical shape; entries past ndim are zero.
 } ssio_info_t;        ///< Header of a semi-sparse file.
 
 
@@ -120,8 +141,9 @@ const char* ssio_strerror(int status);
 /**
  * @brief Reads and validates the header of a semi-sparse file, without reading the payload.
  *
- * Checks the magic, version, byte order and field sizes, that the orders are consistent, and that
- * the file size is 64 + payload bytes.
+ * Checks the magic, version (1 or 2), byte order and field sizes, that the orders are consistent,
+ * that a version-2 shape and layout match the C dimensions and the type, and that the file size is
+ * header + payload bytes.
  *
  * @param[in]  filename Path of the file.
  * @param[out] p_info   Header fields; unchanged on error.
@@ -133,7 +155,7 @@ int ssio_peek(const char* filename, ssio_info_t* p_info);
 
 
 /**
- * @brief Saves a semi-sparse scalar.
+ * @brief Saves a semi-sparse scalar (version 2, ndim 0).
  *
  * @param[in] filename Path of the file to create (overwritten if it exists).
  * @param[in] num      Scalar.
@@ -159,7 +181,7 @@ int ssoti_read(const char* filename, ssotinum_t* res);
 
 
 /**
- * @brief Saves an AoS array.
+ * @brief Saves an AoS array (version 2, logical shape (nrows, ncols)).
  *
  * @param[in] filename Path of the file to create (overwritten if it exists).
  * @param[in] arr      Array.
@@ -171,7 +193,22 @@ int arrss_save(const char* filename, const arrss_t* arr);
 
 
 /**
- * @brief Reads an AoS array saved with arrss_save().
+ * @brief Saves an AoS array with the logical shape of its Python object (version 2).
+ *
+ * @param[in] filename Path of the file to create (overwritten if it exists).
+ * @param[in] arr      Array.
+ * @param[in] ndim     Logical ndim, 0 to SSIO_MAX_NDIM.
+ * @param[in] shape    Logical shape, ndim values (may be NULL for ndim 0); S[0] must be nrows and
+ *                     the product of S[1..] ncols.
+ *
+ * @return SSIO_OK, or an SSIO_ERR_* code (SSIO_ERR_ARGUMENT for a shape that does not match).
+ */
+int arrss_save_shape(const char* filename, const arrss_t* arr, int ndim, const uint64_t* shape);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Reads an AoS array saved with arrss_save() or arrss_save_shape() (version 1 or 2).
  *
  * @param[in]  filename Path of the file.
  * @param[out] res      The array, newly allocated; previous contents are overwritten, not freed.
@@ -185,7 +222,7 @@ int arrss_read(const char* filename, arrss_t* res);
 
 
 /**
- * @brief Saves a SoA array.
+ * @brief Saves a SoA array (version 2, logical shape (nrows, ncols)).
  *
  * @param[in] filename Path of the file to create (overwritten if it exists).
  * @param[in] arr      Array.
@@ -197,7 +234,24 @@ int oarrss_save(const char* filename, const oarrss_t* arr);
 
 
 /**
- * @brief Reads a SoA array saved with oarrss_save().
+ * @brief Saves a SoA array with the logical shape of its Python object (version 2).
+ *
+ * @param[in] filename Path of the file to create (overwritten if it exists).
+ * @param[in] arr      Array.
+ * @param[in] ndim     Logical ndim, 0 to SSIO_MAX_NDIM.
+ * @param[in] shape    Logical shape, ndim values (may be NULL for ndim 0); S[0] must be nrows and
+ *                     the product of S[1..] ncols.
+ *
+ * @return SSIO_OK, or an SSIO_ERR_* code (SSIO_ERR_ARGUMENT for a shape that does not match).
+ */
+int oarrss_save_shape(const char* filename, const oarrss_t* arr, int ndim, const uint64_t* shape);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Reads a SoA array saved with oarrss_save() or oarrss_save_shape() (version 1 or 2).
+ *
+ * The logical shape of a version-2 file is reported by ssio_peek().
  *
  * @param[in]  filename Path of the file.
  * @param[out] res      The array, newly allocated; previous contents are overwritten, not freed.

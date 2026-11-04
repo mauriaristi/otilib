@@ -383,7 +383,7 @@ def test_aos_add_and_list_repr_like_matso():
     holder = dn.arro.zeros((2, 2), order=1)
 
     assert np.array_equal(dn.arro.add(left, right).real, left.real + right.real)
-    assert dn.arro.add(left, right, out=holder) is None
+    assert dn.arro.add(left, right, out=holder) is holder
     assert np.array_equal(holder.real, left.real + right.real)
     assert left.list_repr().startswith("arro< shape: (2, 2)")
 

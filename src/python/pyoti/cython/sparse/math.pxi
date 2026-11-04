@@ -80,13 +80,13 @@ cpdef erf(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_erf_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_erf( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -94,14 +94,14 @@ cpdef erf(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_erf_to( &R.arr, &Rres.arr)
 
     else:
 
-      cRres = darr_cos( &R.arr )
-      res = dmat.create( &cRres )
+      cRres = darr_erf( &R.arr )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -120,6 +120,8 @@ cpdef erf(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -206,13 +208,13 @@ cpdef cos(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_cos_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_cos( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -220,14 +222,14 @@ cpdef cos(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_cos_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_cos( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -246,6 +248,8 @@ cpdef cos(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -335,13 +339,13 @@ cpdef sin(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_sin_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_sin( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -349,14 +353,14 @@ cpdef sin(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_sin_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_sin( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -376,6 +380,8 @@ cpdef sin(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -467,13 +473,13 @@ cpdef tan(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_tan_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_tan( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -481,14 +487,14 @@ cpdef tan(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_tan_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_tan( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -508,6 +514,8 @@ cpdef tan(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -601,13 +609,13 @@ cpdef acos(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_acos_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_acos( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -615,14 +623,14 @@ cpdef acos(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_acos_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_acos( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -642,6 +650,8 @@ cpdef acos(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -735,13 +745,13 @@ cpdef asin(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_asin_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_asin( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -749,14 +759,14 @@ cpdef asin(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_asin_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_asin( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -776,6 +786,8 @@ cpdef asin(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -866,13 +878,13 @@ cpdef atan(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_atan_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_atan( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -880,14 +892,14 @@ cpdef atan(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_atan_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_atan( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -907,6 +919,8 @@ cpdef atan(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -1029,13 +1043,13 @@ cpdef sinh(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_sinh_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_sinh( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -1043,14 +1057,14 @@ cpdef sinh(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_sinh_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_sinh( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -1070,6 +1084,8 @@ cpdef sinh(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -1161,13 +1177,13 @@ cpdef cosh(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_cosh_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_cosh( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -1175,14 +1191,14 @@ cpdef cosh(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_cosh_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_cosh( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -1202,6 +1218,8 @@ cpdef cosh(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -1295,13 +1313,13 @@ cpdef tanh(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_tanh_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_tanh( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -1309,14 +1327,14 @@ cpdef tanh(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_tanh_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_tanh( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -1336,6 +1354,8 @@ cpdef tanh(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -1428,13 +1448,13 @@ cpdef acosh(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_acosh_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_acosh( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -1442,14 +1462,14 @@ cpdef acosh(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_acosh_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_acosh( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -1469,6 +1489,8 @@ cpdef acosh(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -1560,13 +1582,13 @@ cpdef asinh(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_asinh_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_asinh( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -1574,14 +1596,14 @@ cpdef asinh(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_asinh_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_asinh( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -1601,6 +1623,8 @@ cpdef asinh(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -1691,13 +1715,13 @@ cpdef atanh(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_atanh_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_atanh( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -1705,14 +1729,14 @@ cpdef atanh(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_atanh_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_atanh( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -1732,6 +1756,8 @@ cpdef atanh(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -1849,13 +1875,13 @@ cpdef exp(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_exp_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_exp( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -1863,14 +1889,14 @@ cpdef exp(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_exp_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_exp( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -1890,6 +1916,8 @@ cpdef exp(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -1988,13 +2016,13 @@ cpdef log(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_log_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_log( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -2002,14 +2030,14 @@ cpdef log(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_log_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_log( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -2029,6 +2057,8 @@ cpdef log(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -2127,13 +2157,13 @@ cpdef log10(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_log10_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_log10( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -2141,14 +2171,14 @@ cpdef log10(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_log10_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_log10( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -2168,6 +2198,8 @@ cpdef log10(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -2267,13 +2299,13 @@ cpdef logb(object val, coeff_t b, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_logb_to( &O.arr, b, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_logb( &O.arr, b,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -2281,14 +2313,14 @@ cpdef logb(object val, coeff_t b, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_logb_to( &R.arr, b, &Rres.arr)
 
     else:
 
       cRres = darr_logb( &R.arr , b)
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -2308,6 +2340,8 @@ cpdef logb(object val, coeff_t b, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -2410,13 +2444,13 @@ cpdef sqrt(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_sqrt_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_sqrt( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -2424,14 +2458,14 @@ cpdef sqrt(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_sqrt_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_sqrt( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -2450,6 +2484,8 @@ cpdef sqrt(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -2552,13 +2588,13 @@ cpdef cbrt(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_cbrt_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_cbrt( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -2566,14 +2602,14 @@ cpdef cbrt(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_cbrt_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_cbrt( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -2593,6 +2629,8 @@ cpdef cbrt(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -2654,7 +2692,7 @@ cpdef pow(object val, object e, object out = None):
     
   # end if 
 
-  return res
+  return res if out is None else out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -2759,13 +2797,13 @@ cdef object __pow__realexp(object val, coeff_t e, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_pow_to( &O.arr, e, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_pow( &O.arr, e,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
 
@@ -2775,14 +2813,14 @@ cdef object __pow__realexp(object val, coeff_t e, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_pow_to( &R.arr, e, &Rres.arr)
 
     else:
 
       cRres = darr_pow( &R.arr , e)
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
 
@@ -2891,13 +2929,13 @@ cdef object __pow__sotinumexp(object val, sotinum e, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_pow_soti_to( &O.arr, &e.num, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_pow_soti( &O.arr, &e.num,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if      
 
@@ -2968,7 +3006,7 @@ cdef object __pow__matsoexp(object val, matso e, object out = None):
     else:
 
       cOres = soti_pow_arrso( &o.num, &e.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), e._lk)
 
     # end if 
   
@@ -2977,13 +3015,13 @@ cdef object __pow__matsoexp(object val, matso e, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_pow_arrso_to( &O.arr, &e.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_pow_arrso( &O.arr, &e.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if
 
@@ -3110,6 +3148,8 @@ cpdef gauss_integrate(object val, sotife w, object out = None ):
     return res
   # end if 
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
 
 
@@ -3195,13 +3235,13 @@ cpdef neg(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_neg_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_neg( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -3209,14 +3249,14 @@ cpdef neg(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      Rres = _dmat_out(out, R)
       Rres._check_out()
       darr_neg_to( &R.arr, &Rres.arr)
 
     else:
 
       cRres = darr_neg( &R.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), R )
 
     # end if 
   elif tval in number_types:
@@ -3235,6 +3275,8 @@ cpdef neg(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -3322,13 +3364,13 @@ cpdef abs(object val, object out = None):
     O = val
     if res_flag:
       
-      Ores = out
+      Ores = _out_matso(out, O)
       arrso_abs_to( &O.arr, &Ores.arr, dhl)
 
     else:
 
       cOres = arrso_abs( &O.arr,  dhl)
-      res   = matso.create(&cOres)
+      res   = _sk(matso.create(&cOres), O._lk)
 
     # end if    
   elif tval is dmat:
@@ -3336,20 +3378,20 @@ cpdef abs(object val, object out = None):
     R._sync()
     if res_flag:
       
-      Rres = out
+      # darr_abs / darr_abs_to of the frozen C layer call the integer abs(): NumPy does it here.
+      Rres = _dmat_out(out, R)
       Rres._check_out()
-      darr_abs_to( &R.arr, &Rres.arr)
+      np.abs(R.to_numpy(), out=Rres.to_numpy())
 
     else:
 
-      cRres = darr_abs( &R.arr )
-      res = dmat.create( &cRres )
+      res = r.array(np.abs(R.to_numpy()))
 
     # end if 
   elif tval in number_types:
     import math    
     r    = val
-    rres = abs(r)
+    rres = math.fabs(r)
     if res_flag:      
       out = rres
     else:
@@ -3362,5 +3404,7 @@ cpdef abs(object val, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------

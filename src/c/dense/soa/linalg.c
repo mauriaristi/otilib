@@ -27,6 +27,133 @@ static coeff_t* dnol_alloc(uint64_t nblocks, uint64_t blocksize){
 
 
 // *******************************************************************************************************
+// A call-local buffer of nbytes from the calling thread's scratch arena (nd_alloc(ND_ALLOC_SCRATCH),
+// the 7a allocation fix): *p gets its memory, `hold` keeps it until nd_release(hold), which must run on
+// this thread before the call returns. coeff_bytes > 0 also charges that many coefficient bytes to the
+// dense byte budget (dnsm_budget()). DN_ERR_MEMORY on a failure (hold left empty).
+static int dnol_scratch(size_t nbytes, size_t coeff_bytes, ndarr_t* hold, void** p){
+
+    int64_t len = (nbytes > 0) ? (int64_t)nbytes : 1;
+
+    nd_init_empty(hold);
+    *p = NULL;
+
+    if (nbytes > (size_t)INT64_MAX || (coeff_bytes > 0 && dnsm_budget(coeff_bytes / sizeof(coeff_t))
+                                                         != DN_OK)){
+        return DN_ERR_MEMORY;
+    }
+
+    if (nd_alloc(NULL, OTI_U8, 1, &len, ND_LAYOUT_C, ND_ALLOC_SCRATCH, hold) != OTI_OK){
+        return DN_ERR_MEMORY;
+    }
+
+    *p = hold->data;
+
+    return DN_OK;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// A call-local canonical array over (nact, trc) of element shape S on the scratch arena (meta in its
+// extra zone): for the arrays that never leave a call (inv's identity, solve's LU copy). Released by
+// oarr_free() on this thread. The contents are unspecified.
+static int dnol_scratch_array(bases_t nact, const dnob_shape_t* S, ord_t trc, oarr_t* res){
+
+    uint64_t size;
+    size_t need;
+    int status;
+
+    *res = oarr_init();
+
+    if (dnob_shape_size_s(S, &size) != DN_OK || dnob_nreals(nact, trc, size, &need) != DN_OK
+        || dnob_layout_ok(dnob_nblocks(nact, trc), S) != DN_OK){
+        return DN_ERR_MEMORY;
+    }
+
+    status = dnob_new_owned_f(res, need, nact, trc, ND_ALLOC_SCRATCH);
+
+    if (status != DN_OK){
+        return status;
+    }
+
+    res->cap = nact;
+    dnob_set_layout(res, dnob_nblocks(nact, trc), S);
+
+    return DN_OK;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// LU factorization of a canonical square matrix on the scratch arena: lu->A a scratch copy of A, the
+// pivots in `ipiv_hold` (released with dnol_lu_scratch_free()). Returns as oarr_lu_factor().
+static int dnol_lu_scratch(const oarr_t* A, oarr_lu_t* lu, ndarr_t* ipiv_hold){
+
+    dnob_shape_t S = dnob_shape_of(A);
+    size_t n;
+    int info = 0, status;
+    void* p;
+
+    lu->A      = oarr_init();
+    lu->p_ipiv = NULL;
+    nd_init_empty(ipiv_hold);
+    S.layout   = ND_LAYOUT_F;
+
+    status = dnol_scratch_array(oarr_nact(A), &S, oarr_trc_order(A), &lu->A);
+
+    if (status != DN_OK){
+        return status;
+    }
+
+    n = dnob_used(A);
+
+    if (n > 0){
+        memcpy(oarr_data(&lu->A), oarr_data(A), n * sizeof(coeff_t));
+    }
+
+    oarr_set_act_order(&lu->A, oarr_act_order(A));
+
+    status = dnol_scratch((size_t)oarr_nrows(A) * sizeof(int), 0, ipiv_hold, &p);
+
+    if (status != DN_OK){
+        return status;
+    }
+
+    lu->p_ipiv = (int*)p;
+
+    if (oarr_nrows(A) > 0){
+
+        oti_dgetrf((int)oarr_nrows(A), (int)oarr_nrows(A), oarr_data(&lu->A), (int)oarr_nrows(A),
+                   lu->p_ipiv, &info);
+
+        if (info < 0){
+            return DN_ERR_ARGUMENT;
+        }
+
+    }
+
+    return info;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Releases a dnol_lu_scratch() factorization.
+static void dnol_lu_scratch_free(oarr_lu_t* lu, ndarr_t* ipiv_hold){
+
+    oarr_free(&lu->A);
+    nd_release(ipiv_hold);
+    lu->p_ipiv = NULL;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 // Tells whether the product a * b fits the LAPACK integers, without wrapping around in uint64_t.
 static int dnol_fits_prod(uint64_t a, uint64_t b){
 
@@ -58,6 +185,8 @@ static ndir_t dnol_max_ndir(bases_t k, ord_t trc){
 
 // *******************************************************************************************************
 int oarr_lu_factor(const oarr_t* A, oarr_lu_t* lu){
+
+    DNOB_IN1(A, NULL, oarr_lu_factor(c_.in[0], lu));
 
     int info = 0, status;
 
@@ -123,6 +252,8 @@ void oarr_lu_free(oarr_lu_t* lu){
 
 // *******************************************************************************************************
 int oarr_lu_solve(const oarr_lu_t* lu, const oarr_t* b, oarr_t* x, dhelpl_t dhl){
+
+    DNOB_IN1(b, x, oarr_lu_solve(lu, c_.in[0], c_.res, dhl));
 
     const oarr_t* A;
     uint64_t n, m, sa, sx, i;
@@ -282,14 +413,28 @@ cleanup:
 // *******************************************************************************************************
 int oarr_solve_to(const oarr_t* K, const oarr_t* b, oarr_t* x, dhelpl_t dhl){
 
+    DNOB_IN2(K, b, x, oarr_solve_to(c_.in[0], c_.in[1], c_.res, dhl));
+
     oarr_lu_t lu;
-    int status = oarr_lu_factor(K, &lu);
+    ndarr_t ipiv;
+    int status;
+
+    if (K == NULL){
+        return DN_ERR_ARGUMENT;
+    }
+
+    if (!dnob_is_matrix(K) || oarr_nrows(K) != oarr_ncols(K) || !oti_lapack_fits(oarr_nrows(K))){
+        return DN_ERR_SIZE;
+    }
+
+    // The LU copy and the pivots never leave the call: the scratch arena (the 7a allocation fix).
+    status = dnol_lu_scratch(K, &lu, &ipiv);
 
     if (status == DN_OK){
         status = oarr_lu_solve(&lu, b, x, dhl);
     }
 
-    oarr_lu_free(&lu);
+    dnol_lu_scratch_free(&lu, &ipiv);
 
     return status;
 
@@ -299,6 +444,8 @@ int oarr_solve_to(const oarr_t* K, const oarr_t* b, oarr_t* x, dhelpl_t dhl){
 
 // *******************************************************************************************************
 int oarr_inv_to(const oarr_t* A, oarr_t* res, dhelpl_t dhl){
+
+    DNOB_IN1(A, res, oarr_inv_to(c_.in[0], c_.res, dhl));
 
     oarr_t eye = oarr_init();
     int status;
@@ -311,7 +458,28 @@ int oarr_inv_to(const oarr_t* A, oarr_t* res, dhelpl_t dhl){
         return DN_ERR_SIZE;
     }
 
-    status = oarr_eye_to(oarr_nrows(A), oarr_trc_order(A), &eye);
+    // The identity never leaves the call: the scratch arena (the 7a allocation fix).
+    {
+        dnob_shape_t S = dnob_shape2(oarr_nrows(A), oarr_nrows(A));
+        uint64_t i, nr = oarr_nrows(A);
+
+        status = dnol_scratch_array(0, &S, oarr_trc_order(A), &eye);
+
+        if (status == DN_OK){
+
+            if (dnob_used(&eye) > 0){
+                memset(oarr_data(&eye), 0, dnob_used(&eye) * sizeof(coeff_t));
+            }
+
+            for (i = 0; i < nr; i++){
+                oarr_data(&eye)[i + i * nr] = 1.0;
+            }
+
+            oarr_set_act_order(&eye, 0);
+
+        }
+
+    }
 
     if (status == DN_OK){
         status = oarr_solve_to(A, &eye, res, dhl);
@@ -356,6 +524,8 @@ static void dnol_trace_acc(const coeff_t* P, uint64_t n, ord_t lo, coeff_t scale
 // *******************************************************************************************************
 int oarr_det_to(const oarr_t* A, otinum_t* res, dhelpl_t dhl){
 
+    DNOB_IN1(A, NULL, oarr_det_to(c_.in[0], res, dhl));
+
     uint64_t n, sa, r;
     bases_t k;
     ord_t trc, atop, mo;
@@ -363,6 +533,11 @@ int oarr_det_to(const oarr_t* A, otinum_t* res, dhelpl_t dhl){
     coeff_t *LU = NULL, *M = NULL, *P = NULL, *Q = NULL, *work = NULL, *tmp, det0 = 1.0;
     int *ipiv = NULL, info = 0, status = DN_OK;
     otinum_t t = oti_init();
+    ndarr_t lu_hold, ipiv_hold;
+    void* vp = NULL;
+
+    nd_init_empty(&lu_hold);
+    nd_init_empty(&ipiv_hold);
 
     if (A == NULL || res == NULL){
         return DN_ERR_ARGUMENT;
@@ -389,13 +564,16 @@ int oarr_det_to(const oarr_t* A, otinum_t* res, dhelpl_t dhl){
         return DN_ERR_SIZE;
     }
 
-    LU   = dnol_alloc(1, sa);
-    ipiv = (int*)malloc((size_t)n * sizeof(int) + 1);
-
-    if (LU == NULL || ipiv == NULL){
+    // The LU copy of the real part and the pivots never leave the call: the scratch arena.
+    if (sa > SIZE_MAX / sizeof(coeff_t)
+        || dnol_scratch((size_t)sa * sizeof(coeff_t), (size_t)sa * sizeof(coeff_t), &lu_hold, &vp)
+           != DN_OK
+        || (LU = (coeff_t*)vp, dnol_scratch((size_t)n * sizeof(int), 0, &ipiv_hold, &vp)) != DN_OK){
         status = DN_ERR_MEMORY;
         goto cleanup;
     }
+
+    ipiv = (int*)vp;
 
     // det of the real part from its LU factors.
     if (sa > 0){
@@ -494,8 +672,8 @@ int oarr_det_to(const oarr_t* A, otinum_t* res, dhelpl_t dhl){
 cleanup:
 
     oti_free(&t);
-    free(LU);
-    free(ipiv);
+    nd_release(&lu_hold);
+    nd_release(&ipiv_hold);
     free(M);
     free(P);
     free(Q);

@@ -544,7 +544,15 @@ def test_real_part_is_shared():
     assert real.indices is K.indices and real.indptr is K.indptr
     assert not K.indices.flags.writeable and not K.indptr.flags.writeable
 
-    real.data[0] = 123.0
+    assert not real.data.flags.writeable
+
+    with pytest.raises(ValueError):
+
+        real.data[0] = 123.0
+
+    # end with
+
+    K.get_real(writeable=True).data[0] = 123.0
     assert K.toarray().real[0, int(K.indices[0])] == 123.0
     np.testing.assert_array_equal((real @ np.ones(5)), K.real.toarray() @ np.ones(5))
 
@@ -606,8 +614,16 @@ def test_conversions():
     assert (empty @ ss.oarrss.from_real(np.ones((2, 1)))).shape == (3, 1)
 
     copied = semi_csr.copy()
-    copied.real.data[:] = 0.0
+
+    with pytest.raises(ValueError):
+
+        copied.real.data[:] = 0.0
+
+    # end with
+
+    copied.get_real(writeable=True).data[...] = 0.0
     assert semi_csr.real.data.any()
+    assert not copied.real.data.any()
 
     with pytest.raises(ValueError):
 
@@ -671,7 +687,7 @@ def test_matmul_matches_sparse(name, kbases, xbases, order):
     assert _max_rel_diff(ss.matmul(semi_csr, semi_x), expected, union, order) < 1e-13
 
     holder = ss.zeros((8, 3))
-    assert semi_csr.dot(semi_x, out=holder) is None
+    assert semi_csr.dot(semi_x, out=holder) is holder
     assert _max_rel_diff(holder, expected, union, order) < 1e-13
 
 # end function
@@ -810,14 +826,15 @@ def test_solve_symmetric_cholesky_and_out():
         # end if
 
         holder = ss.zeros((n, 1))
-        assert ss.solve(K, b, out=holder, solver=solver) is None
+        assert ss.solve(K, b, out=holder, solver=solver) is holder
         assert _max_rel_diff(holder, expected, (1, 2), order) < 1e-12
 
     # end for
 
     # A real right-hand side and a one-dimensional NumPy vector are accepted.
     vector = ss.solve(K, np.arange(1.0, n + 1.0))
-    assert _max_rel_diff(vector, expected, (1, 2), order) < 1e-12
+    assert vector.shape == (n,)
+    assert _max_rel_diff(vector, expected[:, 0], (1, 2), order) < 1e-12
 
 # end function
 # --------------------------------------------------------------------------------------------------------

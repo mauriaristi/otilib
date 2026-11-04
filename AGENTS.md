@@ -183,8 +183,48 @@ these local documents and are for context only.
   - `pyoti.fem.set_global_algebra(pyoti.dense)` works (it probes `elm_help()`,
     `zeros((2, 2), nip=2)` and `zero(nip=2)`), and `examples/python/fem_twc.py --algebra dense` runs
     the TWC model.
+- **ndarray kernels and Python producers (`PLAN-ndarray.md`).**
+  - Per-array metadata goes in the control block's extra zone (`nd_alloc_extra`), never in a separate
+    allocation. Arrays created and released inside one call use `ND_ALLOC_SCRATCH` and are released on
+    the allocating thread before returning. They cannot be exported (`OTI_ERR_BUSY`).
+  - 2-D C structs (`dmat`, `matso`, semi-sparse AoS) carry a logical shape `_lk` (0: 2-D, 1: 1-D stored
+    n x 1, 2: 0-D stored 1 x 1). The key parser is `pyoti.real.key2d` (`real/ndarray/key2d.pxi`).
+    `'OTI'` v2 lives in `sparse/array/io_v2.pxi`; the C `arrso_save` / `arrso_read` are frozen and
+    unused from Python.
+  - Indexed (indirect) loops are three-operand `nd_iter` walks over the result shape with a
+    precomputed int64 byte-offset operand (stride 0 on the non-indexed axes) and the base view
+    (stride 0 on the indexed axes). Scatters run serially in C order unless the offsets are provably
+    distinct.
+  - `src/python/pyoti/cython/real/ndarray/base.pxi` also holds the generic producers (`nd_to_dlpack`,
+    `nd_dlpack_call`, `nd_getbuffer`, `nd_releasebuffer`): a class that owns an `ndarr_t` becomes a
+    buffer / DLPack exporter with two methods.
+  - `real.dmat` (`real/array/base.pxi`) keeps a retained `nd` and a `darr_t` window `arr` for the C
+    code that still takes a `darr_t` (live when contiguous, a snapshot refreshed by `_sync()`
+    otherwise). Call `D._sync()` before reading `D.arr` of a possibly strided `dmat`, and
+    `D._check_out()` before writing through it.
+  - `src/python/pyoti/python/block_kernel_writer.py` generates the fixed-(k, p) static block kernels
+    (Phase 10), into a build directory only. The opt-in harness `tools/static_block/` is built only
+    with `cmake -DOTI_BUILD_STATIC_BLOCK=ON ..` and `make test_static_block`, never by ctest.
+    `./tools/static_block/test_static_block` checks the kernels bit for bit against
+    `oarr_kernel_mul_acc` (the same FMA contraction as `dense.c` is required).
+  - The static `structures.h` headers carry generated layout asserts (`sizeof`, every `offsetof`;
+    colex order). They come from `_layout_asserts` in `cmod_writer.py`, so change the struct emission
+    and they fail at compile time; never edit them in the output.
 
 ## Semi-sparse gotchas
+- **Logical shape over 2-D C structs.**
+  - `oarrss` / `arrss` carry `_ndim` (0, 1 or 2): `(n,)` is stored n x 1 and `()` is 1 x 1.
+  - Every Python path that builds an array from an operand must keep its ndim (`_nd` / `_same_nd` in
+    `semisparse/shape.pxi`); a vector switches between n x 1 and 1 x n by swapping the header
+    dimensions only.
+- **Exports are tracked.**
+  - `.real`, `get_block` and Gauss `.real` are views registered in `_SS_EXPORTS`.
+  - Any path that relayouts or swaps a buffer must call `_check_ss_growth` / `_check_arr_growth` /
+    `_check_no_exports` first, or `_assign_out` / `_fe_replace` for `out=`.
+  - Library writers use `_block_writeable` (or `_soa_blocks` on fresh arrays), never the public
+    `get_block`.
+- **`'OTS'` v2** keeps the 64-byte header: ndim, layout and shape live in bytes 40-63, and v1 files
+  read back as 2-D.
 - **Block offsets in kernels.** `oarrss_block_index(k, p, i)` and `sshelp_order_offset(k, p)` compute
   a binomial coefficient on every call. Compute the order's first block once per order and add the
   local index (`bp + i`), never call them per direction or per direction pair: per-pair calls were
@@ -236,13 +276,15 @@ these local documents and are for context only.
 - **API parity with `pyoti.sparse`.** `pyoti.semisparse` mirrors the sparse names and call
   signatures (creators, `array`, `zeros(shape, nbases, order, nip, bases=)`, `sum`/`sub`/`mul`/
   `div`/`neg`/`abs`/`norm`/`transpose`/`dot`/`inv`/`det` with `out=`, the Phase 2 functions,
-  `save`/`read`). `nbases=` is accepted everywhere and has no effect (a capacity hint in sparse).
-  In-place operators rebind (`a += b` is `a = a + b`), as in sparse.
+  `save`/`read`). `nbases=` is accepted everywhere and is a capacity hint only (as in sparse);
+  `bases=` reserves labels. In-place operators rebind (`a += b` is `a = a + b`), as in sparse.
 - **Assignment raises the truncation order.** `A[i, j] = x` and slice assignment on SoA/AoS arrays
   (and Gauss types) raise the array's truncation order to the value's, zero-extending the entries
   already there, and grow the active set; `f = zeros((n, 1)); f[i, 0] = f[i, 0] + x` keeps every
-  derivative of `x`. Matrix indexing follows `matso`: `A[i]` is a row block, `A[i, j]` an
-  `ssotinum` copy; negative indices count from the end (sparse does not support them).
+  derivative of `x`. Indexing is NumPy's from 2.0.0 (ndim <= 2 until Phase 8; contracts 11.3):
+  `A[i]` is a 1-D array, `A[i, j]` an `ssotinum` copy, `f = zeros((n, 1)); f[i, 0] = ...` keeps its
+  column, and negative indices work in every algebra. `oarrss` slices are copies until Phase 8 makes
+  them views; assignment broadcasts as NumPy does (a column does not fit a 1-D target).
 - **`sum`, `abs` and `pow` are module functions** of `pyoti.semisparse` and shadow the builtins inside
   every `.pxi` of `semisparse.pyx`; use `_builtins.sum` / `_builtins.abs` there (`import builtins as
   _builtins` is in `semisparse/utils.pxi`). Cython also rejects generator expressions other than
@@ -254,25 +296,28 @@ these local documents and are for context only.
   array and `gauss_integrate` are single SoA matrix products on reinterpreted shapes. Gauss scalars
   broadcast over Gauss arrays point by point; plain OTI values are the same at every point. `.real`,
   `get_im`, `get_deriv` return NumPy of shape `(nip,)` / `(nip, nrows, ncols)` (sparse returns real
-  Gauss types). Gauss `det`/`inv` use closed forms for n <= 3 (a singular real part gives inf/nan,
-  no status) and LU per point above (status on a singular real part).
+  Gauss types); from 2.0.0 `.real` is a read-only view. Gauss types keep the matrix indexing rule
+  (`G[i]` is `(1, ncols)`, a copy); point access is `get_ip` / `set_ip`. Gauss `det`/`inv` use closed
+  forms for n <= 3 (a singular real part gives inf/nan, no status) and LU per point above (status on a
+  singular real part).
 - **`dot_product` pairs entries row-major**, as sparse does (the kernels pair column-major, which is
   the same for equal shapes and vectors; otherwise the transposes are paired).
 - **FEM with semi-sparse.** `pyoti.fem.set_global_algebra(pyoti.semisparse)` builds mesh
-  coordinates with `pyoti.semisparse.array` (SoA columns) and elements hold a semi-sparse
-  `elm_help`. `elbase.allocate` still evaluates shape functions with sparse numbers and fills the
-  helper only through `set_ijk(real, 0, i, ip)`. `set_global_algebra` reports the underlying error
-  when an algebra fails its probe.
+  coordinates with `pyoti.semisparse.array` (SoA `(n, 1)` columns; fem accepts `(n,)` and `(n, 1)`) and
+  elements hold a semi-sparse `elm_help`. `elbase.allocate` still evaluates shape functions with
+  sparse numbers and fills the helper only through `set_ijk(real, 0, i, ip)`. `set_global_algebra`
+  reports the underlying error when an algebra fails its probe.
 - **Save/read formats differ.** `pyoti.semisparse.save`/`read` files start `93 'O' 'T' 'S'` (a
-  versioned, validated format, host byte order); `pyoti.sparse` files start `93 'O' 'T' 'I'`. The two
+  versioned, validated format, host byte order; 2.0.0 writes version 2 with `ndim` / shape / layout
+  flag and reads v1 and v2); `pyoti.sparse` files start `93 'O' 'T' 'I'`. The two
   are not interchangeable.
 - **OTI sparse matrices.** `lil_matrix.tocsr()` empties the builder, as in `pyoti.sparse`
   (`preserve_in=True` keeps it). Setting an element overwrites it; accumulate with
   `K[i, j] = K[i, j] + v` or the faster `K.add(i, j, v)`, and scatter an element matrix with
   `K.add_block(rows, cols, Ke)` (both algebras; one call instead of 64 Python calls for a quad4).
-  `csr_matrix.real` is a SciPy CSR matrix sharing memory with the OTI matrix's real part (writing
-  its `data` changes the OTI matrix); `indices`/`indptr` are read-only int64 arrays shared by
-  copies. `solve(csr, b, solver=...)`
+  `csr_matrix.real` (2.0.0) is a read-only SciPy CSR matrix sharing memory with the OTI matrix's
+  real part (`get_real(writeable=True)` returns one whose `data` writes reach the OTI matrix);
+  `indices`/`indptr` are read-only int64 arrays shared by copies. `solve(csr, b, solver=...)`
   factors the real part once (SciPy SuperLU/spilu, scikit-sparse cholmod, scikit-umfpack) and solves
   all directions of one order as a single multi-column right-hand side built in C; the solution is
   dense over the union of K's and b's bases. `csr @ x` never expands or copies either operand
@@ -292,10 +337,32 @@ these local documents and are for context only.
     numbering coincide.
   - A dense number over bases 1..k has the same coefficient buffer as a semi-sparse number over
     [1..k]; the tests use that for dense-vs-semi-sparse checks.
-  - SoA `oarr_t`: `1 + sshelp_ndir_total(nact, trc)` blocks of `nrows * ncols` reals, column-major.
+  - SoA `oarr_t`: one `ndarr_t blocks` of shape `(nblocks, nrows, ncols)` with strides
+    `(nrows*ncols, 1, nrows)` (column-major blocks), `nblocks = 1 + sshelp_ndir_total(nact, trc)`.
     Block 0 is the real part; direction i of order p is block `1 + sshelp_order_offset(nact, p) + i`
-    (`oarr_block_index`). AoS `arro_t`: row-major `otinum_t` elements, each with its own nact and
-    trc.
+    (`oarr_block_index`). An `oti_meta_t*` holds nact / trc / act and
+    the capacity field `cap` (`oarr_capacity()`).
+    Read the layout through `oarr_data / oarr_nrows / oarr_ncols / oarr_size / oarr_nact /
+    oarr_trc_order / oarr_act_order` (`include/oti/dense/soa/structures.h`); never struct-copy an
+    owning array (move it, or build a view with `oarr_view_matrix()`).
+  - AoS `arro_t`: one OTI_F64 descriptor `elems` (nrows, ncols) over the `re` fields of row-major
+    `otinum_t` elements (strides `(ncols * 3, 3)` reals; `offsetof(otinum_t, re) == 0` and
+    `sizeof(otinum_t) % 8 == 0` are static asserts), over an `nd_wrap` buffer whose release callback
+    frees the elements. Each element keeps its own nact and trc. Read it with `arro_data / arro_nrows
+    / arro_ncols / arro_size`; never struct-copy an owning array.
+- **Dense arrays are n-D.**
+  - `oarr_t.blocks` is `(nblocks, *S)` with S of rank 0..31, and roots are F or C.
+  - Public dense C functions accept views: non-canonical operands are packed at entry (`DNOB_IN*` in
+    `soa/base.c`), and a view or shared root as `res` receives the result through `oarr_assign_to()`
+    (fit or `OTI_ERR_BUSY`). New internal code reads only canonical arrays (`dnob_canon()`).
+  - `oarr_t.flags` carries `OARR_GAUSS`, `OARR_VIEW` and `OARR_CANON` (a cache the library keeps: C
+    code that edits `blocks` of a root by hand must clear it). Use `oarr_ndim()` / `oarr_shape()`,
+    never `blocks.shape` by hand; Cython reaches the descriptor with `oarr_blocks()` / `arro_elems()`.
+  - A root's `oti_meta_t` lives in its buffer's extra zone (`oti_meta_init`, `OTI_META_EMBEDDED`):
+    release the meta before the buffer (`oarr_free` does). Call-local arrays that never leave a call
+    use the scratch arena (`ND_ALLOC_SCRATCH`), released on the same thread before returning.
+  - Python exports of dense memory go through `nd_to_numpy` (read-only by default) and pin the layout;
+    the internal writable path is `_block_writeable` / `_soa_blocks` (library code only).
 - **Order rules** (conventions block of `include/oti/dense/scalar/base.h`):
   - the result of two operands has trc = max and nact = max, the smaller operand being a
     zero-extended prefix;
@@ -320,6 +387,8 @@ these local documents and are for context only.
     `OTI_LINALG_ERR_*`, and linear algebra adds `info > 0` for a singular real part.
   - After a failure the result is valid (freeable) but unspecified. Allocating C variants return
     `oti_init()` with `re = NaN`.
+  - `DN_ERR_*` are aliases of `OTI_ERR_*`. A dense layout change can return `OTI_ERR_BUSY`
+    (BufferError) once views or exports retain the buffer (7b).
   - CSR functions return only `CSRO_*`, and save/read only `DNIO_*`; inner `DN_ERR_*` codes are
     mapped, since the families reuse -1 and -2.
   - `grep -n "exit(" src/c/dense` stays empty. The documented exceptions are all in shared code: the
@@ -362,11 +431,11 @@ these local documents and are for context only.
     `#pragma omp parallel { oti_ws_release(); }` (or calls `oti_ws_release()` in the loop body)
     before `leaks --atExit`. Otherwise every worker's scratch is reported.
 - **OpenMP and BLAS.**
-  - SoA elementwise products, divisions and functions split the elements over threads from 4096
-    elements (`DNOK_OMP_MIN_ELEMS`), never inside an enclosing parallel region, and the results are
-    bit-identical across thread counts.
-  - AoS elementwise loops use OpenMP from 64 elements. Sums, negation, scaling and transpose are
-    serial.
+  - Dense loops run on the execution layer: SoA products and functions in fixed 4096-element chunks
+    through `oti_parallel_for`, from 4096 elements when `oti_exec_plan` gives >= 2 workers (never
+    inside an enclosing parallel region). Results are bit-identical for every thread count.
+  - AoS loops run in chunks of 16 from 64 elements (matmul: chunks of 4 from 16 outputs). Sums,
+    negation, scaling and transpose are serial.
   - `matmul` and `solve` / `inv` / `det` rely on BLAS/LAPACK threads; the semi-sparse "don't nest
     them" rule applies.
 - **AoS keeps per-element orders; SoA has one trc.** Converting an AoS array (or a sparse `arrso_t`)
@@ -383,19 +452,29 @@ these local documents and are for context only.
   - Gauss `det` / `inv` use closed forms for n <= 3, where a singular real part gives inf/nan with
     no status, and an LU per point above (`info > 0`). A 0 x 0 matrix has det 1.
 - **Gauss-point types** (`otife` / `omatfe`, C `feoarr_t`).
-  - Same layout as semi-sparse: one embedded `oarr_t` of `nip x (nrows * ncols)`, points fastest,
-    one nact and one trc for all points.
-  - Products on reinterpreted shapes pass struct-copy views of the embedded array. In Python, the
-    Gauss layer's `omat` views have FLAGS bit 0 clear. Views are only ever inputs, never
-    `res` / `out=` of a C `_to` call: the C structs have no ownership flag.
+  - Same layout as semi-sparse: one `oarr_t` whose blocks are `(nblocks, nip, nrows, ncols)` (read
+    with `fearr_nrows / fearr_ncols / fearr_nip`), points fastest, one nact and one trc for all
+    points. The `oarr_*` functions see it as `nip x (nrows*ncols)`.
+  - Products on reinterpreted shapes pass `oarr_view_matrix()` views (temporary descriptor, borrowed
+    meta). In Python, the Gauss layer's `omat` views have FLAGS bit 0 clear. Views are only ever
+    inputs, never `res` / `out=` of a C `_to` call: the C structs have no ownership flag.
   - `nbases` means nact, and the active bases are `[1, ..., nact]`.
   - Assigning into a Gauss value (`set_ip`, `set_ijk`, `[i, j] =`, `[ip] =`, slices) grows the whole
     value's nact and trc, and writes zeros in the directions the value lacks.
-- **`omat.get_block` views block growth.** A block view shares `p_data`, so while any view of an array
-  is alive the operations that would reallocate its buffer (growing nact or trc through assignment or
-  `set_im` / `set_deriv`, `out=` into the array) raise `BufferError("cannot grow an array with live block
-  views")` (`_check_growth` / `_check_no_block_views` in `dense/utils.pxi`). Same-layout writes are
-  allowed and reach the view. Semi-sparse `oarrss.get_block` has the same design without this guard.
+- **Views and exports block growth (2.0.0, contracts 11.6).** Any view object of an `omat` (`A[i]`,
+  `.T`, `reshape`) and any export (`.real`, `get_block`, `csr_matrix.real`) retains the buffer, so
+  while one is alive the operations that would change the layout (growing nact or trc through
+  assignment or `set_im` / `set_deriv`, `out=` into the array, `reserve`) raise
+  `BufferError("cannot grow an array with live block views or exports; ...")` (`_check_growth` /
+  `_check_no_block_views` in `dense/utils.pxi`). Writing into a root grows it when nothing is alive;
+  writing through a view never changes the layout and raises when the value does not fit. Same-layout
+  writes are allowed and reach the view. Semi-sparse has the same guard from 2.0.0 (a Python
+  registry until `oarrss` moves onto `nd_buffer_t`).
+- **Exports are read-only (2.0.0, contracts 11.11).** `.real`, `get_block(d)` and `csr_matrix.real`
+  are read-only; write with `get_block(d, writeable=True)` or `K.get_real(writeable=True)`. Library
+  code writes through the internal `_block_writeable(arr, d)` (Cython, never returned to users), not
+  through the public `get_block`. Exceptions: static arrays, sparse Gauss `.real` and
+  `dmat.to_numpy()`.
 - **OTI sparse matrices** (`src/c/dense/csr/csr.c`, `dense/csr/base.pxi`).
   - `lilo_t` entries keep their own nact and trc until `lilo_to_csr`, which lays them out over the
     largest ones and keeps every stored entry, explicit zeros included.
@@ -408,14 +487,16 @@ these local documents and are for context only.
     (`CSRO_ERR_SIZE`).
   - Python, as in semi-sparse:
     - `tocsr()` empties the builder unless `preserve_in=True`;
-    - `csr_matrix.real` is a SciPy CSR sharing the real block, and `indices` / `indptr` are
-      read-only int64;
+    - `csr_matrix.real` (2.0.0) is a read-only SciPy CSR sharing the real block
+      (`get_real(writeable=True)` for a writable one), and `indices` / `indptr` are read-only int64;
     - `solve(csr, b, solver=...)` factors the real part once (SuperLU, spilu, cholmod, umfpack) and
       solves all directions of one order as one multi-column right-hand side built in C;
     - `get_active_bases()` is `[1, ..., nact]`.
 - **Save/read format.** `pyoti.dense.save` / `read` (C `oti_save` / `oarr_save` / `arro_save`,
   `dnio_peek`) write magic `0x93 'O' 'T' 'D'` with a 64-byte header and host byte order (format
-  version 1; the layout is documented in `include/oti/dense/io/io.h`).
+  version 1; the layout is documented in `include/oti/dense/io/io.h`). 2.0.0 writes version 2 (adds
+  `ndim`, `shape[ndim]` and a C/F layout flag, so 1-D and 0-D shapes round-trip) and reads both; 1.x
+  cannot read v2 files, and a v1 file keeps the 2-D shape it stored.
   - The reader validates the whole header, including the payload size implied by the shape, against
     the file length before allocating.
   - Only `DNIO_*` statuses are returned.
@@ -433,12 +514,23 @@ these local documents and are for context only.
 - **Memory of high labels and the byte budget.** `e(k)` at order p is dense over 1..k, C(k+p, p)
   coefficients (for example `e(100, order=4)` holds about 4.6 M). No single coefficient buffer may exceed
   `OTI_DENSE_MAX_MB` megabytes (environment variable, read once per process; default the physical memory,
-  or 64 GiB when it cannot be queried): a larger request fails with `DN_ERR_MEMORY` / MemoryError before
+  or 64 GiB when it cannot be queried; this is the default context's `max_alloc_bytes`,
+  `dn_max_bytes()`): a larger request fails with `DN_ERR_MEMORY` / MemoryError before
   allocating (`dnsm_budget` in `scalar/memory.c`), since on macOS an overcommitted `malloc` would
   otherwise be killed while it is zero-filled (e.g. `e(1000, order=4)`, about 313 GiB).
-- **Python semantics** (`pyoti.dense` mirrors `pyoti.sparse`, like semi-sparse).
-  - `nbases=` is accepted everywhere and has no effect. `zeros(..., bases=...)` only sets
-    nact = max(label).
+- **Python semantics** (`pyoti.dense` mirrors `pyoti.sparse`'s API, like semi-sparse; its indexing is
+  NumPy's from 2.0.0).
+  - Indexing, creators and assignment follow NumPy (contracts 11.2-11.5): an integer drops its axis
+    (`A[i]` and `A[:, j]` are 1-D), `zeros(n)` and `array(1-D)` are `(n,)`, `array(2.5)` is 0-D,
+    negative indices work, `None` / `...` are supported, and `len()` / iteration run over axis 0.
+    All integers give an OTI scalar. `A[key] = v` broadcasts `v` as NumPy does, so an `(n, 1)`
+    column does not fit an `(n,)` target. `nrows` / `ncols` are deprecated; use `shape`.
+  - `omat` basic slices, `.T` and `reshape` are views of the root; `arro` slices are copies. Portable
+    code (anything run under `set_global_algebra`) neither writes through a slice expecting the parent
+    to change nor relies on independence.
+  - `nbases=K`, `K > 0`, reserves the layout (`nact = K`, `active_bases == (1..K)`; `MemoryError`
+    above the byte budget); `nbases=0` reserves nothing, and scalar creators ignore it.
+    `zeros(..., bases=...)` still sets nact = max(label).
   - `active_bases` / `get_active_bases()` are `1..nact`.
   - Directions parse as in sparse (a tuple is a list of bases; raw pairs go through `rawdir`).
   - `rom_eval` takes one delta per base 1..nact.
@@ -515,6 +607,15 @@ pytest tests/python/test_fem_elements.py       # every pyoti.fem element, all th
 pytest tests/python/test_fem_twc.py            # TWC model: Lame check, refinement, semi and dense
                                                #   vs sparse
 ```
+
+- Tests that pin a 2.0.0 compatibility rule live in `tests/python/test_compat_2_0_*.py`; they carry no
+  markers once the feature has landed. A new 2.0.0 rule gets a test there with
+  `@pytest.mark.xfail(strict=True)` until its implementation lands, then the marker is removed in the
+  same edit as the implementation's milestone.
+- `tests/python/data/v1/` holds fixtures written by 1.x (`make_fixtures.py` regenerates them with a 1.x
+  build only, never with a 2.0 build); `test_files_v1.py` must stay green.
+- An export (`.real`, `get_block`, DLPack, buffer) retains the C buffer, not the Python object: tests
+  must not assert that the owning Python object stays alive.
 
 ### 3. Verify Native Multi-Language Tests (CTest)
 Run native multi-language tests (C, Fortran, C++) with CTest or individual binaries from `build/`:

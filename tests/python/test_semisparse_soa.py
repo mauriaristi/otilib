@@ -123,7 +123,16 @@ def test_soa_real_and_block_view():
     assert np.array_equal(zero.get_block(semi.rawdir(0, 0)), zero.get_block(0))
     assert view.shape == (2, 3)
     assert view.flags.f_contiguous
-    view[1, 2] = 0.75
+
+    with pytest.raises(ValueError):
+
+        view[1, 2] = 0.75
+
+    # end with
+
+    writable = zero.get_block(1, writeable=True)
+    assert np.shares_memory(writable, view)
+    writable[1, 2] = 0.75
     assert zero[1, 2].get_im(1) == pytest.approx(0.75)
     reference = weakref.ref(zero)
     del zero

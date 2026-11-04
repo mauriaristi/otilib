@@ -1,48 +1,57 @@
-# Index parsing and binary-operation dispatch for the array classes.
+# Indexing, assignment and binary-operation dispatch for the array classes (NumPy rules, 7b).
+#
+# Keys follow NumPy on the logical shape (shape.pxi, pyoti.real.key2d); results of slices are new
+# arrays (copies until Phase 8). Assignment broadcasts the value as NumPy does (rule S1, plans of
+# pyoti.real.assign_plan): 0 equal shapes, 1 a single element, 2 a row repeated down a 2-D target, 3 a
+# column repeated across it. Elementwise operations take equal shapes or a single-element operand.
 
-from cpython.slice cimport PySlice_Unpack, PySlice_AdjustIndices
 from libc.string cimport memcmp
 
 
 # ********************************************************************************************************
-cdef tuple _indices(object key, uint64_t rows, uint64_t cols):
+cdef object _set_shape(object value, tuple shape):
     """
-    Check and normalize two-dimensional element indices.
+    Give an array of the right size a logical shape (vectors switch between n x 1 and 1 x n freely).
 
     Parameters
     ----------
-    key : object
-        Pair of Python indices.
-    rows : int
-        Row count.
-    cols : int
-        Column count.
+    value : oarrss or arrss
+        Freshly built array with ``prod(shape)`` elements.
+    shape : tuple
+        Logical shape, ndim <= 2.
 
     Returns
     -------
-    tuple
-        Nonnegative row and column indices.
+    oarrss or arrss
+        ``value``.
     """
 
-    if not isinstance(key, tuple) or len(key) != 2 or any(
-        not isinstance(index, int) for index in key
-    ):
+    cdef oarrss soa
+    cdef arrss aos
 
-        raise TypeError("expected (row, column) integer indices")
+    if len(shape) < 2:
 
-    # end if
-
-    row, col = key
-    row = row + rows if row < 0 else row
-    col = col + cols if col < 0 else col
-
-    if not (0 <= row < rows and 0 <= col < cols):
-
-        raise IndexError("matrix index out of bounds")
+        return _nd(value, len(shape))
 
     # end if
 
-    return row, col
+    if isinstance(value, oarrss):
+
+        soa = value
+        soa.arr.nrows = shape[0]
+        soa.arr.ncols = shape[1]
+        soa._ndim = 2
+
+    else:
+
+        aos = value
+        aos.arr.nrows = shape[0]
+        aos.arr.ncols = shape[1]
+        aos._ndim = 2
+
+    # end if
+
+    return value
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -52,6 +61,119 @@ cdef tuple _indices(object key, uint64_t rows, uint64_t cols):
 cdef object _array_binary(oarrss left, object other, str op, bint reverse):
     """
     Dispatch an elementwise SoA operation by operand type and side.
+
+    Arrays must have equal logical shapes, or one of them a single element (11.2: broadcasting
+    between other shapes is supported by pyoti.dense only).
+
+    Parameters
+    ----------
+    left : oarrss
+        Array operand.
+    other : object
+        Other array or broadcast scalar.
+    op : str
+        Addition, subtraction, multiplication, or division.
+    reverse : bool
+        Whether other appears on the left.
+
+    Returns
+    -------
+    oarrss or NotImplemented
+        Elementwise result.
+    """
+
+    cdef oarrss rhs
+    cdef tuple shape
+
+    if isinstance(other, oarrss):
+
+        rhs = other
+
+        if rhs._ndim != left._ndim or rhs.arr.nrows != left.arr.nrows or (
+                rhs.arr.ncols != left.arr.ncols):
+
+            shape = _broadcast_shape(left.shape, rhs.shape)
+
+            if rhs.arr.size == 1:
+
+                return _set_shape(_soa_elementwise(
+                    left, ssotinum.wrap(oarrss_get_item(0, 0, &rhs.arr)), op, reverse), shape)
+
+            # end if
+
+            return _set_shape(_soa_elementwise(
+                rhs, ssotinum.wrap(oarrss_get_item(0, 0, &left.arr)), op, not reverse), shape)
+
+        # end if
+
+    # end if
+
+    return _soa_elementwise(left, other, op, reverse)
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+cdef object _aos_binary(arrss left, object other, str op, bint reverse):
+    """
+    Dispatch AoS elementwise operations without converting the array to SoA.
+
+    Shapes follow the rule of ``_array_binary``.
+
+    Parameters
+    ----------
+    left : arrss
+        Array operand.
+    other : object
+        Array or broadcast scalar.
+    op : str
+        Algebraic operation.
+    reverse : bool
+        Whether the other operand appears on the left.
+
+    Returns
+    -------
+    arrss or NotImplemented
+        Elementwise result.
+    """
+
+    cdef arrss rhs
+    cdef tuple shape
+
+    if isinstance(other, arrss):
+
+        rhs = other
+
+        if rhs._ndim != left._ndim or rhs.arr.nrows != left.arr.nrows or (
+                rhs.arr.ncols != left.arr.ncols):
+
+            shape = _broadcast_shape(left.shape, rhs.shape)
+
+            if rhs.arr.size == 1:
+
+                return _set_shape(_aos_elementwise(
+                    left, ssotinum.wrap(ssoti_copy(&rhs.arr.p_data[0])), op, reverse), shape)
+
+            # end if
+
+            return _set_shape(_aos_elementwise(
+                rhs, ssotinum.wrap(ssoti_copy(&left.arr.p_data[0])), op, not reverse), shape)
+
+        # end if
+
+    # end if
+
+    return _aos_elementwise(left, other, op, reverse)
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+cdef object _soa_elementwise(oarrss left, object other, str op, bint reverse):
+    """
+    Run an elementwise SoA operation on operands of equal shapes, or an array and a scalar.
 
     Parameters
     ----------
@@ -77,12 +199,6 @@ cdef object _array_binary(oarrss left, object other, str op, bint reverse):
     if isinstance(other, oarrss):
 
         rhs = other
-
-        if left.shape != rhs.shape:
-
-            raise ValueError("{}: array shapes must match".format(op))
-
-        # end if
 
         if op == "add":
 
@@ -204,16 +320,16 @@ cdef object _array_binary(oarrss left, object other, str op, bint reverse):
 
     # end if
 
-    return oarrss.wrap(result)
+    return _nd(oarrss.wrap(result), left._ndim)
 
 # end function
 # --------------------------------------------------------------------------------------------------------
 
 
 # ********************************************************************************************************
-cdef object _aos_binary(arrss left, object other, str op, bint reverse):
+cdef object _aos_elementwise(arrss left, object other, str op, bint reverse):
     """
-    Dispatch AoS elementwise operations without converting the array to SoA.
+    Run an elementwise AoS operation on operands of equal shapes, or an array and a scalar.
 
     Parameters
     ----------
@@ -239,12 +355,6 @@ cdef object _aos_binary(arrss left, object other, str op, bint reverse):
     if isinstance(other, arrss):
 
         rhs = other
-
-        if left.shape != rhs.shape:
-
-            raise ValueError("{}: array shapes must match".format(op))
-
-        # end if
 
         if op == "add":
 
@@ -366,97 +476,7 @@ cdef object _aos_binary(arrss left, object other, str op, bint reverse):
 
     # end if
 
-    return arrss.wrap(result)
-
-# end function
-# --------------------------------------------------------------------------------------------------------
-
-
-# ********************************************************************************************************
-cdef object _normalize_value(object value, uint64_t nr, uint64_t nc, bint soa):
-    """
-    Bring a value assigned to a matrix slice to a real, an ssotinum or an array of the matrix layout.
-
-    Parameters
-    ----------
-    value : object
-        Real, sparse or semi-sparse scalar, sparse or semi-sparse array, or real NumPy array.
-    nr : int
-        Rows of the target slice.
-    nc : int
-        Columns of the target slice.
-    soa : bool
-        Whether the target is a SoA array (otherwise AoS).
-
-    Returns
-    -------
-    float or ssotinum or oarrss or arrss
-        Value ready for assignment.
-    """
-
-    cdef object data
-
-    if isinstance(value, Real) or isinstance(value, ssotinum):
-
-        return value
-
-    # end if
-
-    if isinstance(value, sotinum):
-
-        return ssotinum(value)
-
-    # end if
-
-    if isinstance(value, matso):
-
-        value = oarrss.from_sparse(value)
-
-    elif isinstance(value, np.ndarray):
-
-        data = np.asarray(value, dtype=np.float64)
-
-        if data.ndim == 0:
-
-            return float(data)
-
-        # end if
-
-        if data.ndim == 1 and data.size == nr * nc:
-
-            data = data.reshape(nr, nc)
-
-        # end if
-
-        if data.ndim != 2:
-
-            raise ValueError("a real array must be one- or two-dimensional")
-
-        # end if
-
-        value = oarrss.from_real(data)
-
-    # end if
-
-    if soa and isinstance(value, arrss):
-
-        return value.to_soa()
-
-    # end if
-
-    if not soa and isinstance(value, oarrss):
-
-        return value.to_aos()
-
-    # end if
-
-    if isinstance(value, (oarrss, arrss)):
-
-        return value
-
-    # end if
-
-    raise TypeError("expected a real, a scalar or an array of OTI numbers")
+    return _nd(arrss.wrap(result), left._ndim)
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -465,7 +485,7 @@ cdef object _normalize_value(object value, uint64_t nr, uint64_t nc, bint soa):
 # ********************************************************************************************************
 cdef np.ndarray _array_real(object a):
     """
-    Copy the real parts of an array into a C-ordered NumPy matrix.
+    Return the real parts of an array: a read-only view (SoA) or a read-only copy (AoS).
 
     Parameters
     ----------
@@ -475,10 +495,11 @@ cdef np.ndarray _array_real(object a):
     Returns
     -------
     numpy.ndarray
-        Matrix of shape (nrows, ncols).
+        The array's logical shape. A SoA view is tracked like ``get_block(0)``.
     """
 
     cdef np.ndarray[np.float64_t, ndim=2] result
+    cdef np.ndarray logical
     cdef uint64_t i, j
     cdef oarrss soa
     cdef arrss aos
@@ -486,8 +507,7 @@ cdef np.ndarray _array_real(object a):
     if isinstance(a, oarrss):
 
         soa = a
-        return np.ascontiguousarray(
-            _soa_blocks(soa)[0].reshape(soa.arr.ncols, soa.arr.nrows).T)
+        return _export_view(soa, soa.arr.p_data, soa.arr.size, soa.shape, False)
 
     # end if
 
@@ -504,7 +524,9 @@ cdef np.ndarray _array_real(object a):
 
     # end for
 
-    return result
+    logical = result.reshape(aos.shape)
+    logical.flags.writeable = False
+    return logical
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -513,7 +535,7 @@ cdef np.ndarray _array_real(object a):
 # ********************************************************************************************************
 cdef np.ndarray _array_get_im(object a, object direction, bint deriv):
     """
-    Read one direction of every element of an array as a NumPy matrix.
+    Read one direction of every element of an array as a NumPy array (always a copy).
 
     Parameters
     ----------
@@ -527,7 +549,7 @@ cdef np.ndarray _array_get_im(object a, object direction, bint deriv):
     Returns
     -------
     numpy.ndarray
-        Matrix of shape (nrows, ncols); zeros for a direction outside the active set.
+        The array's logical shape; zeros for a direction outside the active set.
     """
 
     cdef tuple pair = _direction(direction)
@@ -540,11 +562,11 @@ cdef np.ndarray _array_get_im(object a, object direction, bint deriv):
 
         try:
 
-            result = np.array(a.get_block(rawdir(pair[0], pair[1])), dtype=np.float64, order="C")
+            result = np.array(_block_writeable(a, pair[0], pair[1]), dtype=np.float64, order="C")
 
         except KeyError:
 
-            result = np.zeros(a.shape, dtype=np.float64)
+            result = np.zeros(((<oarrss>a).arr.nrows, (<oarrss>a).arr.ncols), dtype=np.float64)
 
         # end try
 
@@ -554,7 +576,7 @@ cdef np.ndarray _array_get_im(object a, object direction, bint deriv):
 
         # end if
 
-        return result
+        return result.reshape(a.shape)
 
     # end if
 
@@ -572,7 +594,7 @@ cdef np.ndarray _array_get_im(object a, object direction, bint deriv):
 
     # end for
 
-    return result
+    return result.reshape(aos.shape)
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -581,18 +603,25 @@ cdef np.ndarray _array_get_im(object a, object direction, bint deriv):
 # ********************************************************************************************************
 cdef void _array_set_im(object a, object value, object direction, bint deriv) except *:
     """
-    Set one direction of every element of an array from a real value or matrix.
+    Set one direction of every element of an array from a real value or array.
+
+    Writes go through the internal writable path, never through the public read-only exports.
 
     Parameters
     ----------
     a : oarrss or arrss
         Target array; its active set grows to hold the direction's bases.
     value : float or array_like
-        Real scalar, or matrix of shape (nrows, ncols).
+        Real scalar, or array broadcastable to the array's logical shape.
     direction : int or list or tuple
         Direction in any pyoti.sparse format, or a rawdir.
     deriv : bool
         Treat ``value`` as derivatives instead of coefficients.
+
+    Raises
+    ------
+    BufferError
+        The direction needs new labels or a higher order while a view of the array is alive.
     """
 
     cdef tuple pair = _direction(direction)
@@ -600,28 +629,32 @@ cdef void _array_set_im(object a, object value, object direction, bint deriv) ex
     cdef arrss aos
     cdef np.ndarray[np.float64_t, ndim=2] data
     cdef np.ndarray[np.uint16_t, ndim=1] labels
+    cdef object logical
     cdef uint64_t i, j, rows, cols
     cdef double factor = _deriv_factor(pair[0], pair[1]) if deriv else 1.0
 
-    rows, cols = a.shape
-    data = np.empty((rows, cols), dtype=np.float64)
-    data[...] = np.asarray(value, dtype=np.float64) / factor
+    logical = np.empty(a.shape, dtype=np.float64)
+    logical[...] = np.asarray(value, dtype=np.float64) / factor
 
     if isinstance(a, oarrss):
 
         soa = a
+        rows = soa.arr.nrows
+        cols = soa.arr.ncols
+        data = np.ascontiguousarray(logical.reshape(rows, cols))
 
         if pair[1] == 0:
 
-            _soa_blocks(soa)[0][...] = data.T.reshape(-1)
+            _block_writeable(soa, 0, 0)[...] = data
             return
 
         # end if
 
-        _raise_soa_order(soa, pair[1])
         labels = np.asarray(sorted(set(_unrank(pair[0], pair[1]))), dtype=np.uint16)
+        _check_ss_growth(soa, <bases_t *>labels.data, len(labels), pair[1])
+        _raise_soa_order(soa, pair[1])
         oarrss_add_bases(<bases_t *>labels.data, len(labels), &soa.arr)
-        soa.get_block(rawdir(pair[0], pair[1]))[...] = data
+        _block_writeable(soa, pair[0], pair[1])[...] = data
 
         if pair[1] > soa.arr.act_order:
 
@@ -634,6 +667,9 @@ cdef void _array_set_im(object a, object value, object direction, bint deriv) ex
     # end if
 
     aos = a
+    rows = aos.arr.nrows
+    cols = aos.arr.ncols
+    data = np.ascontiguousarray(logical.reshape(rows, cols))
 
     for i in range(rows):
 
@@ -696,130 +732,6 @@ cdef list _array_active_bases(object a):
 
 
 # ********************************************************************************************************
-cdef bint _axis_range(object index, Py_ssize_t extent, Py_ssize_t *start, Py_ssize_t *step,
-                      Py_ssize_t *count) except -1:
-    """
-    Resolve one axis index of a matrix key into a start, a step and a count.
-
-    Parameters
-    ----------
-    index : int or slice
-        Index along the axis. Negative integers count from the end.
-    extent : int
-        Length of the axis.
-    start : Py_ssize_t *
-        First selected position.
-    step : Py_ssize_t *
-        Distance between selected positions.
-    count : Py_ssize_t *
-        Number of selected positions.
-
-    Returns
-    -------
-    bool
-        True when the index was an integer.
-    """
-
-    cdef Py_ssize_t stop
-    cdef Py_ssize_t value
-
-    if isinstance(index, slice):
-
-        PySlice_Unpack(index, start, &stop, step)
-        count[0] = PySlice_AdjustIndices(extent, start, &stop, step[0])
-        return False
-
-    # end if
-
-    if type(index) is not int:
-
-        if isinstance(index, (bool, np.bool_)) or not isinstance(index, (int, np.integer)):
-
-            raise IndexError("only integers and slices (`:`) are valid indices")
-
-        # end if
-
-    # end if
-
-    value = index
-
-    if value < 0:
-
-        value += extent
-
-    # end if
-
-    if value < 0 or value >= extent:
-
-        raise IndexError("Index out of bounds.")
-
-    # end if
-
-    start[0] = value
-    step[0] = 1
-    count[0] = 1
-    return True
-
-# end function
-# --------------------------------------------------------------------------------------------------------
-
-
-# ********************************************************************************************************
-cdef bint _parse_key_c(object key, Py_ssize_t nrows, Py_ssize_t ncols, Py_ssize_t *r0,
-                       Py_ssize_t *rs, Py_ssize_t *rn, Py_ssize_t *c0, Py_ssize_t *cs,
-                       Py_ssize_t *cn) except -1:
-    """
-    Parse a matrix key with the semantics of ``pyoti.sparse.matso`` into C ranges.
-
-    A single integer or slice selects rows and keeps every column, so ``A[i]`` is a 1 x ncols
-    matrix. A pair of two integers selects one element.
-
-    Parameters
-    ----------
-    key : int or slice or tuple
-        Matrix key.
-    nrows : int
-        Row count.
-    ncols : int
-        Column count.
-    r0, rs, rn : Py_ssize_t *
-        Start, step and count of the selected rows.
-    c0, cs, cn : Py_ssize_t *
-        Start, step and count of the selected columns.
-
-    Returns
-    -------
-    bool
-        True when the key names a single element.
-    """
-
-    cdef bint row_integer, column_integer
-
-    if isinstance(key, tuple):
-
-        if len(<tuple>key) != 2:
-
-            raise IndexError("expected a row index or a (row, column) pair")
-
-        # end if
-
-        row_integer = _axis_range((<tuple>key)[0], nrows, r0, rs, rn)
-        column_integer = _axis_range((<tuple>key)[1], ncols, c0, cs, cn)
-        return row_integer and column_integer
-
-    # end if
-
-    _axis_range(key, nrows, r0, rs, rn)
-    c0[0] = 0
-    cs[0] = 1
-    cn[0] = ncols
-    return False
-
-# end function
-# --------------------------------------------------------------------------------------------------------
-
-
-# ********************************************************************************************************
 cdef void _copy_strided(coeff_t *dst, Py_ssize_t dst_nrows, Py_ssize_t dr0, Py_ssize_t drs,
                         Py_ssize_t dc0, Py_ssize_t dcs, const coeff_t *src, Py_ssize_t src_nrows,
                         Py_ssize_t sr0, Py_ssize_t srs, Py_ssize_t sc0, Py_ssize_t scs,
@@ -867,6 +779,50 @@ cdef void _copy_strided(coeff_t *dst, Py_ssize_t dst_nrows, Py_ssize_t dr0, Py_s
 
 
 # ********************************************************************************************************
+cdef void _copy_linear(coeff_t *dst, Py_ssize_t dst_nrows, Py_ssize_t dr0, Py_ssize_t drs,
+                       Py_ssize_t dc0, Py_ssize_t dcs, const coeff_t *src, Py_ssize_t s_r,
+                       Py_ssize_t s_c, Py_ssize_t nr, Py_ssize_t nc) noexcept nogil:
+    """
+    Fill an nr x nc block of a column-major matrix from linear source strides (0 repeats a value).
+
+    Element (ii, jj) of the block receives ``src[ii * s_r + jj * s_c]``.
+
+    Parameters
+    ----------
+    dst : coeff_t *
+        Destination matrix (one direction block).
+    dst_nrows : int
+        Rows of the destination matrix.
+    dr0, drs, dc0, dcs : int
+        First row, row step, first column and column step of the destination block.
+    src : coeff_t *
+        Source coefficients.
+    s_r, s_c : int
+        Source steps along the block's rows and columns.
+    nr, nc : int
+        Rows and columns written.
+    """
+
+    cdef Py_ssize_t ii, jj
+    cdef coeff_t *d
+
+    for jj in range(nc):
+
+        d = dst + (dc0 + jj * dcs) * dst_nrows + dr0
+
+        for ii in range(nr):
+
+            d[ii * drs] = src[ii * s_r + jj * s_c]
+
+        # end for
+
+    # end for
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
 cdef bases_t *_positions_c(const bases_t *big, bases_t nbig, const bases_t *small, bases_t nsmall):
     """
     Locate every base of a sorted subset inside a sorted superset (caller frees the result).
@@ -899,6 +855,12 @@ cdef bases_t *_positions_c(const bases_t *big, bases_t nbig, const bases_t *smal
 
     positions = <bases_t *>malloc(nsmall * sizeof(bases_t))
 
+    if positions == NULL:
+
+        raise MemoryError()
+
+    # end if
+
     for i in range(nsmall):
 
         while j < nbig and big[j] < small[i]:
@@ -920,27 +882,29 @@ cdef bases_t *_positions_c(const bases_t *big, bases_t nbig, const bases_t *smal
 # ********************************************************************************************************
 cdef object _soa_getitem(oarrss a, object key):
     """
-    Read an element or a block of a SoA array with the semantics of ``pyoti.sparse.matso``.
+    Read an element or a block of a SoA array with NumPy's basic indexing (rule I1).
 
     Parameters
     ----------
     a : oarrss
         Source array.
-    key : int or slice or tuple
-        Matrix key.
+    key : int or slice or Ellipsis or tuple
+        Basic key on the logical shape.
 
     Returns
     -------
     ssotinum or oarrss
-        Element copy for an (int, int) key, otherwise a new array holding the selected block.
+        Element copy for one integer per axis, otherwise a new array holding the selection (a copy
+        until Phase 8).
     """
 
-    cdef Py_ssize_t r0, rs, rn, c0, cs, cn, block
-    cdef Py_ssize_t nrows = a.arr.nrows
+    cdef tuple res = _key(key, a._ndim, a.arr.nrows, a.arr.ncols)
+    cdef Py_ssize_t r0 = res[0], rs = res[1], rn = res[2], c0 = res[3], cs = res[4], cn = res[5]
+    cdef Py_ssize_t block
     cdef uint64_t nblocks
     cdef oarrss result
 
-    if _parse_key_c(key, nrows, a.arr.ncols, &r0, &rs, &rn, &c0, &cs, &cn):
+    if res[6] is None:
 
         return ssotinum.wrap(oarrss_get_item(r0, c0, &a.arr))
 
@@ -955,14 +919,146 @@ cdef object _soa_getitem(oarrss a, object key):
         for block in range(nblocks):
 
             _copy_strided(result.arr.p_data + block * result.arr.size, rn, 0, 1, 0, 1,
-                          a.arr.p_data + block * a.arr.size, nrows, r0, rs, c0, cs, rn, cn)
+                          a.arr.p_data + block * a.arr.size, a.arr.nrows, r0, rs, c0, cs, rn, cn)
 
         # end for
 
     # end if
 
     result.arr.act_order = a.arr.act_order
-    return result
+    return _set_shape(result, res[6])
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+cdef object _semisparse_value(object value):
+    """
+    Bring an assigned value to a real, an ssotinum, a real NumPy array or a semi-sparse array.
+
+    Parameters
+    ----------
+    value : object
+        Real, sparse or semi-sparse scalar or array, NumPy array, or nested list.
+
+    Returns
+    -------
+    float or ssotinum or numpy.ndarray or oarrss or arrss
+        Value ready for assignment (logical shapes kept).
+    """
+
+    cdef object data
+
+    if isinstance(value, Real) or isinstance(value, ssotinum):
+
+        return value
+
+    elif isinstance(value, sotinum):
+
+        return ssotinum(value)
+
+    elif isinstance(value, (oarrss, arrss)):
+
+        return value
+
+    elif isinstance(value, matso):
+
+        return oarrss.from_sparse(value)
+
+    elif isinstance(value, np.ndarray) and value.dtype != object:
+
+        return np.asarray(value, dtype=np.float64)
+
+    elif isinstance(value, (np.ndarray, list, tuple)):
+
+        return array(value)
+
+    # end if
+
+    raise TypeError("expected a real, a scalar or an array of OTI numbers")
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+cdef int _soa_fill_scalar(oarrss a, ssotinum scalar, Py_ssize_t r0, Py_ssize_t rs, Py_ssize_t rn,
+                          Py_ssize_t c0, Py_ssize_t cs, Py_ssize_t cn) except -1:
+    """
+    Write one semi-sparse scalar into every element of a block of a SoA array.
+
+    Parameters
+    ----------
+    a : oarrss
+        Target array; it grows to the scalar's labels and order (refused with live exports).
+    scalar : ssotinum
+        Value.
+    r0, rs, rn, c0, cs, cn : int
+        Start, step and count of the block's rows and columns.
+    """
+
+    cdef Py_ssize_t size, block, ii, jj
+    cdef uint64_t nblocks
+    cdef coeff_t *buffer = NULL
+    cdef bases_t *positions = NULL
+    cdef ord_t top
+
+    _check_ss_growth(a, scalar.num.p_bases, scalar.num.nbases, scalar.num.trc_order)
+    _raise_soa_order(a, scalar.num.trc_order)
+    oarrss_add_bases(scalar.num.p_bases, scalar.num.nbases, &a.arr)
+    nblocks = 1 + sshelp_ndir_total(a.arr.nbases, a.arr.trc_order)
+    size = a.arr.size
+    buffer = <coeff_t *>malloc(nblocks * sizeof(coeff_t))
+
+    if buffer == NULL:
+
+        raise MemoryError()
+
+    # end if
+
+    try:
+
+        positions = _positions_c(a.arr.p_bases, a.arr.nbases, scalar.num.p_bases, scalar.num.nbases)
+        buffer[0] = scalar.num.re
+
+        if nblocks > 1:
+
+            ssoti_kernel_expand(&scalar.num, positions, a.arr.nbases, a.arr.trc_order, buffer + 1)
+
+        # end if
+
+        for block in range(nblocks):
+
+            for jj in range(cn):
+
+                for ii in range(rn):
+
+                    a.arr.p_data[block * size + (c0 + jj * cs) * a.arr.nrows + r0 + ii * rs] = (
+                        buffer[block])
+
+                # end for
+
+            # end for
+
+        # end for
+
+    finally:
+
+        free(buffer)
+        free(positions)
+
+    # end try
+
+    top = scalar.num.act_order if scalar.num.act_order < a.arr.trc_order else a.arr.trc_order
+
+    if top > a.arr.act_order:
+
+        a.arr.act_order = top
+
+    # end if
+
+    return 0
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -971,43 +1067,44 @@ cdef object _soa_getitem(oarrss a, object key):
 # ********************************************************************************************************
 cdef int _soa_setitem(oarrss a, object key, object value) except -1:
     """
-    Assign an element or a block of a SoA array with the semantics of ``pyoti.sparse.matso``.
+    Assign an element or a block of a SoA array with NumPy's rules (S1 broadcasting, S2 snapshot).
 
-    The array's truncation order is raised to the value's (zero-extending every entry) and its active
-    set grows to hold the value's bases, so no derivative of the value is dropped.
+    Writing into a root grows it (truncation order and labels rise to the value's, existing entries
+    are zero-extended) while no export of it is alive (G1); otherwise a growth raises BufferError.
 
     Parameters
     ----------
     a : oarrss
         Target array.
-    key : int or slice or tuple
-        Matrix key.
+    key : int or slice or Ellipsis or tuple
+        Basic key on the logical shape.
     value : object
-        Real, scalar, array of OTI numbers or real NumPy array. Arrays must have the slice's shape.
+        Real, scalar, array of OTI numbers or real NumPy array, broadcastable to the selection.
     """
 
-    cdef Py_ssize_t r0, rs, rn, c0, cs, cn, block, ii, jj
+    cdef tuple res = _key(key, a._ndim, a.arr.nrows, a.arr.ncols)
+    cdef Py_ssize_t r0 = res[0], rs = res[1], rn = res[2], c0 = res[3], cs = res[4], cn = res[5]
     cdef Py_ssize_t nrows = a.arr.nrows
-    cdef Py_ssize_t size = a.arr.size
+    cdef Py_ssize_t size, block, ii, jj, s_r, s_c
+    cdef tuple tshape = () if res[6] is None else res[6]
     cdef uint64_t nblocks
     cdef ssotinum scalar
     cdef oarrss source
     cdef coeff_t *buffer = NULL
     cdef const coeff_t *table
     cdef bases_t *positions = NULL
-    cdef bint is_item
     cdef bint same_set
     cdef ord_t top
     cdef type kind = type(value)
-    cdef double real_value
+    cdef int plan = 0
+    cdef double[:, ::1] full
 
-    is_item = _parse_key_c(key, nrows, a.arr.ncols, &r0, &rs, &rn, &c0, &cs, &cn)
-
-    if is_item:
+    if res[6] is None:
 
         if kind is ssotinum:
 
             scalar = value
+            _check_ss_growth(a, scalar.num.p_bases, scalar.num.nbases, scalar.num.trc_order)
             _raise_soa_order(a, scalar.num.trc_order)
             oarrss_set_item(&scalar.num, r0, c0, &a.arr)
             return 0
@@ -1023,16 +1120,51 @@ cdef int _soa_setitem(oarrss a, object key, object value) except -1:
 
     # end if
 
-    value = _normalize_value(value, rn, cn, True)
+    value = _semisparse_value(value)
+
+    if isinstance(value, np.ndarray):
+
+        # Real values: NumPy broadcasts them (S1); the imaginary blocks of the selection become zero.
+        data = np.empty(tshape, dtype=np.float64)
+        data[...] = value
+        full = np.ascontiguousarray(data.reshape(rn, cn))
+        size = a.arr.size
+        nblocks = 1 + sshelp_ndir_total(a.arr.nbases, a.arr.trc_order)
+
+        for jj in range(cn):
+
+            for ii in range(rn):
+
+                a.arr.p_data[(c0 + jj * cs) * nrows + r0 + ii * rs] = full[ii, jj]
+
+                for block in range(1, nblocks):
+
+                    a.arr.p_data[block * size + (c0 + jj * cs) * nrows + r0 + ii * rs] = 0.0
+
+                # end for
+
+            # end for
+
+        # end for
+
+        return 0
+
+    # end if
+
+    if isinstance(value, arrss):
+
+        value = value.to_soa()
+
+    # end if
 
     if isinstance(value, oarrss):
 
         source = value
+        plan = _assign_plan(source.shape, tshape)
 
-        if source.arr.nrows != rn or source.arr.ncols != cn:
+        if plan == 1:
 
-            raise ValueError("slice assignment: value has shape {}, the slice has shape {}.".format(
-                source.shape, (rn, cn)))
+            value = ssotinum.wrap(oarrss_get_item(0, 0, &source.arr))
 
         # end if
 
@@ -1046,7 +1178,7 @@ cdef int _soa_setitem(oarrss a, object key, object value) except -1:
 
     if isinstance(value, Real):
 
-        real_value = value
+        size = a.arr.size
         nblocks = 1 + sshelp_ndir_total(a.arr.nbases, a.arr.trc_order)
 
         for block in range(nblocks):
@@ -1056,7 +1188,7 @@ cdef int _soa_setitem(oarrss a, object key, object value) except -1:
                 for ii in range(rn):
 
                     a.arr.p_data[block * size + (c0 + jj * cs) * nrows + r0 + ii * rs] = (
-                        real_value if block == 0 else 0.0)
+                        <double>value if block == 0 else 0.0)
 
                 # end for
 
@@ -1070,66 +1202,42 @@ cdef int _soa_setitem(oarrss a, object key, object value) except -1:
 
     if isinstance(value, ssotinum):
 
-        scalar = value
-        _raise_soa_order(a, scalar.num.trc_order)
-        oarrss_add_bases(scalar.num.p_bases, scalar.num.nbases, &a.arr)
-        nblocks = 1 + sshelp_ndir_total(a.arr.nbases, a.arr.trc_order)
-        buffer = <coeff_t *>malloc(nblocks * sizeof(coeff_t))
-        positions = _positions_c(a.arr.p_bases, a.arr.nbases, scalar.num.p_bases, scalar.num.nbases)
-
-        try:
-
-            buffer[0] = scalar.num.re
-
-            if nblocks > 1:
-
-                ssoti_kernel_expand(&scalar.num, positions, a.arr.nbases, a.arr.trc_order,
-                                    buffer + 1)
-
-            # end if
-
-            for block in range(nblocks):
-
-                for jj in range(cn):
-
-                    for ii in range(rn):
-
-                        a.arr.p_data[block * size + (c0 + jj * cs) * nrows + r0 + ii * rs] = (
-                            buffer[block])
-
-                    # end for
-
-                # end for
-
-            # end for
-
-        finally:
-
-            free(buffer)
-            free(positions)
-
-        # end try
-
-        top = scalar.num.act_order if scalar.num.act_order < a.arr.trc_order else a.arr.trc_order
-
-        if top > a.arr.act_order:
-
-            a.arr.act_order = top
-
-        # end if
-
-        return 0
+        return _soa_fill_scalar(a, value, r0, rs, rn, c0, cs, cn)
 
     # end if
 
+    # S2: a value sharing the target's buffer is read as a snapshot.
+    if source is a or (source.arr.p_data != NULL and source.arr.p_data == a.arr.p_data):
+
+        source = source.copy()
+
+    # end if
+
+    if plan == 0:
+
+        s_r = 1
+        s_c = rn
+
+    elif plan == 2:
+
+        s_r = 0
+        s_c = 1
+
+    else:
+
+        s_r = 1
+        s_c = 0
+
+    # end if
+
+    _check_ss_growth(a, source.arr.p_bases, source.arr.nbases, source.arr.trc_order)
     _raise_soa_order(a, source.arr.trc_order)
     oarrss_add_bases(source.arr.p_bases, source.arr.nbases, &a.arr)
     nblocks = 1 + sshelp_ndir_total(a.arr.nbases, a.arr.trc_order)
     size = a.arr.size
-
-    same_set = (source.arr.nbases == a.arr.nbases and source.arr.trc_order == a.arr.trc_order
-                and (a.arr.nbases == 0
-                     or memcmp(source.arr.p_bases, a.arr.p_bases, a.arr.nbases * sizeof(bases_t)) == 0))
+    same_set = source.arr.nbases == a.arr.nbases and source.arr.trc_order == a.arr.trc_order and (
+        a.arr.nbases == 0 or memcmp(source.arr.p_bases, a.arr.p_bases,
+                                    a.arr.nbases * sizeof(bases_t)) == 0)
 
     if same_set:
 
@@ -1138,6 +1246,13 @@ cdef int _soa_setitem(oarrss a, object key, object value) except -1:
     else:
 
         buffer = <coeff_t *>malloc(nblocks * source.arr.size * sizeof(coeff_t))
+
+        if buffer == NULL:
+
+            raise MemoryError()
+
+        # end if
+
         positions = _positions_c(a.arr.p_bases, a.arr.nbases, source.arr.p_bases,
                                  source.arr.nbases)
         oarrss_kernel_expand(&source.arr, positions, a.arr.nbases, a.arr.trc_order, buffer)
@@ -1149,8 +1264,8 @@ cdef int _soa_setitem(oarrss a, object key, object value) except -1:
 
         for block in range(nblocks):
 
-            _copy_strided(a.arr.p_data + block * size, nrows, r0, rs, c0, cs,
-                          table + block * source.arr.size, rn, 0, 1, 0, 1, rn, cn)
+            _copy_linear(a.arr.p_data + block * size, nrows, r0, rs, c0, cs,
+                         table + block * source.arr.size, s_r, s_c, rn, cn)
 
         # end for
 
@@ -1178,25 +1293,27 @@ cdef int _soa_setitem(oarrss a, object key, object value) except -1:
 # ********************************************************************************************************
 cdef object _aos_getitem(arrss a, object key):
     """
-    Read an element or a block of an AoS array with the semantics of ``pyoti.sparse.matso``.
+    Read an element or a block of an AoS array with NumPy's basic indexing (rule I1).
 
     Parameters
     ----------
     a : arrss
         Source array.
-    key : int or slice or tuple
-        Matrix key.
+    key : int or slice or Ellipsis or tuple
+        Basic key on the logical shape.
 
     Returns
     -------
     ssotinum or arrss
-        Element copy for an (int, int) key, otherwise a new array holding copies of the block.
+        Element copy for one integer per axis, otherwise a new array holding copies of the block.
     """
 
-    cdef Py_ssize_t r0, rs, rn, c0, cs, cn, ii, jj
+    cdef tuple res = _key(key, a._ndim, a.arr.nrows, a.arr.ncols)
+    cdef Py_ssize_t r0 = res[0], rs = res[1], rn = res[2], c0 = res[3], cs = res[4], cn = res[5]
+    cdef Py_ssize_t ii, jj
     cdef arrss result
 
-    if _parse_key_c(key, a.arr.nrows, a.arr.ncols, &r0, &rs, &rn, &c0, &cs, &cn):
+    if res[6] is None:
 
         return ssotinum.wrap(ssoti_copy(arrss_get_item_ptr(r0, c0, &a.arr)))
 
@@ -1215,7 +1332,7 @@ cdef object _aos_getitem(arrss a, object key):
 
     # end for
 
-    return result
+    return _set_shape(result, res[6])
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -1224,7 +1341,7 @@ cdef object _aos_getitem(arrss a, object key):
 # ********************************************************************************************************
 cdef int _aos_setitem(arrss a, object key, object value) except -1:
     """
-    Assign an element or a block of an AoS array with the semantics of ``pyoti.sparse.matso``.
+    Assign an element or a block of an AoS array with NumPy's rules (S1 broadcasting, S2 snapshot).
 
     Every assigned element becomes a copy of the value, with the value's truncation order.
 
@@ -1232,21 +1349,22 @@ cdef int _aos_setitem(arrss a, object key, object value) except -1:
     ----------
     a : arrss
         Target array.
-    key : int or slice or tuple
-        Matrix key.
+    key : int or slice or Ellipsis or tuple
+        Basic key on the logical shape.
     value : object
-        Real, scalar, array of OTI numbers or real NumPy array. Arrays must have the slice's shape.
+        Real, scalar, array of OTI numbers or real NumPy array, broadcastable to the selection.
     """
 
-    cdef Py_ssize_t r0, rs, rn, c0, cs, cn, ii, jj
-    cdef bint is_item
+    cdef tuple res = _key(key, a._ndim, a.arr.nrows, a.arr.ncols)
+    cdef Py_ssize_t r0 = res[0], rs = res[1], rn = res[2], c0 = res[3], cs = res[4], cn = res[5]
+    cdef Py_ssize_t ii, jj, s_r, s_c
+    cdef tuple tshape = () if res[6] is None else res[6]
     cdef ssotinum scalar
     cdef arrss source
-    cdef type kind = type(value)
+    cdef int plan
+    cdef double[:, ::1] full
 
-    is_item = _parse_key_c(key, a.arr.nrows, a.arr.ncols, &r0, &rs, &rn, &c0, &cs, &cn)
-
-    if is_item and kind is ssotinum:
+    if res[6] is None and type(value) is ssotinum:
 
         scalar = value
         arrss_set_item(&scalar.num, r0, c0, &a.arr)
@@ -1254,31 +1372,73 @@ cdef int _aos_setitem(arrss a, object key, object value) except -1:
 
     # end if
 
-    value = _normalize_value(value, rn, cn, False)
+    value = _semisparse_value(value)
 
-    if isinstance(value, arrss):
+    if isinstance(value, np.ndarray):
 
-        source = value
-
-        if source.arr.nrows != rn or source.arr.ncols != cn:
-
-            raise ValueError("slice assignment: value has shape {}, the slice has shape {}.".format(
-                source.shape, (rn, cn)))
-
-        # end if
+        data = np.empty(tshape, dtype=np.float64)
+        data[...] = value
+        full = np.ascontiguousarray(data.reshape(rn, cn))
 
         for ii in range(rn):
 
             for jj in range(cn):
 
-                arrss_set_item(arrss_get_item_ptr(ii, jj, &source.arr), r0 + ii * rs, c0 + jj * cs,
-                               &a.arr)
+                arrss_set_item_r(full[ii, jj], r0 + ii * rs, c0 + jj * cs, &a.arr)
 
             # end for
 
         # end for
 
-    elif isinstance(value, Real):
+        return 0
+
+    # end if
+
+    if isinstance(value, oarrss):
+
+        value = value.to_aos()
+
+    # end if
+
+    if isinstance(value, arrss):
+
+        source = value
+        plan = _assign_plan(source.shape, tshape)
+
+        if plan == 1:
+
+            value = ssotinum.wrap(ssoti_copy(&source.arr.p_data[0]))
+
+        else:
+
+            if source is a:
+
+                source = source.copy()
+
+            # end if
+
+            # AoS records are row-major: equal shapes copy in that order.
+            s_r = cn if plan == 0 else (0 if plan == 2 else 1)
+            s_c = 1 if plan != 3 else 0
+
+            for ii in range(rn):
+
+                for jj in range(cn):
+
+                    arrss_set_item(&source.arr.p_data[ii * s_r + jj * s_c], r0 + ii * rs,
+                                   c0 + jj * cs, &a.arr)
+
+                # end for
+
+            # end for
+
+            return 0
+
+        # end if
+
+    # end if
+
+    if isinstance(value, Real):
 
         for ii in range(rn):
 
@@ -1290,23 +1450,89 @@ cdef int _aos_setitem(arrss a, object key, object value) except -1:
 
         # end for
 
-    else:
-
-        scalar = value
-
-        for ii in range(rn):
-
-            for jj in range(cn):
-
-                arrss_set_item(&scalar.num, r0 + ii * rs, c0 + jj * cs, &a.arr)
-
-            # end for
-
-        # end for
+        return 0
 
     # end if
 
+    scalar = value
+
+    for ii in range(rn):
+
+        for jj in range(cn):
+
+            arrss_set_item(&scalar.num, r0 + ii * rs, c0 + jj * cs, &a.arr)
+
+        # end for
+
+    # end for
+
     return 0
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+cdef object _soa_matmul(oarrss lhs, oarrss rhs):
+    """
+    Matrix product with ``numpy.matmul``'s rules for 1-D operands (I3).
+
+    A 1-D left operand is a row and a 1-D right operand a column; the promoted axes are removed, so two
+    vectors give an OTI scalar.
+
+    Parameters
+    ----------
+    lhs, rhs : oarrss
+        Factors of ndim 1 or 2.
+
+    Returns
+    -------
+    oarrss or ssotinum
+        Product.
+    """
+
+    cdef oarrss left = _as_row(lhs) if lhs._ndim == 1 else lhs
+    cdef oarrss_t result = oarrss_init()
+    cdef oarrss product
+    cdef int status
+
+    if lhs._ndim == 0 or rhs._ndim == 0:
+
+        raise ValueError("matmul: an input operand does not have enough dimensions (0-D array)")
+
+    # end if
+
+    if left.arr.ncols != rhs.arr.nrows:
+
+        raise ValueError("matmul: mismatch in the core dimension: shapes {} and {}".format(
+            lhs.shape, rhs.shape))
+
+    # end if
+
+    status = oarrss_matmul_OO_to(&left.arr, &rhs.arr, &result, _dhl)
+
+    if status != 0:
+
+        oarrss_free(&result)
+        _status("matmul", status)
+
+    # end if
+
+    product = oarrss.wrap(result)
+
+    if lhs._ndim == 1 and rhs._ndim == 1:
+
+        return ssotinum.wrap(oarrss_get_item(0, 0, &product.arr))
+
+    # end if
+
+    if lhs._ndim == 1 or rhs._ndim == 1:
+
+        return _nd(product, 1)
+
+    # end if
+
+    return product
 
 # end function
 # --------------------------------------------------------------------------------------------------------

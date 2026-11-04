@@ -4,19 +4,21 @@
 # ********************************************************************************************************
 cdef class oarrss:
     """
-    Column-major structure-of-arrays semi-sparse OTI matrix.
+    Column-major structure-of-arrays semi-sparse OTI array of logical ndim 0, 1 or 2.
 
-    Create with ``zeros``, ``from_sparse`` or ``from_real``. Views returned by ``get_block``
-    retain this array, but must not be used after an operation that grows its active set.
+    Create with ``zeros``, ``array``, ``from_sparse`` or ``from_real``. Indexing follows NumPy on the
+    logical shape (slices are copies until Phase 8). ``.real`` and ``get_block`` are read-only views;
+    while one is alive, an operation that would relayout the array raises ``BufferError``.
     """
 
     # ****************************************************************************************************
     def __cinit__(self):
         """
-        Initialize an empty owned C array.
+        Initialize an empty owned C array (logically 2-D until a creator says otherwise).
         """
 
         self.arr = oarrss_init()
+        self._ndim = 2
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -64,8 +66,8 @@ cdef class oarrss:
 
         Parameters
         ----------
-        shape : tuple of int
-            Matrix rows and columns.
+        shape : int or tuple of int
+            Logical shape (ndim <= 2).
         bases : iterable of int
             Strictly increasing global basis labels.
         order : int
@@ -74,18 +76,13 @@ cdef class oarrss:
         Returns
         -------
         oarrss
-            Zero matrix.
+            Zero array.
         """
 
         cdef list active = _bases(bases)
         cdef np.ndarray[np.uint16_t, ndim=1] labels = np.asarray(active, dtype=np.uint16)
         cdef bases_t *ptr = NULL
-
-        if len(shape) != 2 or any(not isinstance(x, int) or x < 0 for x in shape):
-
-            raise ValueError("shape must be (nonnegative rows, nonnegative columns)")
-
-        # end if
+        cdef tuple dims = _creator_dims(shape)
 
         if order < 0 or order > 255:
 
@@ -99,7 +96,8 @@ cdef class oarrss:
 
         # end if
 
-        return oarrss.wrap(oarrss_zeros(ptr, len(active), shape[0], shape[1], order))
+        _check_alloc(comb(len(active) + order, order) * dims[1] * dims[2] * 8)
+        return _nd(oarrss.wrap(oarrss_zeros(ptr, len(active), dims[1], dims[2], order)), dims[0])
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -121,7 +119,7 @@ cdef class oarrss:
             Semi-sparse array.
         """
 
-        return oarrss.wrap(oarrss_from_arrso(&value.arr, _dhl))
+        return _nd(oarrss.wrap(oarrss_from_arrso(&value.arr, _dhl)), len(value.shape))
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -130,30 +128,33 @@ cdef class oarrss:
     @classmethod
     def from_real(cls, value, order=0):
         """
-        Copy a real NumPy matrix into a column-major SoA array.
+        Copy a real NumPy array (ndim <= 2) into a column-major SoA array of the same shape.
 
         Parameters
         ----------
         value : array_like
-            Two-dimensional real matrix.
+            Real array of ndim 0, 1 or 2.
         order : int
             Truncation order.
 
         Returns
         -------
         oarrss
-            Real-valued semi-sparse matrix.
+            Real-valued semi-sparse array.
         """
 
         cdef np.ndarray[np.float64_t, ndim=2, mode="fortran"] data
         cdef coeff_t *ptr = NULL
-        data = np.asfortranarray(value, dtype=np.float64)
+        cdef object source = np.asarray(value, dtype=np.float64)
+        cdef int ndim = source.ndim
 
-        if data.ndim != 2:
+        if ndim > 2:
 
-            raise ValueError("expected a two-dimensional real matrix")
+            raise ValueError(_RANK_ERROR)
 
         # end if
+
+        data = np.asfortranarray(source.reshape(source.shape + (1,) * (2 - ndim)))
 
         if order < 0 or order > 255:
 
@@ -167,7 +168,7 @@ cdef class oarrss:
 
         # end if
 
-        return oarrss.wrap(oarrss_from_real(ptr, data.shape[0], data.shape[1], order))
+        return _nd(oarrss.wrap(oarrss_from_real(ptr, data.shape[0], data.shape[1], order)), ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -184,7 +185,7 @@ cdef class oarrss:
         """
 
         cdef arrso_t result = oarrss_to_arrso(&self.arr, _dhl)
-        return matso.create(&result)
+        return _sparse_like(matso.create(&result), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -202,7 +203,7 @@ cdef class oarrss:
 
         cdef arrss_t result = arrss_init()
         arrss_from_oarrss(&self.arr, &result)
-        return arrss.wrap(result)
+        return _nd(arrss.wrap(result), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -211,15 +212,86 @@ cdef class oarrss:
     @property
     def shape(self):
         """
-        Return the matrix dimensions.
+        Return the logical shape (ndim <= 2 until Phase 8).
 
         Returns
         -------
         tuple
-            Number of rows and columns.
+            ``(nrows, ncols)``, ``(n,)`` or ``()``.
         """
 
-        return self.arr.nrows, self.arr.ncols
+        return _lshape(self._ndim, self.arr.nrows, self.arr.ncols)
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    @property
+    def ndim(self):
+        """
+        Return the number of logical dimensions.
+
+        Returns
+        -------
+        int
+            0, 1 or 2.
+        """
+
+        return self._ndim
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    def __len__(self):
+        """
+        Return the length of the first axis.
+
+        Returns
+        -------
+        int
+            ``shape[0]``.
+
+        Raises
+        ------
+        TypeError
+            For a 0-D array.
+        """
+
+        if self._ndim == 0:
+
+            raise TypeError("len() of unsized object")
+
+        # end if
+
+        return self.arr.nrows
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    def __iter__(self):
+        """
+        Iterate over the first axis: rows of a 2-D array, OTI scalars of a 1-D array.
+
+        Returns
+        -------
+        iterator
+            ``A[0], A[1], ...``.
+
+        Raises
+        ------
+        TypeError
+            For a 0-D array.
+        """
+
+        if self._ndim == 0:
+
+            raise TypeError("iteration over a 0-d array")
+
+        # end if
+
+        return (self[i] for i in range(self.arr.nrows))
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -296,15 +368,22 @@ cdef class oarrss:
     @property
     def T(self):
         """
-        Return a transposed copy of every coefficient block.
+        Return a transposed copy of every coefficient block (a copy of a 0-D or 1-D array, as NumPy).
 
         Returns
         -------
         oarrss
-            Transposed matrix.
+            Transposed copy (a view from Phase 8).
         """
 
         cdef oarrss_t result = oarrss_init()
+
+        if self._ndim < 2:
+
+            return self.copy()
+
+        # end if
+
         oarrss_transpose_to(&self.arr, &result, _dhl)
         return oarrss.wrap(result)
 
@@ -312,23 +391,26 @@ cdef class oarrss:
     # ----------------------------------------------------------------------------------------------------
 
     # ****************************************************************************************************
-    def get_block(self, humdir):
+    def get_block(self, humdir, writeable=False):
         """
-        Return a writable Fortran-ordered NumPy view of one direction block.
+        Return a read-only (or, on request, writable) Fortran-ordered NumPy view of one direction block.
 
-        The view keeps the array alive. Changing the active set or shape afterwards may
-        reallocate the native buffer and invalidates outstanding views.
+        The view keeps the array alive and is tracked: while it lives, an operation that would
+        relayout the array (new base labels, a higher truncation order) raises ``BufferError``.
 
         Parameters
         ----------
         humdir : int or list or tuple
             Direction in any pyoti.sparse format, or a rawdir; 0 or [] selects the real block.
+        writeable : bool, optional
+            Return a writable view. For an imaginary direction the active order is raised to the
+            truncation order first, so values written there are never ignored.
 
         Returns
         -------
         numpy.ndarray
-            Shape (nrows, ncols), sharing native memory; an empty array (not shared) for a zero-size
-            matrix.
+            The array's logical shape, sharing native memory; an empty array (not shared) for a
+            zero-size array.
 
         Raises
         ------
@@ -338,8 +420,6 @@ cdef class oarrss:
 
         cdef tuple pair = _direction(humdir)
         cdef coeff_t *block = oarrss_get_block(pair[0], pair[1], &self.arr)
-        cdef np.npy_intp dims[1]
-        cdef np.ndarray flat
         cdef ndir_t local
 
         if block == NULL and self.arr.size == 0:
@@ -348,7 +428,7 @@ cdef class oarrss:
             if pair[1] == 0 or (pair[1] <= self.arr.trc_order and sshelp_global_to_local(
                     pair[0], pair[1], self.arr.p_bases, self.arr.nbases, &local) == 1):
 
-                return np.empty(self.shape, dtype=np.float64)
+                return _export_view(self, NULL, 0, self.shape, writeable)
 
             # end if
 
@@ -360,10 +440,13 @@ cdef class oarrss:
 
         # end if
 
-        dims[0] = self.arr.size
-        flat = np.PyArray_SimpleNewFromData(1, dims, np.NPY_DOUBLE, <void *>block)
-        np.set_array_base(flat, self)
-        return flat.reshape(self.shape, order="F")
+        if writeable and pair[1] > 0:
+
+            self.arr.act_order = self.arr.trc_order
+
+        # end if
+
+        return _export_view(self, block, self.arr.size, self.shape, writeable)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -375,14 +458,15 @@ cdef class oarrss:
     @property
     def nrows(self):
         """
-        Return the number of rows.
+        Return the number of rows of the 2-D C struct (deprecated in 2.0.0: use ``shape``).
 
         Returns
         -------
         int
-            Row count.
+            Row count (1-D: n; 0-D: 1).
         """
 
+        _warn_nrows("nrows")
         return self.arr.nrows
 
     # end function
@@ -392,14 +476,15 @@ cdef class oarrss:
     @property
     def ncols(self):
         """
-        Return the number of columns.
+        Return the number of columns of the 2-D C struct (deprecated in 2.0.0: use ``shape``).
 
         Returns
         -------
         int
-            Column count.
+            Column count (1-D and 0-D: 1).
         """
 
+        _warn_nrows("ncols")
         return self.arr.ncols
 
     # end function
@@ -426,12 +511,12 @@ cdef class oarrss:
     @property
     def real(self):
         """
-        Copy the real parts into a NumPy matrix.
+        Return the real parts as a read-only view (tracked like ``get_block(0)``).
 
         Returns
         -------
         numpy.ndarray
-            Real coefficients, shape (nrows, ncols).
+            Real coefficients, of the array's logical shape; ``.real.copy()`` is writable.
         """
 
         return _array_real(self)
@@ -450,7 +535,106 @@ cdef class oarrss:
             Independent copy.
         """
 
-        return oarrss.wrap(oarrss_copy(&self.arr))
+        return _nd(oarrss.wrap(oarrss_copy(&self.arr)), self._ndim)
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    def reshape(self, *shape, order='C'):
+        """
+        Return a copy with a new logical shape (C order, as NumPy's default; ndim <= 2).
+
+        Parameters
+        ----------
+        *shape : int or tuple of int
+            New shape; one extent may be -1.
+        order : str, optional
+            Only ``'C'`` (NumPy's row-major order), as ``matso.reshape``.
+
+        Returns
+        -------
+        oarrss
+            Reshaped copy.
+        """
+
+        cdef object target = shape[0] if len(shape) == 1 and not isinstance(
+            shape[0], (int, np.integer)) else shape
+        cdef tuple dims
+        cdef object order_map
+        cdef oarrss result
+
+        if order != 'C':
+
+            raise ValueError("reshape: only order='C' is supported")
+
+        # end if
+
+        target = np.empty(self.shape, dtype=np.int8).reshape(target).shape
+        dims = _creator_dims(target)
+        result = oarrss.wrap(oarrss_zeros(self.arr.p_bases, self.arr.nbases, dims[1], dims[2],
+                                          self.arr.trc_order))
+        result.arr.act_order = self.arr.act_order
+
+        if self.arr.size > 0:
+
+            # Position of every source element (in row-major order) in the column-major blocks.
+            order_map = np.arange(self.arr.size).reshape(
+                (self.arr.ncols, self.arr.nrows)).T.reshape(-1)
+            _soa_blocks(result)[:, np.arange(result.arr.size).reshape(
+                (result.arr.ncols, result.arr.nrows)).T.reshape(-1)] = _soa_blocks(self)[:, order_map]
+
+        # end if
+
+        return _nd(result, dims[0])
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    def reserve(self, bases=None, order=None):
+        """
+        Grow the layout now (labels and truncation order) so later assignments never relayout (G4).
+
+        Parameters
+        ----------
+        bases : iterable of int, optional
+            Labels to add to the active set.
+        order : int, optional
+            Truncation order to raise to.
+
+        Raises
+        ------
+        BufferError
+            The layout must change and a ``.real`` / ``get_block`` view is alive.
+        """
+
+        cdef list active = _bases(sorted(set(bases))) if bases is not None else []
+        cdef np.ndarray[np.uint16_t, ndim=1] labels = np.asarray(active, dtype=np.uint16)
+        cdef ord_t top = self.arr.trc_order
+        cdef bases_t *ptr = <bases_t *>labels.data if active else NULL
+
+        if order is not None:
+
+            if order < 0 or order > 255:
+
+                raise ValueError("order must be between 0 and 255")
+
+            # end if
+
+            top = order if order > top else top
+
+        # end if
+
+        _check_ss_growth(self, ptr, len(active), top)
+        _check_alloc(comb(len(set(active).union(self.active_bases)) + top, top) * self.arr.size * 8)
+        _raise_soa_order(self, top)
+
+        if active:
+
+            oarrss_add_bases(ptr, len(active), &self.arr)
+
+        # end if
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -580,7 +764,7 @@ cdef class oarrss:
         Returns
         -------
         oarrss
-            Product, or None when ``out`` is given.
+            Product; ``out`` itself when it is given.
         """
 
         return dot(lhs, rhs, out)
@@ -601,7 +785,7 @@ cdef class oarrss:
         Returns
         -------
         oarrss
-            Inverse, or None when ``out`` is given.
+            Inverse; ``out`` itself when it is given.
         """
 
         return inv(arr, out)
@@ -622,7 +806,7 @@ cdef class oarrss:
         Returns
         -------
         oarrss
-            Transposed copy, or None when ``out`` is given.
+            Transposed copy; ``out`` itself when it is given.
         """
 
         return transpose(arr, out)
@@ -668,20 +852,22 @@ cdef class oarrss:
     # ****************************************************************************************************
     def __getitem__(self, key):
         """
-        Read an element or a block with the indexing semantics of ``pyoti.sparse.matso``.
+        Read an element or a block with NumPy's basic indexing on the logical shape (7b).
 
-        A single integer or slice selects rows and keeps every column, so ``A[i]`` is a
-        1 x ncols matrix; two integers select one element.
+        An integer drops its axis (``A[i]`` of a matrix is 1-D), a slice keeps it, one ``...``
+        expands, negative integers count from the end; one integer per axis gives an OTI scalar.
+        ``None`` raises ``ValueError`` (at most 2 dimensions until Phase 8).
 
         Parameters
         ----------
-        key : int or slice or tuple
-            Matrix key.
+        key : int or slice or Ellipsis or tuple
+            Basic key.
 
         Returns
         -------
         ssotinum or oarrss
-            Element copy for two integers, otherwise a new array holding the block.
+            Element copy for one integer per axis, otherwise a new array holding the selection
+            (a copy).
         """
 
         return _soa_getitem(self, key)
@@ -692,17 +878,19 @@ cdef class oarrss:
     # ****************************************************************************************************
     def __setitem__(self, key, value):
         """
-        Assign an element or a block with the indexing semantics of ``pyoti.sparse.matso``.
+        Assign an element or a block with NumPy's rules (S1 broadcasting, S2 snapshot; 7b).
 
         The truncation order rises to the value's when it is larger (existing entries are
-        zero-extended), and the active set grows to hold the value's bases.
+        zero-extended), and the active set grows to hold the value's bases, unless a ``.real`` or
+        ``get_block`` view is alive: then a growth raises ``BufferError`` (G1).
 
         Parameters
         ----------
-        key : int or slice or tuple
-            Matrix key.
+        key : int or slice or Ellipsis or tuple
+            Basic key.
         value : float or ssotinum or sotinum or array or numpy.ndarray
-            Replacement; arrays must have the shape of the selected block.
+            Replacement, broadcast to the selection as NumPy does (an ``(n, 1)`` column does not fit
+            an ``(n,)`` target).
         """
 
         _soa_setitem(self, key, value)
@@ -770,7 +958,7 @@ cdef class oarrss:
             Elementwise absolute value.
         """
 
-        cdef oarrss result = oarrss.wrap(oarrss_copy(&self.arr))
+        cdef oarrss result = _nd(oarrss.wrap(oarrss_copy(&self.arr)), self._ndim)
         cdef np.ndarray blocks
 
         if self.arr.size > 0:
@@ -905,7 +1093,7 @@ cdef class oarrss:
         cdef tuple pair = _direction(humdir)
         cdef oarrss_t result = oarrss_init()
         oarrss_truncate_im_to(pair[0], pair[1], &self.arr, &result)
-        return oarrss.wrap(result)
+        return _nd(oarrss.wrap(result), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -928,7 +1116,7 @@ cdef class oarrss:
 
         cdef oarrss_t result = oarrss_init()
         oarrss_truncate_order_to(order, &self.arr, &result)
-        return oarrss.wrap(result)
+        return _nd(oarrss.wrap(result), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -951,7 +1139,7 @@ cdef class oarrss:
 
         cdef oarrss_t result = oarrss_init()
         oarrss_get_order_im_to(order, &self.arr, &result)
-        return oarrss.wrap(result)
+        return _nd(oarrss.wrap(result), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -969,7 +1157,7 @@ cdef class oarrss:
 
         cdef oarrss_t result = oarrss_init()
         oarrss_compact_to(&self.arr, &result)
-        return oarrss.wrap(result)
+        return _nd(oarrss.wrap(result), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -1155,7 +1343,7 @@ cdef class oarrss:
 
         cdef oarrss_t result = oarrss_init()
         oarrss_neg_to(&self.arr, &result, _dhl)
-        return oarrss.wrap(result)
+        return _nd(oarrss.wrap(result), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -1187,7 +1375,7 @@ cdef class oarrss:
         # end if
 
         oarrss_pow_to(&(<oarrss>self).arr, exponent, &result, _dhl)
-        return oarrss.wrap(result)
+        return _nd(oarrss.wrap(result), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -1195,20 +1383,21 @@ cdef class oarrss:
     # ****************************************************************************************************
     def __matmul__(self, other):
         """
-        Perform coefficient-aware matrix multiplication.
+        Perform coefficient-aware matrix multiplication with ``numpy.matmul``'s 1-D rules (I3).
+
+        A 1-D left operand acts as a row and a 1-D right operand as a column; the promoted axis is
+        removed, so ``x @ y`` of two vectors is an OTI scalar.
 
         Parameters
         ----------
         other : oarrss
-            Right matrix.
+            Right factor.
 
         Returns
         -------
-        oarrss or NotImplemented
-            Matrix product.
+        oarrss or ssotinum or NotImplemented
+            Product.
         """
-
-        cdef oarrss_t result = oarrss_init()
 
         if not isinstance(other, oarrss):
 
@@ -1216,23 +1405,7 @@ cdef class oarrss:
 
         # end if
 
-        if self.arr.ncols != (<oarrss>other).arr.nrows:
-
-            raise ValueError("matmul: incompatible matrix dimensions")
-
-        # end if
-
-        cdef int status = oarrss_matmul_OO_to(&(<oarrss>self).arr, &(<oarrss>other).arr,
-                                               &result, _dhl)
-
-        if status != 0:
-
-            oarrss_free(&result)
-            _status("matmul", status)
-
-        # end if
-
-        return oarrss.wrap(result)
+        return _soa_matmul(self, other)
 
     # end function
     # ----------------------------------------------------------------------------------------------------

@@ -288,6 +288,8 @@ cdef class dmatfe:
     """
     #*************************************************************************************************
 
+    val = gauss_key(val, self.arr.nrows, self.arr.ncols)
+
     cdef coeff_t ores
     cdef fednum_t  fres
     cdef fedarr_t Fres
@@ -425,6 +427,8 @@ cdef class dmatfe:
     """
     #*************************************************************************************************
     
+    indices = gauss_key(indices, self.arr.nrows, self.arr.ncols)
+
 
     tvalue = type(value)
 

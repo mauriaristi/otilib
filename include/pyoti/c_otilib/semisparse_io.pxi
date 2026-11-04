@@ -10,6 +10,10 @@ cdef extern from "oti/semisparse.h":
         uint64_t nrows
         uint64_t ncols
         uint64_t payload
+        int ndim
+        int layout
+        uint64_t head_bytes
+        uint64_t shape[31]
 
     cdef enum:
         SSIO_OK
@@ -25,6 +29,8 @@ cdef extern from "oti/semisparse.h":
         SSIO_TYPE_SCALAR
         SSIO_TYPE_AOS
         SSIO_TYPE_SOA
+        SSIO_VERSION
+        SSIO_MAX_NDIM
 
     const char *ssio_strerror(int status)
     int ssio_peek(const char *filename, ssio_info_t *p_info)
@@ -34,3 +40,5 @@ cdef extern from "oti/semisparse.h":
     int arrss_read(const char *filename, arrss_t *res)
     int oarrss_save(const char *filename, const oarrss_t *arr)
     int oarrss_read(const char *filename, oarrss_t *res)
+    int oarrss_save_shape(const char *filename, const oarrss_t *arr, int ndim, const uint64_t *shape)
+    int arrss_save_shape(const char *filename, const arrss_t *arr, int ndim, const uint64_t *shape)

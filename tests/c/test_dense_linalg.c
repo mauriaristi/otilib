@@ -1481,7 +1481,7 @@ static void test_errors(dhelpl_t dhl){
 
     // Coefficient counts past size_t: nact 60000 at order 5 (C(60005, 5) > 2^64).
     huge        = make_shell(3, 1, 60000, 5, &hmeta);
-    huge.nbases = 60000;
+    huge.cap = 60000;
     check(oarr_lu_solve(&lu, &huge, &x, dhl) == DN_ERR_MEMORY,
           "coefficient count overflow: lu_solve DN_ERR_MEMORY");
     oarr_lu_free(&lu);

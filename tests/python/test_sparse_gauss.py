@@ -498,7 +498,7 @@ def test_sparse_fem_element_helper_oracle(element_id, node_x, node_y, area, area
     x = oti.array(node_x, nbases=len(bases), order=order)
     y = oti.array(node_y, nbases=len(bases), order=order)
     z = oti.zeros((len(node_x), 1), nbases=len(bases), order=order)
-    x[1, 0] += oti.e(1, order=order)
+    x[1] += oti.e(1, order=order)
     element = fem.element[element_id].copy()
 
     element.allocate(2, nbases=len(bases), order=order)

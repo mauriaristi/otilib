@@ -299,7 +299,7 @@ def test_get_order_im(order, sets):
         _same_array(semi.get_order_im(k, aos), ref, order, f"aos order {k}")
 
         out = semi.zeros((2, 3))
-        assert semi.get_order_im(k, soa, out=out) is None
+        assert semi.get_order_im(k, soa, out=out) is out
         _same_array(out, ref, order, f"soa out order {k}")
 
     # end for
@@ -358,7 +358,7 @@ def test_extract_im_and_deriv(order, sets):
             _same_array(getattr(aos, name)(d), ref_m, order, f"{name} aos method {d}")
 
             out = semi.ssotinum(0.0)
-            assert sfun(d, sx, out=out) is None
+            assert sfun(d, sx, out=out) is out
             _same_scalar(out, ref_s, order, f"{name} scalar out {d}")
 
         # end for
@@ -697,7 +697,7 @@ def test_trunc_dot(order, sets):
     # end for
 
     out = sb.copy() if hasattr(sb, "copy") else semi.oarrss.from_sparse(b)
-    assert semi.trunc_dot(0, sb, 1, out, out=out) is None
+    assert semi.trunc_dot(0, sb, 1, out, out=out) is out
     _same_array(out, _trunc_dot_reference(0, b, 1, b), order, "out aliasing the right operand")
 
     with pytest.raises(ValueError):
@@ -741,7 +741,7 @@ def test_trunc_sub(order, sets):
         _same_array(semi.trunc_sub(k, aa, ab), ref, order, f"aos order {k}")
 
         out = semi.oarrss.from_sparse(a)
-        assert semi.trunc_sub(k, out, sb, out=out) is None
+        assert semi.trunc_sub(k, out, sb, out=out) is out
         _same_array(out, ref, order, f"soa out aliasing order {k}")
 
         _same_scalar(semi.trunc_sub(k, semi.ssotinum(x), semi.ssotinum(y)),
@@ -802,7 +802,7 @@ def test_dot_product(order, sets):
 
     out = semi.ssotinum(0.0)
     assert semi.dot_product(semi.oarrss.from_sparse(col), semi.oarrss.from_sparse(row),
-                            out=out) is None
+                            out=out) is out
     _same_scalar(out, sparse.dot_product(col, row), order, "out")
 
     with pytest.raises(ValueError):
@@ -1041,7 +1041,7 @@ def test_inv_block(order, sets):
     _same_array(semi.inv_block(aos), ref, order, "aos")
 
     out = semi.zeros((3, 3))
-    assert semi.inv_block(soa, out=out) is None
+    assert semi.inv_block(soa, out=out) is out
     _same_array(out, ref, order, "soa out")
 
     with pytest.raises(ValueError):

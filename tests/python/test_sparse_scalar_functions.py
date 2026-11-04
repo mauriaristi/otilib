@@ -296,7 +296,7 @@ def test_function_out_argument(name, fn, x0):
     out = 9.0 + 5.0 * oti.e(3, order=MAX_ORDER) + oti.e(1, order=MAX_ORDER) ** 2
     result = fn(x * y, out=out)
 
-    assert result is None, f"{name}: out= call should return None"
+    assert result is out, f"{name}: out= call should return the out"
     assert float(out.real) == pytest.approx(float(expected.real), rel=REL_TOL)
     assert float(out.get_deriv([3])) == 0.0, f"{name}: stale e3 coefficient kept"
 

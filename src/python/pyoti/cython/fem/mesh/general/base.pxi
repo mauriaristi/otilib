@@ -297,9 +297,10 @@ cdef class mesh:
     # end for 
 
     # Th.nodes = nodalCoord 
-    Th.x = alg.array( nodalCoord[ : , 0 ] )
-    Th.y = alg.array( nodalCoord[ : , 1 ] )
-    Th.z = alg.array( nodalCoord[ : , 2 ] )
+    # The nodal coordinates stay (n, 1) columns in every algebra (11.2): a 1-D input would give (n,).
+    Th.x = alg.array( nodalCoord[ : , 0:1 ] )
+    Th.y = alg.array( nodalCoord[ : , 1:2 ] )
+    Th.z = alg.array( nodalCoord[ : , 2:3 ] )
 
     return Th
 

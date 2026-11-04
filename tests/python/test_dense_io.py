@@ -747,7 +747,7 @@ def test_bad_files(tmp_path):
 
     with pytest.raises(ValueError, match="version"):
 
-        read_bytes(data[:4] + (2).to_bytes(2, "little") + data[6:])
+        read_bytes(data[:4] + (3).to_bytes(2, "little") + data[6:])
 
     # end with
 

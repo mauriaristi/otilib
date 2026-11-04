@@ -522,7 +522,7 @@ static void test_bad_files(void){
     // Header fields.
     {
         uint8_t* bad = (uint8_t*)malloc(n);
-        uint16_t version = 2;
+        uint16_t version = 3;   // 2 is the current format (readers accept 1 and 2)
 
         memcpy(bad, buf, n);
         memcpy(bad + 4, &version, sizeof(version));

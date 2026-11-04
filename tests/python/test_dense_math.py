@@ -858,15 +858,15 @@ def test_scalar_result_goes_into_out(name, order):
 
     if name == "pow":
 
-        assert dn.pow(value, EXPONENT, out=holder) is None
+        assert dn.pow(value, EXPONENT, out=holder) is holder
 
     elif name == "logb":
 
-        assert dn.logb(value, LOG_BASE, out=holder) is None
+        assert dn.logb(value, LOG_BASE, out=holder) is holder
 
     else:
 
-        assert getattr(dn, name)(value, out=holder) is None
+        assert getattr(dn, name)(value, out=holder) is holder
 
     # end if
 
@@ -914,7 +914,7 @@ def test_array_result_goes_into_out(kind, order):
     value = _to_dense(kind, sparse_value)
     holder = _to_dense(kind, _random_matrix(bases, order, 5000, "exp"))
 
-    assert dn.exp(value, out=holder) is None
+    assert dn.exp(value, out=holder) is holder
     _assert_sparse_equal(_as_sparse(holder), sp.exp(sparse_value), bases, order)
 
     wrong = _to_dense(kind, sp.array([[1.0, 2.0, 3.0]], order=order))
@@ -1097,10 +1097,10 @@ def test_algebra_out_holders_and_errors(kind, order):
     left_sp, left, right_sp, right = _algebra_operands(kind, bases, bases, order)
     holder = _to_dense(kind, sp.array([[0.0, 0.0], [0.0, 0.0]], order=order))
 
-    assert dn.sum(left, right, out=holder) is None
+    assert dn.sum(left, right, out=holder) is holder
     _assert_sparse_equal(_as_sparse(holder), sp.sum(left_sp, right_sp), bases, order)
 
-    assert dn.dot(left, right, out=holder) is None
+    assert dn.dot(left, right, out=holder) is holder
     _assert_sparse_equal(_as_sparse(holder), sp.dot(left_sp, right_sp), bases, order)
 
     assert dn.sum(1.0, 2.0) == 3.0
@@ -1126,7 +1126,7 @@ def test_algebra_out_holders_and_errors(kind, order):
     # end with
 
     scalar_holder = dn.otinum(0.0)
-    assert dn.norm(left, out=scalar_holder) is None
+    assert dn.norm(left, out=scalar_holder) is scalar_holder
     _assert_sparse_equal(scalar_holder.to_sparse(), sp.norm(left_sp), bases, order)
 
 # end function

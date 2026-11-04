@@ -774,10 +774,19 @@ def test_array_indexing(layout, order, pattern):
 
     # end for
 
-    # The result is an independent copy.
+    # SoA rows are views of the array; AoS rows are copies.
     block = array[0]
-    block[0, 0] = 42.0
-    assert array[0, 0].real == reference[0, 0].real
+    block[0] = 42.0
+
+    if layout == "soa":
+
+        assert array[0, 0].real == 42.0
+
+    else:
+
+        assert array[0, 0].real == reference[0, 0].real
+
+    # end if
 
     for bad in (3, (3, 0), (0, 4), 1.5, (0, 1, 2), "a"):
 
@@ -854,9 +863,15 @@ def test_array_slice_assignment(layout, order, pattern):
     array[1, 0:4:2] = to_layout(row, layout)
     assert_array_matches(array, reference, order)
 
-    reference[:, 3] = column
-    array[:, 3] = to_layout(column, layout)
+    reference[:, 3:4] = column
+    array[:, 3:4] = to_layout(column, layout)
     assert_array_matches(array, reference, order)
+
+    with pytest.raises(ValueError):
+
+        array[:, 3] = to_layout(column, layout)
+
+    # end with
 
     reference[2, 1] = scalar
     array[2, 1] = dn.otinum(scalar)
@@ -1086,7 +1101,7 @@ def test_array_inplace_and_printing(layout, order, pattern):
     # As in sparse, the in-place operators bind a new array; other names keep the old one.
     assert alias is not array
 
-    assert str(array).startswith("matso< shape: (2, 3)")
+    assert str(array).startswith(("omat<" if layout == "soa" else "arro<") + " shape: (2, 3)")
     assert "shape: (2, 3)" in array.short_repr()
     assert "order: {}".format(order) in array.long_repr()
 
@@ -1124,7 +1139,7 @@ def test_math_functions_on_arrays_and_reals(name, order, layout):
     assert_array_matches(result, expected, order)
 
     holder = to_layout(sp.zeros((2, 2)), layout)
-    assert function(array, out=holder) is None
+    assert function(array, out=holder) is holder
     assert_array_matches(holder, expected, order)
 
     point = DOMAIN.get(name, (0.5, 1.5))[0] + 0.1
@@ -1203,11 +1218,11 @@ def test_array_creators(order):
         Truncation order.
     """
 
-    assert dn.zeros(4).shape == sp.zeros(4).shape == (4, 1)
-    assert dn.zeros((3,)).shape == (3, 1)
+    assert dn.zeros(4).shape == sp.zeros(4).shape == (4,)
+    assert dn.zeros((3,)).shape == (3,)
     assert dn.zeros((2, 3), order=order).shape == (2, 3)
     assert dn.zeros((2, 3), 4, order).order == order
-    assert dn.zeros((2, 3), nbases=4, order=order).active_bases == ()
+    assert dn.zeros((2, 3), nbases=4, order=order).active_bases == (1, 2, 3, 4)
     assert dn.zeros((2, 3), bases=[2, 5], order=order).active_bases == (1, 2, 3, 4, 5)
     assert isinstance(dn.zeros(2), dn.omat)
 
@@ -1216,9 +1231,12 @@ def test_array_creators(order):
     assert_array_matches(dn.eye(3, order=order), sp.eye(3, order=order), order)
     assert dn.eye(3, nbases=2, order=order).order == order
 
+    # Dense arrays are n-dimensional from 2.0.0; the 2-D modules keep raising ValueError.
+    assert dn.zeros((2, 3, 4)).shape == (2, 3, 4)
+
     with pytest.raises(ValueError):
 
-        dn.zeros((2, 3, 4))
+        sp.zeros((2, 3, 4))
 
     # end with
 
@@ -1263,9 +1281,8 @@ def test_array_from_nested_lists(order, pattern):
     assert_array_matches(dn.array([[1, 2], [3, 4]]), sp.array([[1, 2], [3, 4]]), order)
 
     column = np.arange(1.0, 5.0)
-    assert dn.array(column).shape == (4, 1)
-    assert dn.array(column)[2, 0].real == 3.0
-    assert dn.array(column)[2].real.item() == 3.0
+    assert dn.array(column).shape == (4,)
+    assert dn.array(column)[2].real == 3.0
     assert_close(dn.array(np.arange(6.0).reshape(2, 3)).real, np.arange(6.0).reshape(2, 3))
 
     # Lists of sparse scalars are accepted too, and a higher minimum order is honoured.
@@ -1274,9 +1291,12 @@ def test_array_from_nested_lists(order, pattern):
     assert_array_matches(dn.array(dn.array([firsts])), sp.array([first]), order)
     assert_array_matches(dn.array(sp.array([first])), sp.array([first]), order)
 
+    # Dense arrays are n-dimensional from 2.0.0 (up to 31 dimensions).
+    assert dn.array(np.zeros((1, 1, 1, 1))).shape == (1, 1, 1, 1)
+
     with pytest.raises(ValueError):
 
-        dn.array(np.zeros((1, 1, 1, 1)))
+        dn.array(np.zeros((1,) * 32))
 
     # end with
 
@@ -1438,7 +1458,7 @@ def test_algebra_functions(layout, order, pattern):
         assert_scalar_matches(function(scalar, scalar), oracle(scalar_ref, scalar_ref), order)
 
         holder = to_layout(sp.zeros((2, 3)), layout)
-        assert function(left, right, out=holder) is None
+        assert function(left, right, out=holder) is holder
         assert_array_matches(holder, oracle(left_ref, right_ref), order)
 
     # end for
@@ -1459,15 +1479,15 @@ def test_algebra_functions(layout, order, pattern):
     assert_scalar_matches(dn.norm(left), sp.norm(left_ref), order)
 
     holder = dn.number(0.0)
-    assert dn.norm(left, out=holder) is None
+    assert dn.norm(left, out=holder) is holder
     assert_scalar_matches(holder, sp.norm(left_ref), order)
 
     holder = to_layout(sp.zeros((3, 2)), layout)
-    assert dn.transpose(left, out=holder) is None
+    assert dn.transpose(left, out=holder) is holder
     assert_array_matches(holder, sp.transpose(left_ref), order)
 
     holder = dn.number(0.0)
-    assert dn.neg(scalar, out=holder) is None
+    assert dn.neg(scalar, out=holder) is holder
     assert_scalar_matches(holder, sp.neg(scalar_ref), order)
 
     with pytest.raises(ValueError):
@@ -1537,7 +1557,7 @@ def test_direction_functions(layout, order, pattern):
     # end for
 
     holder = to_layout(sp.zeros((2, 2)), layout)
-    assert dn.get_deriv([1], array, out=holder) is None
+    assert dn.get_deriv([1], array, out=holder) is holder
     assert_close(holder.real, sp.get_deriv([1], reference).real)
 
 # end function
@@ -1634,7 +1654,7 @@ def run_script(oti, order):
 
     for k in range(2 * nb):
 
-        fe[k, 0] = fe[k, 0] + (-Pi) * Ke[k, (k + 1) % (2 * nb)] / E
+        fe[k] = fe[k] + (-Pi) * Ke[k, (k + 1) % (2 * nb)] / E
 
     # end for
 
@@ -1652,7 +1672,7 @@ def run_script(oti, order):
         "u": u.real,
         "du_dE": u.get_deriv(1),
         "x": x.real,
-        "x2": np.array([x[2, 0].real, x[2].real.item(), x.nrows, x.ncols, x.size]),
+        "x2": np.array([x[2].real, x[2].real, x.nrows, x.ncols, x.size]),
         "element": np.array([Ke[1, 2].order, len(Ke[1, 2].get_active_bases()), Ke[1, 2].real,
                              (Ke[1, 2] ** 0.5).real]),
         "norm": np.array([oti.norm(Ke[0:2, 0:3]).real, oti.norm(Ke, 1.0).real]),
@@ -1819,7 +1839,14 @@ def test_get_block_of_zero_size_arrays(shape):
 
     # The non-empty case still shares memory with the array.
     full = dn.zeros((2, 2), bases=[1])
-    full.get_block(0)[0, 1] = 5.0
+
+    with pytest.raises(ValueError):
+
+        full.get_block(0)[0, 1] = 5.0
+
+    # end with
+
+    full.get_block(0, writeable=True)[0, 1] = 5.0
     assert full[0, 1].real == 5.0
 
 # end function
@@ -1834,8 +1861,14 @@ def test_get_block_of_zero_size_arrays(shape):
 # pyoti.dense, reason)}. The names listed are the exact dense parameters, so the test also
 # fails when an entry becomes stale (after a rename, delete its entry).
 NAME_ALLOW_LIST = {
-    "zeros": (["shape_in", "nbases", "order", "nip", "bases"],
-              "intentional: the dense extra bases= comes last"),
+    "zeros": (["shape_in", "nbases", "order", "nip", "bases", "layout"],
+              "intentional: the dense extras bases= and layout= come last (11.14 row 12)"),
+    "array": (["arr", "nbases", "order", "nip", "layout"],
+              "intentional: the dense extra layout= comes last (11.14 row 12)"),
+    "eye": (["size", "nbases", "order", "nip", "layout"],
+            "intentional: the dense extra layout= comes last (11.14 row 12)"),
+    "ones": (["shape_in", "nbases", "order", "nip", "layout"],
+             "intentional: the dense extra layout= comes last (11.14 row 12)"),
     "lil_matrix.tocsr": (["preserve_in"], "intentional: extra keyword of the dense builder"),
     # Pending renames owned by other work packages (see build-orch/briefs/WPN-report.md).
 }
@@ -2027,7 +2060,7 @@ def test_keyword_calls_from_sparse_scripts():
     assert dn.det(arr=array).real == pytest.approx(5.5)
     assert dn.inv(arr=array).shape == (2, 2)
     assert dn.zeros(shape_in=(2, 3)).shape == (2, 3)
-    assert dn.ones(shape_in=2).shape == (2, 1)
+    assert dn.ones(shape_in=2).shape == (2,)
     assert dn.get_active_bases(obj_in=number) == [1]
     assert dn.imdir(hum_dir=[1, 2]) == sp.imdir([1, 2])
     assert dn.get_deriv(humdir=1, val=number).real == 1.0
@@ -2072,7 +2105,7 @@ def test_keyword_calls_from_sparse_scripts():
     assert_close(dn.matmul(lhs=array, rhs=solution).real, right.real)
 
     holder = dn.zeros((2, 1))
-    assert dn.solve(K_in=array, b_in=right, out=holder) is None
+    assert dn.solve(K_in=array, b_in=right, out=holder) is holder
     assert_close(holder.real, solution.real)
 
     factors = dn.lu_factor(A=array)
@@ -2081,7 +2114,7 @@ def test_keyword_calls_from_sparse_scripts():
     assert_close(stored.real, np.array([[2.0, 1.0], [0.25, 2.75]]))
     assert_close(dn.lu_solve(lu_and_piv=factors, b=right).real, solution.real)
     holder = dn.zeros((2, 1))
-    assert dn.lu_solve(lu_and_piv=factors, b=right, out=holder) is None
+    assert dn.lu_solve(lu_and_piv=factors, b=right, out=holder) is holder
     assert_close(holder.real, solution.real)
 
     if hasattr(dn, "save"):
@@ -2154,7 +2187,8 @@ def test_printing_uses_plain_integers_like_sparse(order, pattern, terms_print):
         for layout in LAYOUTS:
 
             printed = str(to_layout(matrix, layout))
-            assert printed == plain(str(matrix))
+            assert printed.startswith("omat<" if layout == "soa" else "arro<")
+            assert printed.split("<", 1)[1] == plain(str(matrix)).split("<", 1)[1]
             assert "np." not in printed
 
         # end for
@@ -2233,7 +2267,7 @@ def test_array_builder_edge_cases():
     number = 1.0 + dn.e(1, order=2)
 
     assert_close(dn.array(((1, 2.5), (np.float64(3.0), True))).real, [[1.0, 2.5], [3.0, 1.0]])
-    assert dn.array((number, 2.0)).shape == (2, 1)
+    assert dn.array((number, 2.0)).shape == (2,)
     assert dn.array([[number, 1], [2.0, number]]).order == 2
     assert dn.array([[number], [1.0]], order=4).order == 4
     assert dn.array([[1.0, 2.0], [3.0, 4.0]], order=3).order == 3

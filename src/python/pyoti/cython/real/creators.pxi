@@ -160,6 +160,7 @@ cpdef array( object arr,   uint64_t nip = 0):
         Oarr = darr_zeros( nrows, ncols)
         Rres = dmat.create(&Oarr)
         Rres[0,0] = np_arr.item(0)
+        Rres._lk = 2
         res = Rres
 
       else:
@@ -184,6 +185,7 @@ cpdef array( object arr,   uint64_t nip = 0):
         for i in range(nrows):
           Rres[i,0] =  np_arr[i] # Column vectors.
         # end for 
+        Rres._lk = 1
         res = Rres
 
       else:
@@ -273,17 +275,18 @@ cpdef zeros( object shape_in, uint64_t nip = 0):
   """
   
   cdef uint64_t ncols, nrows
+  cdef uint8_t kind
   cdef darr_t Rres
   cdef fedarr_t Fres
   
-  nrows, ncols = process_shape_r(shape_in)
+  nrows, ncols, kind = process_shape_k(shape_in)
 
   if nip == 0:
 
     # This will create an dmat.
     Rres = darr_zeros(nrows,ncols)
 
-    return dmat.create(&Rres)
+    return _dmat_k(dmat.create(&Rres), kind)
 
   else:
 
@@ -304,17 +307,18 @@ cpdef ones( object shape_in, uint64_t nip = 0):
   """
   
   cdef uint64_t ncols, nrows
+  cdef uint8_t kind
   cdef darr_t Rres
   cdef fedarr_t Fres
   
-  nrows, ncols = process_shape_r(shape_in)
+  nrows, ncols, kind = process_shape_k(shape_in)
 
   if nip == 0:
 
     # This will create an dmat.
     Rres = darr_ones(nrows,ncols)
 
-    return dmat.create(&Rres)
+    return _dmat_k(dmat.create(&Rres), kind)
 
   else:
 

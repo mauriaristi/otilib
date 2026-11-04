@@ -119,14 +119,16 @@ cdef object _fe_local(object arr, object rows, int64_t ncols=-1):
 
         # Per-entry conversion: converting the whole global array for every element would be O(n).
         idx = np.asarray(rows, dtype=np.int64).ravel()
-        m   = src.shape[1] if ncols < 0 else min(ncols, src.shape[1])
+        width = src.shape[1] if len(src.shape) == 2 else 1
+        m   = width if ncols < 0 else min(ncols, width)
         res = oarrss.zeros((idx.shape[0], m), order=src.order)
 
         for i in range(idx.shape[0]):
 
             for j in range(m):
 
-                res[i, j] = src[int(idx[i]), j]
+                # A 1-D global vector is read as a column (contracts 11.2).
+                res[i, j] = src[int(idx[i]), j] if len(src.shape) == 2 else src[int(idx[i])]
 
             # end for
 
@@ -155,7 +157,7 @@ cdef class elm_help:
     cdef public object special
     cdef public uint64_t nbasis, nip, ndim_an
     cdef public uint8_t ndim, compute_Jinv
-    cdef public object otinbases, otiorder
+    cdef public object otinbases, otiorder, otibases
     cdef public object xi, eta, zeta, w
     cdef public object N, Nxi, Neta, Nzeta, Nx, Ny, Nz
     cdef public object x, y, z
@@ -207,7 +209,7 @@ cdef class elm_help:
     # ----------------------------------------------------------------------------------------------------
 
     # ****************************************************************************************************
-    def allocate(self, ndim, nbasis, nip, nbases=0, order=0):
+    def allocate(self, ndim, nbasis, nip, nbases=0, order=0, bases=None):
         """
         Allocate the integration-point fields.
 
@@ -220,26 +222,39 @@ cdef class elm_help:
         nip : int
             Number of integration points.
         nbases : int
-            Accepted for pyoti.sparse compatibility (a capacity hint there); unused.
+            Base capacity (contracts 11.7: capacity only in pyoti.semisparse; no label is reserved).
         order : int
             Truncation order of the helper fields.
+        bases : iterable of int, optional
+            Labels reserved in every helper field (``N``, ``Nxi``, ``Neta``, ``Nzeta``, ``w``, ``xi``,
+            ``eta``, ``zeta`` and, in ``allocate_spatial``, ``J``, ``Jinv``, ``Nx``, ``Ny``, ``Nz``,
+            ``detJ``, ``dV``, ``x``, ``y``, ``z``), so assembly never relayouts them.
         """
+
+        cdef tuple labels = tuple(_bases(sorted(set(bases)))) if bases is not None else ()
+
+        if nbases < 0:
+
+            raise ValueError("nbases must be nonnegative")
+
+        # end if
 
         self.ndim      = ndim
         self.nip       = nip
         self.nbasis    = nbasis
         self.otiorder  = order
         self.otinbases = nbases
+        self.otibases  = labels
 
-        self.N     = _fe_zeros((1, nbasis), (), order, nip)
-        self.Nxi   = _fe_zeros((1, nbasis), (), order, nip)
-        self.Neta  = _fe_zeros((1, nbasis), (), order, nip)
-        self.Nzeta = _fe_zeros((1, nbasis), (), order, nip)
+        self.N     = _fe_zeros((1, nbasis), labels, order, nip)
+        self.Nxi   = _fe_zeros((1, nbasis), labels, order, nip)
+        self.Neta  = _fe_zeros((1, nbasis), labels, order, nip)
+        self.Nzeta = _fe_zeros((1, nbasis), labels, order, nip)
 
-        self.w    = _fe_scalar(0.0, (), order, nip)
-        self.xi   = _fe_scalar(0.0, (), order, nip)
-        self.eta  = _fe_scalar(0.0, (), order, nip)
-        self.zeta = _fe_scalar(0.0, (), order, nip)
+        self.w    = _fe_scalar(0.0, labels, order, nip)
+        self.xi   = _fe_scalar(0.0, labels, order, nip)
+        self.eta  = _fe_scalar(0.0, labels, order, nip)
+        self.zeta = _fe_scalar(0.0, labels, order, nip)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -258,6 +273,7 @@ cdef class elm_help:
         """
 
         cdef object order = self.otiorder
+        cdef tuple labels = self.otibases if self.otibases is not None else ()
 
         if not self.is_allocated():
 
@@ -267,20 +283,20 @@ cdef class elm_help:
         # end if
 
         self.ndim_an = ndim_an
-        self.J = _fe_zeros((self.ndim, ndim_an), (), order, self.nip)
-        self.x = oarrss.zeros((self.nbasis, 1), order=order)
-        self.y = oarrss.zeros((self.nbasis, 1), order=order)
-        self.z = oarrss.zeros((self.nbasis, 1), order=order)
-        self.detJ = _fe_scalar(0.0, (), order, self.nip)
-        self.dV   = _fe_scalar(0.0, (), order, self.nip)
+        self.J = _fe_zeros((self.ndim, ndim_an), labels, order, self.nip)
+        self.x = oarrss.zeros((self.nbasis, 1), bases=labels, order=order)
+        self.y = oarrss.zeros((self.nbasis, 1), bases=labels, order=order)
+        self.z = oarrss.zeros((self.nbasis, 1), bases=labels, order=order)
+        self.detJ = _fe_scalar(0.0, labels, order, self.nip)
+        self.dV   = _fe_scalar(0.0, labels, order, self.nip)
         self.compute_Jinv = compute_Jinv
 
         if compute_Jinv:
 
-            self.Jinv = _fe_zeros((ndim_an, self.ndim), (), order, self.nip)
-            self.Nx   = _fe_zeros((1, self.nbasis), (), order, self.nip)
-            self.Ny   = _fe_zeros((1, self.nbasis), (), order, self.nip)
-            self.Nz   = _fe_zeros((1, self.nbasis), (), order, self.nip)
+            self.Jinv = _fe_zeros((ndim_an, self.ndim), labels, order, self.nip)
+            self.Nx   = _fe_zeros((1, self.nbasis), labels, order, self.nip)
+            self.Ny   = _fe_zeros((1, self.nbasis), labels, order, self.nip)
+            self.Nz   = _fe_zeros((1, self.nbasis), labels, order, self.nip)
 
         # end if
 
@@ -309,10 +325,12 @@ cdef class elm_help:
         Zero the spatial fields.
         """
 
+        cdef tuple labels = self.otibases if self.otibases is not None else ()
+
         self.J.set(0.0)
-        self.x = oarrss.zeros((self.nbasis, 1), order=self.otiorder)
-        self.y = oarrss.zeros((self.nbasis, 1), order=self.otiorder)
-        self.z = oarrss.zeros((self.nbasis, 1), order=self.otiorder)
+        self.x = oarrss.zeros((self.nbasis, 1), bases=labels, order=self.otiorder)
+        self.y = oarrss.zeros((self.nbasis, 1), bases=labels, order=self.otiorder)
+        self.z = oarrss.zeros((self.nbasis, 1), bases=labels, order=self.otiorder)
         self.detJ.set(0.0)
         self.dV.set(0.0)
 

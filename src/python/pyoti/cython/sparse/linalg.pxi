@@ -61,6 +61,8 @@ cpdef interp1d(object x, matso xvals, matso yvals, object out = None):
     return res
   # end if 
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
 
 
@@ -84,8 +86,8 @@ cpdef moving_average(matso data, int size):
   cdef int miss_strtj, miss_endj
   
   factor = 1.0/float(size)
-  npts = data.size
-  new_data = zeros(npts)
+  npts = data.arr.size
+  new_data = zeros(npts) if data._lk == 1 else zeros((npts, 1))
 
   starti = size//2 # mid point
   lefti = size - starti - 1
@@ -103,22 +105,22 @@ cpdef moving_average(matso data, int size):
 
     if (nmisstrtj>0):
 
-      value  = factor * ( data[ startj, 0 ] * nmisstrtj )
+      value  = factor * ( _vec_item(data, startj) * nmisstrtj )
 
     # end if 
 
     if (nmisendj>0):
 
       j = endj-1
-      value  = value + factor * ( data[      j, 0 ] * nmisendj )
+      value  = value + factor * ( _vec_item(data, j) * nmisendj )
 
     # end if 
 
     for j in range(startj,endj):
-      value += data[j,0]*factor
+      value += _vec_item(data, j)*factor
     # end for 
 
-    new_data[k,0] = value
+    arrso_set_item_i_o( &value.num, k, &new_data.arr, dhl)
 
   # end for
   return new_data
@@ -174,6 +176,8 @@ cpdef dot_product(object lhs, object rhs, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -240,9 +244,258 @@ cpdef dot_product(object lhs, object rhs, object out = None):
 
 
 #*****************************************************************************************************
+cdef uint8_t _lkind(object obj):
+  """
+  PURPOSE:  Logical shape kind of a matso or dmat (0: 2-D, 1: 1-D, 2: 0-D); 0 for any other object.
+  """
+  #***************************************************************************************************
+
+  cdef matso O
+  cdef dmat  R
+
+  if type(obj) is matso:
+
+    O = obj
+
+    return O._lk
+
+  elif type(obj) is dmat:
+
+    R = obj
+
+    return R._lk
+
+  # end if
+
+  return 0
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+cdef object _row_view(object obj):
+  """
+  PURPOSE:  A 1-D matso or dmat of n elements (stored n x 1) as the 1 x n row over the same memory: a
+            non-owning view, valid while obj is alive.
+  """
+  #***************************************************************************************************
+
+  cdef matso O
+  cdef dmat  R
+  cdef arrso_t hdr
+  cdef darr_t  rdr
+  cdef uint64_t t
+
+  if type(obj) is matso:
+
+    O = obj
+    hdr = O.arr
+    t = hdr.nrows
+    hdr.nrows = 1
+    hdr.ncols = t
+
+    return matso.create(&hdr, 0)
+
+  # end if
+
+  R = obj
+  R._sync()
+  rdr = R.arr
+  t = rdr.nrows
+  rdr.nrows = 1
+  rdr.ncols = t
+
+  return dmat.create(&rdr, 0)
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+cdef object _out_phys(object out, tuple shape, uint64_t nrows, uint64_t ncols):
+  """
+  PURPOSE:  The holder of an out= argument for a product whose result of logical shape `shape` is
+            stored as nrows x ncols: a non-owning 2-D view over out's elements (rule S1b: out's shape is
+            the result shape, or has extra leading axes of extent 1). None if out is None.
+  """
+  #***************************************************************************************************
+
+  cdef matso O
+  cdef arrso_t hdr
+
+  if out is None:
+
+    return None
+
+  # end if
+
+  if type(out) is not matso:
+
+    raise TypeError("out must be a matso, got {}".format(type(out).__name__))
+
+  # end if
+
+  _check_out_shape("dot", out, shape)
+
+  O = out
+  hdr = O.arr
+  hdr.nrows = nrows
+  hdr.ncols = ncols
+
+  return matso.create(&hdr, 0)
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+cdef object _dot_nd(object lhs, object rhs, object out):
+  """
+  PURPOSE:  dot with NumPy's shape rules for 1-D and 0-D operands (11.3, rule I3):
+              - 1-D . 1-D: the inner product, an OTI scalar;
+              - 2-D . 1-D: (m,); 1-D . 2-D: (n,); csr . 1-D: (m,);
+              - a 0-D operand multiplies.
+            The 2-D C struct stores a 1-D (n,) as n x 1: a 1-D left operand is read as the 1 x n row over
+            the same memory and a (n,) result of a row product is stored n x 1.
+  """
+  #***************************************************************************************************
+
+  cdef uint8_t lk = _lkind(lhs)
+  cdef uint8_t rk = _lkind(rhs)
+  cdef matso   Ores
+  cdef object  res, row, o
+  cdef uint64_t t, m, n
+
+  tl = type(lhs)
+  tr = type(rhs)
+
+  if tl is dmat and tr is dmat:
+
+    return r.dot(lhs, rhs, out)
+
+  # end if
+
+  if tl is matsofe or tr is matsofe:
+
+    # Gauss arrays keep the matrix rule: the operand is its 2-D struct, the result is 2-D.
+    return _dot2d(lhs, rhs, out)
+
+  # end if
+
+  if lk == 2 or rk == 2:
+
+    if out is not None:
+
+      raise ValueError("out= is not supported for the product with a 0-d array")
+
+    # end if
+
+    return mul(_single(lhs), rhs) if lk == 2 else mul(lhs, _single(rhs))
+
+  # end if
+
+  if lk == 1 and rk == 1:
+
+    if out is not None:
+
+      raise ValueError("out= is not supported for the inner product of two 1-d arrays")
+
+    # end if
+
+    row = _row_view(lhs)
+    _check_matmul("dot", row, rhs, None)
+    res = _dot2d(row, rhs, None)
+
+    return _single(res)
+
+  # end if
+
+  if lk == 1:
+
+    # (n,) . (n, k) -> (k,)
+    row = _row_view(lhs)
+    n = _array_phys(rhs)[1]
+    _check_matmul("dot", row, rhs, None)
+    o = _out_phys(out, (n,), 1, n)
+    res = _dot2d(row, rhs, o)
+
+    if out is not None:
+
+      return out
+
+    # end if
+
+    Ores = res
+    t = Ores.arr.nrows
+    Ores.arr.nrows = Ores.arr.ncols
+    Ores.arr.ncols = t
+    Ores._lk = 1
+
+    return Ores
+
+  # end if
+
+  # (m, n) . (n,) -> (m,)
+  m = _array_phys(lhs)[0]
+  _check_matmul("dot", lhs, rhs, None)
+  o = _out_phys(out, (m,), m, 1)
+  res = _dot2d(lhs, rhs, o)
+
+  if out is not None:
+
+    return out
+
+  # end if
+
+  Ores = res
+  Ores._lk = 1
+
+  return Ores
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
 cpdef dot(object lhs, object rhs, object out = None):
   """
-  PURPOSE:  Matrix inner product (standard matrix multiplication).
+  PURPOSE:  Matrix inner product (standard matrix multiplication), with NumPy's shape rules for 1-D
+            operands: dot(x, y) of 1-D arrays is the inner product (an OTI scalar), dot(A, x) is (m,),
+            dot(x, A) is (n,).
+  """
+  #***************************************************************************************************
+
+  if _lkind(lhs) == 0 and _lkind(rhs) == 0:
+
+    return _dot2d(lhs, rhs, out)
+
+  # end if
+
+  return _dot_nd(lhs, rhs, out)
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+cpdef matmul(object lhs, object rhs, object out = None):
+  """
+  PURPOSE:  Matrix product with the rules of numpy.matmul (the operator @): the shape rules of dot for 1-D
+            and 2-D operands; an operand of 0 dimensions (or a scalar) is an error, as in NumPy.
+  """
+  #***************************************************************************************************
+
+  if _lkind(lhs) == 2 or _lkind(rhs) == 2 or type(lhs) in number_types or type(rhs) in number_types:
+
+    raise ValueError("matmul: an input operand does not have enough dimensions (0-D array or scalar)")
+
+  # end if
+
+  return dot(lhs, rhs, out)
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+cdef object _dot2d(object lhs, object rhs, object out):
+  """
+  PURPOSE:  Matrix inner product (standard matrix multiplication) of operands stored as 2-D structs.
   """
   #***************************************************************************************************
 
@@ -417,7 +670,37 @@ cpdef dot(object lhs, object rhs, object out = None):
     return res
   # end if 
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
+
+#*****************************************************************************************************
+cdef object _order_part(ord_t order, object obj):
+  """
+  PURPOSE:  The terms of one order of a matso (a matso, same shape); a dmat only has the order 0.
+  """
+  #***************************************************************************************************
+
+  cdef matso O
+
+  if type(obj) is matso:
+
+    O = obj
+
+    return O.get_order_im(order)
+
+  # end if
+
+  if order != 0:
+
+    raise ValueError("trunc_dot: a real array has terms of order 0 only")
+
+  # end if
+
+  return obj
+
+#-----------------------------------------------------------------------------------------------------
+
 
 #*****************************************************************************************************
 cpdef trunc_dot(ord_t ordlhs, object lhs, ord_t ordrhs, object rhs, object out = None):
@@ -441,8 +724,9 @@ cpdef trunc_dot(ord_t ordlhs, object lhs, ord_t ordrhs, object rhs, object out =
   tlhs = type(lhs)
   trhs = type(rhs)
 
-  _check_matmul("trunc_dot", lhs, rhs, out)
-
+  if tlhs is csr_matrix:
+    _check_matmul("trunc_dot", lhs, rhs, out)
+  # end if
   if out is None:
     res_flag = 0
   # end if 
@@ -452,8 +736,14 @@ cpdef trunc_dot(ord_t ordlhs, object lhs, ord_t ordrhs, object rhs, object out =
   #    -  matsofe
   #    -  darr
 
-  if tlhs is csr_matrix:
-
+  if tlhs is matso or tlhs is dmat:
+    # The product of the order-ordlhs terms of lhs with the order-ordrhs terms of rhs (numpy.dot shapes).
+    if trhs is matso or trhs is dmat:
+      res = dot(_order_part(ordlhs, lhs), _order_part(ordrhs, rhs), out)
+    else:
+      raise TypeError("Unsupported types at trunc_dot operation.")
+    # end if
+  elif tlhs is csr_matrix:
     # Slhs = lhs
     if   trhs is matso: # SO
       if res_flag:
@@ -474,6 +764,8 @@ cpdef trunc_dot(ord_t ordlhs, object lhs, ord_t ordrhs, object rhs, object out =
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -499,10 +791,18 @@ cpdef transpose(object arr, object out = None):
 
   shape = _array_shape(arr)
 
+  if _lkind(arr) != 0:
+    # transpose of a 1-D or 0-D array is the array itself (as NumPy): a copy, or out.set(arr)
+    if out is None:
+      return arr.copy()
+    # end if
+    out.set(arr)
+    return out
+  # end if
+
   if shape is not None:
     _check_out_shape("transpose", out, (shape[1], shape[0]))
   # end if
-
   _check_nip("transpose", arr, out)
 
   if out is None:
@@ -558,6 +858,8 @@ cpdef transpose(object arr, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -677,6 +979,8 @@ cpdef det(object arr, object out = None):
     return res
   # end if 
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
@@ -755,6 +1059,8 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
     return res
   # end if 
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
 
 
@@ -829,6 +1135,8 @@ cpdef inv(object arr, object out = None):
   if out is None:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -915,6 +1223,8 @@ cpdef inv_block(object arr, object out = None):
     return res
   # end if 
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
 
 
@@ -991,6 +1301,8 @@ cpdef solve(object K_in, matso b_in, matso out = None, solver = 'SuperLU', solve
   if res_flag == 0:
     return res
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -1114,6 +1426,8 @@ cpdef lu_solve(object lu_and_piv, matso b, matso out = None):
     return Ores
   # end if
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
 
 
@@ -1204,15 +1518,15 @@ cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None, solver = 'Super
     solve = factor.solve
   # end if 
 
-  rhs = b_in.real
+  rhs = b_in.real.reshape(b_in.arr.nrows, b_in.arr.ncols)
   # Solve the real system of equations:
   rhs = solve(rhs)
 
 
 
   # Solve the real coefficient
-  for i in range(Ores.nrows):      
-    for j in range(Ores.ncols):
+  for i in range(Ores.arr.nrows):
+    for j in range(Ores.arr.ncols):
 
       arrso_set_item_ij_r( rhs[i,j], i, j, &Ores.arr, dhl)
 
@@ -1264,6 +1578,8 @@ cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None, solver = 'Super
     return Ores
 
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -1357,14 +1673,14 @@ cdef solve_sparse_old(csr_matrix K_in, matso b_in, matso out = None, solver = 'S
     solve = factor.solve
   # end if 
 
-  rhs = b_in.real
+  rhs = b_in.real.reshape(b_in.arr.nrows, b_in.arr.ncols)
   # Solve the real system of equations:
   rhs = solve(rhs)
 
 
   # Solve the real coefficient
-  for i in range(Ores.nrows):      
-    for j in range(Ores.ncols):
+  for i in range(Ores.arr.nrows):
+    for j in range(Ores.arr.ncols):
 
       arrso_set_item_ij_r( rhs[i,j], i, j, &Ores.arr, dhl)
 
@@ -1399,6 +1715,8 @@ cdef solve_sparse_old(csr_matrix K_in, matso b_in, matso out = None, solver = 'S
     return Ores
 
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -1444,19 +1762,19 @@ cpdef get_order_im_array(ord_t ordi, matso tmp):
 
   maxidx = dhelp_ndirOrder( bases_list[ordi-1], ordi )
 
-  res = np.zeros((tmp.nrows,tmp.ncols*maxidx), dtype = np.float64)
+  res = np.zeros((tmp.arr.nrows,tmp.arr.ncols*maxidx), dtype = np.float64)
 
-  for i in range(tmp.nrows):
-    for j in range(tmp.ncols):
+  for i in range(tmp.arr.nrows):
+    for j in range(tmp.arr.ncols):
 
-      otmp = tmp.arr.p_data[ j + i * tmp.ncols ]
+      otmp = tmp.arr.p_data[ j + i * tmp.arr.ncols ]
 
       if otmp.act_order >= ordi:
         
         nnz = otmp.p_nnz[ordi-1]
         
         for k in range( nnz ):          
-          res[ i, j + tmp.ncols * otmp.p_idx[ordi-1][k] ] = otmp.p_im[ordi-1][k]
+          res[ i, j + tmp.arr.ncols * otmp.p_idx[ordi-1][k] ] = otmp.p_im[ordi-1][k]
         # end for
 
       # end if 
@@ -1490,17 +1808,19 @@ cpdef set_order_im_from_array(ord_t ordi, np.ndarray arr, matso tmp):
   cdef ndir_t nnz, nnz_set
   cdef coeff_t val
   cdef uint64_t i,j,k
+  cdef sotinum_t ores
+  cdef sotinum acc
 
-  nnz = arr.shape[1]/tmp.ncols
+  nnz = arr.shape[1] // tmp.arr.ncols
 
   otmp = soti_get_tmp(5, ordi, dhl)
 
   # print("set_order_im_from_array ordi:", ordi)
   # print("settting arr.shape:", (arr.shape[0],arr.shape[1])," to tmp.shape",tmp)
 
-  for i in range(tmp.nrows):
+  for i in range(tmp.arr.nrows):
     
-    for j in range(tmp.ncols):
+    for j in range(tmp.arr.ncols):
       # print(' ----- position(',i,j,')')
       soti_set_r(0.0, &otmp, dhl)
 
@@ -1508,7 +1828,7 @@ cpdef set_order_im_from_array(ord_t ordi, np.ndarray arr, matso tmp):
         
       for k in range( nnz ):          
         
-        val = arr[ i, j + tmp.ncols * k ] 
+        val = arr[ i, j + tmp.arr.ncols * k ]
         
         if val != 0.0:
 
@@ -1525,7 +1845,10 @@ cpdef set_order_im_from_array(ord_t ordi, np.ndarray arr, matso tmp):
       
       # soti_print(&otmp,dhl);
 
-      tmp[i,j] = tmp[i,j] + sotinum.create( &otmp, FLAGS = 0)
+      # The element (i, j) of the 2-D struct of tmp (a 1-D tmp is stored as a column).
+      ores = arrso_get_item_ij( &tmp.arr, i, j, dhl)
+      acc  = sotinum.create( &ores, FLAGS = 0) + sotinum.create( &otmp, FLAGS = 0)
+      arrso_set_item_ij_o( &acc.num, i, j, &tmp.arr, dhl)
 
     # end for 
   # end for

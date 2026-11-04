@@ -455,6 +455,58 @@ cdef object _fe_adopt(_ssfe like, oarrss out):
 
 
 # ********************************************************************************************************
+cdef int _fe_replace(_ssfe target, feoarrss_t *res) except -1:
+    """
+    Move a freshly built Gauss buffer into a Gauss value, honouring its live ``.real`` exports.
+
+    Without exports the old buffer is freed and ``res`` moves in. With exports, ``res`` is copied into
+    the existing buffer when the layout (points, shape, labels, order) is unchanged; otherwise the call
+    raises ``BufferError`` (rule G1.3). ``res`` is consumed (reset to feoarrss_init()) unless an error
+    is raised, in which case it is freed.
+
+    Parameters
+    ----------
+    target : _ssfe
+        Value receiving the result.
+    res : feoarrss_t *
+        Freshly built buffer.
+    """
+
+    if _has_exports(target):
+
+        if not (target.fe.nip == res.nip and target.fe.nrows == res.nrows
+                and target.fe.ncols == res.ncols and _same_layout(&target.fe.arr, &res.arr)):
+
+            feoarrss_free(res)
+            _check_no_exports(target)
+
+        # end if
+
+        if target.fe.arr.size > 0:
+
+            memcpy(target.fe.arr.p_data, res.arr.p_data,
+                   (1 + sshelp_ndir_total(res.arr.nbases, res.arr.trc_order)) * res.arr.size
+                   * sizeof(coeff_t))
+
+        # end if
+
+        target.fe.arr.act_order = res.arr.act_order
+        feoarrss_free(res)
+        res[0] = feoarrss_init()
+        return 0
+
+    # end if
+
+    feoarrss_free(&target.fe)
+    target.fe = res[0]
+    res[0] = feoarrss_init()
+    return 0
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
 cdef object _fe_store(object result, object out):
     """
     Move a result into a caller-provided output object (the out= argument of module functions).
@@ -486,17 +538,25 @@ cdef object _fe_store(object result, object out):
 
         gres = result
         gout = out
-        feoarrss_free(&gout.fe)
-        gout.fe = gres.fe
-        gres.fe = feoarrss_init()
+        _fe_replace(gout, &gres.fe)
 
     elif isinstance(result, oarrss) and isinstance(out, oarrss):
 
         ares = result
         aout = out
+
+        if _has_exports(aout):
+
+            # Copies in place when the layout is unchanged, else BufferError (G1.3).
+            _assign_out(aout, ares)
+            return out
+
+        # end if
+
         oarrss_free(&aout.arr)
         aout.arr = ares.arr
         ares.arr = oarrss_init()
+        aout._ndim = ares._ndim
 
     elif isinstance(result, ssotinum) and isinstance(out, ssotinum):
 
@@ -727,6 +787,23 @@ cdef class _ssfe:
     # ----------------------------------------------------------------------------------------------------
 
     # ****************************************************************************************************
+    @property
+    def active_bases(self):
+        """
+        Return the sorted active global bases, as ``oarrss.active_bases``.
+
+        Returns
+        -------
+        tuple of int
+            Active bases (shared by every point).
+        """
+
+        return tuple(self.get_active_bases())
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
     def copy(self):
         """
         Return an independent copy.
@@ -750,15 +827,27 @@ cdef class _ssfe:
     @property
     def real(self):
         """
-        Real part at every point.
+        Real part at every point as a read-only view (contracts 11.8, 11.11).
+
+        The view is tracked: while it lives, an assignment that would relayout this value raises
+        ``BufferError``.
 
         Returns
         -------
         numpy.ndarray
-            Shape (nip,) for a scalar, (nip, nrows, ncols) for an array.
+            Shape (nip,) for a scalar, (nip, nrows, ncols) for an array; ``.real.copy()`` is
+            writable.
         """
 
-        return _fe_block(self, 0)
+        cdef tuple shape = (self.fe.nip,)
+
+        if _fe_is_array(self):
+
+            shape = (self.fe.nip, self.fe.nrows, self.fe.ncols)
+
+        # end if
+
+        return _export_view(self, self.fe.arr.p_data, self.fe.arr.size, shape, False)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -989,8 +1078,7 @@ cdef class _ssfe:
 
         # end if
 
-        feoarrss_free(&self.fe)
-        self.fe = res
+        _fe_replace(self, &res)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -1487,9 +1575,7 @@ cdef object _fe_inplace(_ssfe target, object result):
     # end if
 
     g = result
-    feoarrss_free(&target.fe)
-    target.fe = g.fe
-    g.fe = feoarrss_init()
+    _fe_replace(target, &g.fe)
 
     return target
 
@@ -1679,6 +1765,7 @@ cdef class ssotife(_ssfe):
         if isinstance(value, ssotinum):
 
             o = value
+            _check_arr_growth(self, &self.fe.arr, o.num.p_bases, o.num.nbases, o.num.trc_order)
             feoarrss_set_ijk_o(&o.num, 0, 0, k, &self.fe)
 
         elif isinstance(value, Real):
@@ -1771,17 +1858,20 @@ cdef tuple _fe_axis(object key, uint64_t n):
         (start, count, step, is_integer).
     """
 
-    cdef int64_t k
+    cdef object k
 
     if isinstance(key, slice):
 
+        # slice.indices clips huge bounds as NumPy does; a step only matters for two or more
+        # elements, where it is below n, so a huge step on one element becomes 1 (C3).
         start, stop, step = key.indices(n)
+        count = len(range(start, stop, step))
 
-        return (start, len(range(start, stop, step)), step, False)
+        return (start, count, step if count > 1 else 1, False)
 
     # end if
 
-    k = key
+    k = _operator.index(key)
 
     if k < 0:
 
@@ -1789,7 +1879,7 @@ cdef tuple _fe_axis(object key, uint64_t n):
 
     # end if
 
-    if k < 0 or k >= <int64_t>n:
+    if k < 0 or k >= n:
 
         raise IndexError("index {} out of range for size {}".format(key, n))
 
@@ -2156,6 +2246,7 @@ cdef class oarrssfe(_ssfe):
 
         # end if
 
+        _check_arr_growth(self, &self.fe.arr, plain.arr.p_bases, plain.arr.nbases, plain.arr.trc_order)
         feoarrss_set_ip(&plain.arr, k, &self.fe)
 
     # end function
@@ -2185,6 +2276,7 @@ cdef class oarrssfe(_ssfe):
         if isinstance(rhs, ssotinum):
 
             o = rhs
+            _check_arr_growth(self, &self.fe.arr, o.num.p_bases, o.num.nbases, o.num.trc_order)
             feoarrss_set_ijk_o(&o.num, i, j, k, &self.fe)
 
         elif isinstance(rhs, Real):
@@ -2304,6 +2396,8 @@ cdef class oarrssfe(_ssfe):
 
             # end if
 
+            _check_arr_growth(self, &self.fe.arr, g.fe.arr.p_bases, g.fe.arr.nbases,
+                              g.fe.arr.trc_order)
             feoarrss_set_slice(&g.fe, rows[0], rows[1], rows[2], cols[0], cols[1], cols[2],
                                &self.fe)
 
@@ -2317,6 +2411,8 @@ cdef class oarrssfe(_ssfe):
 
             # end if
 
+            _check_arr_growth(self, &self.fe.arr, plain.arr.p_bases, plain.arr.nbases,
+                              plain.arr.trc_order)
             feoarrss_from_oarrss_to(&plain.arr, self.fe.nip, &tmp)
             feoarrss_set_slice(&tmp, rows[0], rows[1], rows[2], cols[0], cols[1], cols[2], &self.fe)
             feoarrss_free(&tmp)
@@ -2324,6 +2420,8 @@ cdef class oarrssfe(_ssfe):
         elif isinstance(value, (Real, ssotinum)):
 
             g = _fe_scalar(value, (), 0, self.fe.nip)
+            _check_arr_growth(self, &self.fe.arr, g.fe.arr.p_bases, g.fe.arr.nbases,
+                              g.fe.arr.trc_order)
             feoarrss_set_slice(&g.fe, rows[0], rows[1], rows[2], cols[0], cols[1], cols[2],
                                &self.fe)
 

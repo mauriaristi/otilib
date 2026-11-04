@@ -70,7 +70,7 @@ endforeach()
 #   views  basic indexing and view functions;     iter   the multi-operand iterator;
 #   ufunc  elementwise arithmetic and functions;   reduce, blas, linalg, index in later phases.
 # A test whose source is not written yet is skipped, so the tree always configures.
-foreach(nd_test core views iter ufunc reduce blas linalg index)
+foreach(nd_test core views iter ufunc reduce blas linalg index alloc)
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_real_ndarray_${nd_test}.c")
         add_executable(test_c_real_ndarray_${nd_test} test_real_ndarray_${nd_test}.c)
         target_link_libraries(test_c_real_ndarray_${nd_test} oti oticwrap ${LINK_TARGET_OMP_C})
@@ -97,4 +97,25 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_dense_7b_ready.c")
     add_executable(test_c_dense_7b_ready test_dense_7b_ready.c)
     target_link_libraries(test_c_dense_7b_ready oti oticwrap ${LINK_TARGET_OMP_C})
     add_test(NAME c_dense_7b_ready_test COMMAND test_c_dense_7b_ready)
+endif()
+
+# Phase 7b dense SoA n-D C API (views, assignment rules, reservations, strided kernels), oracle agent.
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_dense_7b.c")
+    add_executable(test_c_dense_7b test_dense_7b.c)
+    target_link_libraries(test_c_dense_7b oti oticwrap ${LINK_TARGET_OMP_C})
+    add_test(NAME c_dense_7b_test COMMAND test_c_dense_7b)
+endif()
+
+# slice_size() of src/c/core/utils.c (empty, reversed and extreme-step ranges), nd-core agent.
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_core_slice.c")
+    add_executable(test_c_core_slice test_core_slice.c)
+    target_link_libraries(test_c_core_slice oti oticwrap ${LINK_TARGET_OMP_C})
+    add_test(NAME c_core_slice_test COMMAND test_c_core_slice)
+endif()
+
+# darr_abs / darr_abs_to / darr_self_abs on non-integer, signed-zero and non-finite values, nd-core agent.
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_real_darr_abs.c")
+    add_executable(test_c_real_darr_abs test_real_darr_abs.c)
+    target_link_libraries(test_c_real_darr_abs oti oticwrap ${LINK_TARGET_OMP_C})
+    add_test(NAME c_real_darr_abs_test COMMAND test_c_real_darr_abs)
 endif()

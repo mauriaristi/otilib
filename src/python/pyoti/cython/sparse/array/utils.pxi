@@ -115,7 +115,7 @@ def _io_filename( filename ):
 #***************************************************************************************************
 def save( matso arr, filename ): 
   """
-  PURPOSE: Export array into a binary proprietary format.
+  PURPOSE: Export array into a binary proprietary format (version 2: it keeps the logical shape).
 
   USAGE:
   >>> save( arr, filename )
@@ -130,7 +130,7 @@ def save( matso arr, filename ):
   cdef bytes path = _io_filename( filename )
 
   # A bytes object converts to the char* argument, with its terminating '\0'.
-  arrso_save( path, &arr.arr, dhl )
+  _io_write_v2( arr, path )
 
 #---------------------------------------------------------------------------------------------------
 
@@ -158,44 +158,12 @@ def read( filename ):
   global dhl
   
   cdef bytes path = _io_filename( filename )
-  cdef arrso_t res
-  cdef uint64_t mem_size
 
   if not _os.path.isfile( _os.fsdecode(filename) ):
-
     raise FileNotFoundError("no such file: '%s'" % _os.fsdecode(filename))
-
   # end if
 
-  # Checks the C reader would answer with exit(): 64-byte header, magic, array format, data size.
-  with open( path, "rb" ) as handle:
-
-    header = handle.read(64)
-
-  # end with
-
-  if len(header) < 64 or header[:4] != b"\x93OTI":
-
-    raise ValueError("not an OTI array file: '%s'" % _os.fsdecode(filename))
-
-  # end if
-
-  if header[6] != 21:
-
-    raise ValueError("not a matso array file (format %d): '%s'" % ( header[6], _os.fsdecode(filename) ))
-
-  # end if
-
-  mem_size = int.from_bytes( header[8:16], _sys.byteorder )
-
-  if mem_size != _os.path.getsize( path ) - 64:
-
-    raise ValueError("truncated or corrupt matso file: '%s'" % _os.fsdecode(filename))
-
-  # end if
-
-  res = arrso_read( path, dhl )
-
-  return matso.create(&res)
+  # Version 1 and 2 files are decoded and validated by _io_read_any (never exit() or a crash).
+  return _io_read_any( path, _os.fsdecode(filename) )
 
 #---------------------------------------------------------------------------------------------------

@@ -30,16 +30,16 @@ cdef sotinum __interp1d_OOo(matso xvals, matso yvals, sotinum x , sotinum out = 
   y = zero()
   
   start  = 1
-  finish = xvals.shape[0]
+  finish = xvals.arr.nrows
 
   # evaluate bounds:
   if xr < xvals.arr.p_data[start-1].re:
 
-    y =  yvals[start-1,0].copy()
+    y =  _vec_item(yvals, start-1).copy()
 
   elif xr > xvals.arr.p_data[finish-1].re:
 
-    y =  yvals[finish-1,0].copy()
+    y =  _vec_item(yvals, finish-1).copy()
 
   else:
 
@@ -75,6 +75,8 @@ cdef sotinum __interp1d_OOo(matso xvals, matso yvals, sotinum x , sotinum out = 
     out.set(y)
   # end if 
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
@@ -96,28 +98,34 @@ cdef matso __interp1d_OOO(matso xvals, matso yvals, matso x , matso out = None):
   #***************************************************************************************************
   cdef matso y
   cdef uint8_t res_flag = 1
-  cdef uint64_t i, j, 
+  cdef uint64_t i, j
+  cdef sotinum_t ores
+  cdef sotinum interp
+
   
   
   if out is None:
     res_flag = 0
     y = zeros(x.shape)
   else:
-    if x.shape[0] != out.shape[0] and x.shape[1] != out.shape[1]:
+    if x.shape != out.shape:
       raise IndexError('"out" array must have the same shape as the interpolated matrix "x"')
     # end if
     y = out
   # end if 
-  
-  for i in range(y.shape[0]):
-    for j in range(y.shape[1]):
-      y[i,j] = __interp1d_OOo( xvals, yvals, x[i,j] )
-    # end for 
+
+  # Every element of x (the 2-D struct, row-major): a 1-D x is stored as a column.
+  for i in range(y.arr.size):
+    ores = arrso_get_item_i( &x.arr, i, dhl)
+    interp = __interp1d_OOo( xvals, yvals, sotinum.create(&ores, FLAGS=0) )
+    arrso_set_item_i_o( &interp.num, i, &y.arr, dhl)
   # end for 
 
   if res_flag == 0:
     return y
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -157,7 +165,7 @@ cdef sotife __interp1d_OOf(matso xvals, matso yvals, sotife xfe , sotife out = N
   for ip in range(xfe.nip):
     
     start  = 1
-    finish = xvals.shape[0]
+    finish = xvals.arr.nrows
 
     x = sotinum.create( &xfe.num.p_data[ip], FLAGS=0 )
     xr = x.real
@@ -165,11 +173,11 @@ cdef sotife __interp1d_OOf(matso xvals, matso yvals, sotife xfe , sotife out = N
     # evaluate bounds:
     if xr < xvals.arr.p_data[start-1].re:
 
-      y[ip] =  yvals[start-1,0].copy()
+      y[ip] =  _vec_item(yvals, start-1).copy()
 
     elif xr > xvals.arr.p_data[finish-1].re:
 
-      y[ip] =  yvals[finish-1,0].copy()
+      y[ip] =  _vec_item(yvals, finish-1).copy()
 
     else:
 
@@ -204,5 +212,7 @@ cdef sotife __interp1d_OOf(matso xvals, matso yvals, sotife xfe , sotife out = N
   if res_flag == 0:
     return y
   # end if 
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------

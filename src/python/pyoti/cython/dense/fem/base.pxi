@@ -31,10 +31,28 @@ cdef omat _fe_take_rows(omat src, object rows, int64_t ncols=-1):
     """
 
     cdef np.ndarray[np.int64_t, ndim=1] idx = np.asarray(rows, dtype=np.int64).ravel()
-    cdef uint64_t nr = idx.shape[0], m = oarr_ncols(&src.arr), n = oarr_nrows(&src.arr)
+    cdef uint64_t nr, m, n
     cdef uint64_t nb = 1 + sshelp_ndir_total(oarr_nact(&src.arr), oarr_trc_order(&src.arr))
-    cdef oarr_t res = oarr_init()
+    cdef omat res
     cdef uint64_t d, c, i, r
+
+    # A 1-D global array is a column (contracts 11.2: fem accepts (n,) and (n, 1) alike); a strided
+    # view is read through a compact copy.
+    if src.ndim > 2:
+
+        raise ValueError("get_local: global arrays must be 1-D or 2-D, got shape {}".format(src.shape))
+
+    # end if
+
+    if oarr_is_view(&src.arr):
+
+        src = src.copy()
+
+    # end if
+
+    nr = idx.shape[0]
+    m  = oarr_ncols(&src.arr)
+    n  = oarr_nrows(&src.arr)
 
     if ncols >= 0 and <uint64_t>ncols < m:
 
@@ -52,7 +70,9 @@ cdef omat _fe_take_rows(omat src, object rows, int64_t ncols=-1):
 
     # end for
 
-    _soa_ok("get_local", oarr_zeros_to(oarr_nact(&src.arr), nr, m, oarr_trc_order(&src.arr), &res), &res)
+    res = omat.__new__(omat)
+    _soa_ok("get_local", oarr_zeros_to(oarr_nact(&src.arr), nr, m, oarr_trc_order(&src.arr), &res.arr),
+            &res.arr)
 
     for d in range(nb):
 
@@ -61,7 +81,7 @@ cdef omat _fe_take_rows(omat src, object rows, int64_t ncols=-1):
             for i in range(nr):
 
                 r = idx[i]
-                oarr_data(&res)[d * oarr_size(&res) + i + c * nr] = (
+                oarr_data(&res.arr)[d * oarr_size(&res.arr) + i + c * nr] = (
                     oarr_data(&src.arr)[d * oarr_size(&src.arr) + r + c * n])
 
             # end for
@@ -70,9 +90,9 @@ cdef omat _fe_take_rows(omat src, object rows, int64_t ncols=-1):
 
     # end for
 
-    oarr_set_act_order(&res, oarr_act_order(&src.arr))
+    oarr_set_act_order(&res.arr, oarr_act_order(&src.arr))
 
-    return omat.wrap(res)
+    return res
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -220,10 +240,14 @@ cdef class elm_help:
         nip : int
             Number of integration points.
         nbases : int
-            Accepted for pyoti.sparse compatibility (a capacity hint there); unused.
+            Bases to reserve (contracts 7.5, 11.7): with K > 0 every helper field (here and in
+            allocate_spatial) is created with the layout nact = K at truncation order ``order``, so
+            assembly never grows it; 0 reserves nothing.
         order : int
             Truncation order of the helper fields.
         """
+
+        cdef tuple labels = tuple(range(1, nbases + 1))
 
         self.ndim      = ndim
         self.nip       = nip
@@ -231,15 +255,15 @@ cdef class elm_help:
         self.otiorder  = order
         self.otinbases = nbases
 
-        self.N     = _fe_zeros((1, nbasis), (), order, nip)
-        self.Nxi   = _fe_zeros((1, nbasis), (), order, nip)
-        self.Neta  = _fe_zeros((1, nbasis), (), order, nip)
-        self.Nzeta = _fe_zeros((1, nbasis), (), order, nip)
+        self.N     = _fe_zeros((1, nbasis), labels, order, nip)
+        self.Nxi   = _fe_zeros((1, nbasis), labels, order, nip)
+        self.Neta  = _fe_zeros((1, nbasis), labels, order, nip)
+        self.Nzeta = _fe_zeros((1, nbasis), labels, order, nip)
 
-        self.w    = _fe_scalar(0.0, (), order, nip)
-        self.xi   = _fe_scalar(0.0, (), order, nip)
-        self.eta  = _fe_scalar(0.0, (), order, nip)
-        self.zeta = _fe_scalar(0.0, (), order, nip)
+        self.w    = _fe_scalar(0.0, labels, order, nip)
+        self.xi   = _fe_scalar(0.0, labels, order, nip)
+        self.eta  = _fe_scalar(0.0, labels, order, nip)
+        self.zeta = _fe_scalar(0.0, labels, order, nip)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -258,6 +282,7 @@ cdef class elm_help:
         """
 
         cdef object order = self.otiorder
+        cdef tuple labels = tuple(range(1, self.otinbases + 1))
 
         if not self.is_allocated():
 
@@ -267,20 +292,20 @@ cdef class elm_help:
         # end if
 
         self.ndim_an = ndim_an
-        self.J = _fe_zeros((self.ndim, ndim_an), (), order, self.nip)
-        self.x = omat.zeros((self.nbasis, 1), order=order)
-        self.y = omat.zeros((self.nbasis, 1), order=order)
-        self.z = omat.zeros((self.nbasis, 1), order=order)
-        self.detJ = _fe_scalar(0.0, (), order, self.nip)
-        self.dV   = _fe_scalar(0.0, (), order, self.nip)
+        self.J = _fe_zeros((self.ndim, ndim_an), labels, order, self.nip)
+        self.x = zeros((self.nbasis, 1), nbases=self.otinbases, order=order)
+        self.y = zeros((self.nbasis, 1), nbases=self.otinbases, order=order)
+        self.z = zeros((self.nbasis, 1), nbases=self.otinbases, order=order)
+        self.detJ = _fe_scalar(0.0, labels, order, self.nip)
+        self.dV   = _fe_scalar(0.0, labels, order, self.nip)
         self.compute_Jinv = compute_Jinv
 
         if compute_Jinv:
 
-            self.Jinv = _fe_zeros((ndim_an, self.ndim), (), order, self.nip)
-            self.Nx   = _fe_zeros((1, self.nbasis), (), order, self.nip)
-            self.Ny   = _fe_zeros((1, self.nbasis), (), order, self.nip)
-            self.Nz   = _fe_zeros((1, self.nbasis), (), order, self.nip)
+            self.Jinv = _fe_zeros((ndim_an, self.ndim), labels, order, self.nip)
+            self.Nx   = _fe_zeros((1, self.nbasis), labels, order, self.nip)
+            self.Ny   = _fe_zeros((1, self.nbasis), labels, order, self.nip)
+            self.Nz   = _fe_zeros((1, self.nbasis), labels, order, self.nip)
 
         # end if
 
@@ -310,9 +335,9 @@ cdef class elm_help:
         """
 
         self.J.set(0.0)
-        self.x = omat.zeros((self.nbasis, 1), order=self.otiorder)
-        self.y = omat.zeros((self.nbasis, 1), order=self.otiorder)
-        self.z = omat.zeros((self.nbasis, 1), order=self.otiorder)
+        self.x = zeros((self.nbasis, 1), nbases=self.otinbases, order=self.otiorder)
+        self.y = zeros((self.nbasis, 1), nbases=self.otinbases, order=self.otiorder)
+        self.z = zeros((self.nbasis, 1), nbases=self.otinbases, order=self.otiorder)
         self.detJ.set(0.0)
         self.dV.set(0.0)
 

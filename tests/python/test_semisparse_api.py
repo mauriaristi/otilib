@@ -772,9 +772,9 @@ def test_array_indexing(layout, order, pattern):
 
     # end for
 
-    # The result is an independent copy.
+    # The result is an independent copy (semi-sparse slices become views in Phase 8).
     block = array[0]
-    block[0, 0] = 42.0
+    block[0] = 42.0
     assert array[0, 0].real == reference[0, 0].real
 
     for bad in (3, (3, 0), (0, 4), 1.5, (0, 1, 2), "a"):
@@ -852,9 +852,15 @@ def test_array_slice_assignment(layout, order, pattern):
     array[1, 0:4:2] = to_layout(row, layout)
     assert_array_matches(array, reference, order)
 
-    reference[:, 3] = column
-    array[:, 3] = to_layout(column, layout)
+    reference[:, 3:4] = column
+    array[:, 3:4] = to_layout(column, layout)
     assert_array_matches(array, reference, order)
+
+    with pytest.raises(ValueError):
+
+        array[:, 3] = to_layout(column, layout)
+
+    # end with
 
     reference[2, 1] = scalar
     array[2, 1] = ss.ssotinum(scalar)
@@ -1122,7 +1128,7 @@ def test_math_functions_on_arrays_and_reals(name, order, layout):
     assert_array_matches(result, expected, order)
 
     holder = to_layout(sp.zeros((2, 2)), layout)
-    assert function(array, out=holder) is None
+    assert function(array, out=holder) is holder
     assert_array_matches(holder, expected, order)
 
     point = DOMAIN.get(name, (0.5, 1.5))[0] + 0.1
@@ -1201,8 +1207,8 @@ def test_array_creators(order):
         Truncation order.
     """
 
-    assert ss.zeros(4).shape == sp.zeros(4).shape == (4, 1)
-    assert ss.zeros((3,)).shape == (3, 1)
+    assert ss.zeros(4).shape == sp.zeros(4).shape == (4,)
+    assert ss.zeros((3,)).shape == (3,)
     assert ss.zeros((2, 3), order=order).shape == (2, 3)
     assert ss.zeros((2, 3), 4, order).order == order
     assert ss.zeros((2, 3), nbases=4, order=order).active_bases == ()
@@ -1261,9 +1267,8 @@ def test_array_from_nested_lists(order, pattern):
     assert_array_matches(ss.array([[1, 2], [3, 4]]), sp.array([[1, 2], [3, 4]]), order)
 
     column = np.arange(1.0, 5.0)
-    assert ss.array(column).shape == (4, 1)
-    assert ss.array(column)[2, 0].real == 3.0
-    assert ss.array(column)[2].real.item() == 3.0
+    assert ss.array(column).shape == (4,)
+    assert ss.array(column)[2].real == 3.0
     assert_close(ss.array(np.arange(6.0).reshape(2, 3)).real, np.arange(6.0).reshape(2, 3))
 
     # Lists of sparse scalars are accepted too, and a higher minimum order is honoured.
@@ -1436,7 +1441,7 @@ def test_algebra_functions(layout, order, pattern):
         assert_scalar_matches(function(scalar, scalar), oracle(scalar_ref, scalar_ref), order)
 
         holder = to_layout(sp.zeros((2, 3)), layout)
-        assert function(left, right, out=holder) is None
+        assert function(left, right, out=holder) is holder
         assert_array_matches(holder, oracle(left_ref, right_ref), order)
 
     # end for
@@ -1457,15 +1462,15 @@ def test_algebra_functions(layout, order, pattern):
     assert_scalar_matches(ss.norm(left), sp.norm(left_ref), order)
 
     holder = ss.number(0.0)
-    assert ss.norm(left, out=holder) is None
+    assert ss.norm(left, out=holder) is holder
     assert_scalar_matches(holder, sp.norm(left_ref), order)
 
     holder = to_layout(sp.zeros((3, 2)), layout)
-    assert ss.transpose(left, out=holder) is None
+    assert ss.transpose(left, out=holder) is holder
     assert_array_matches(holder, sp.transpose(left_ref), order)
 
     holder = ss.number(0.0)
-    assert ss.neg(scalar, out=holder) is None
+    assert ss.neg(scalar, out=holder) is holder
     assert_scalar_matches(holder, sp.neg(scalar_ref), order)
 
     with pytest.raises(ValueError):
@@ -1535,7 +1540,7 @@ def test_direction_functions(layout, order, pattern):
     # end for
 
     holder = to_layout(sp.zeros((2, 2)), layout)
-    assert ss.get_deriv([1], array, out=holder) is None
+    assert ss.get_deriv([1], array, out=holder) is holder
     assert_close(holder.real, sp.get_deriv([1], reference).real)
 
 # end function
@@ -1632,7 +1637,7 @@ def run_script(oti, order):
 
     for k in range(2 * nb):
 
-        fe[k, 0] = fe[k, 0] + (-Pi) * Ke[k, (k + 1) % (2 * nb)] / E
+        fe[k] = fe[k] + (-Pi) * Ke[k, (k + 1) % (2 * nb)] / E
 
     # end for
 
@@ -1650,7 +1655,7 @@ def run_script(oti, order):
         "u": u.real,
         "du_dE": u.get_deriv(1),
         "x": x.real,
-        "x2": np.array([x[2, 0].real, x[2].real.item(), x.nrows, x.ncols, x.size]),
+        "x2": np.array([x[2].real, x[2].real, x.nrows, x.ncols, x.size]),
         "element": np.array([Ke[1, 2].order, len(Ke[1, 2].get_active_bases()), Ke[1, 2].real,
                              (Ke[1, 2] ** 0.5).real]),
         "norm": np.array([oti.norm(Ke[0:2, 0:3]).real, oti.norm(Ke, 1.0).real]),
@@ -1810,7 +1815,14 @@ def test_get_block_of_zero_size_arrays(shape):
 
     # The non-empty case still shares memory with the array.
     full = ss.zeros((2, 2), bases=[1])
-    full.get_block(0)[0, 1] = 5.0
+
+    with pytest.raises(ValueError):
+
+        full.get_block(0)[0, 1] = 5.0
+
+    # end with
+
+    full.get_block(0, writeable=True)[0, 1] = 5.0
     assert full[0, 1].real == 5.0
 
 # end function
@@ -2017,7 +2029,7 @@ def test_keyword_calls_from_sparse_scripts():
     assert ss.det(arr=array).real == pytest.approx(5.5)
     assert ss.inv(arr=array).shape == (2, 2)
     assert ss.zeros(shape_in=(2, 3)).shape == (2, 3)
-    assert ss.ones(shape_in=2).shape == (2, 1)
+    assert ss.ones(shape_in=2).shape == (2,)
     assert ss.get_active_bases(obj_in=number) == [1]
     assert ss.imdir(hum_dir=[1, 2]) == sp.imdir([1, 2])
     assert ss.get_deriv(humdir=1, val=number).real == 1.0
@@ -2062,7 +2074,7 @@ def test_keyword_calls_from_sparse_scripts():
     assert_close(ss.matmul(lhs=array, rhs=solution).real, right.real)
 
     holder = ss.zeros((2, 1))
-    assert ss.solve(K_in=array, b_in=right, out=holder) is None
+    assert ss.solve(K_in=array, b_in=right, out=holder) is holder
     assert_close(holder.real, solution.real)
 
     factors = ss.lu_factor(A=array)
@@ -2071,7 +2083,7 @@ def test_keyword_calls_from_sparse_scripts():
     assert_close(stored.real, np.array([[2.0, 1.0], [0.25, 2.75]]))
     assert_close(ss.lu_solve(lu_and_piv=factors, b=right).real, solution.real)
     holder = ss.zeros((2, 1))
-    assert ss.lu_solve(lu_and_piv=factors, b=right, out=holder) is None
+    assert ss.lu_solve(lu_and_piv=factors, b=right, out=holder) is holder
     assert_close(holder.real, solution.real)
 
     with tempfile.TemporaryDirectory() as folder:
@@ -2219,7 +2231,7 @@ def test_array_builder_edge_cases():
     number = 1.0 + ss.e(1, order=2)
 
     assert_close(ss.array(((1, 2.5), (np.float64(3.0), True))).real, [[1.0, 2.5], [3.0, 1.0]])
-    assert ss.array((number, 2.0)).shape == (2, 1)
+    assert ss.array((number, 2.0)).shape == (2,)
     assert ss.array([[number, 1], [2.0, number]]).order == 2
     assert ss.array([[number], [1.0]], order=4).order == 4
     assert ss.array([[1.0, 2.0], [3.0, 4.0]], order=3).order == 3

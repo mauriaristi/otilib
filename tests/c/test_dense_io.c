@@ -319,7 +319,7 @@ static int is_init_scalar(const otinum_t* n){
 // *******************************************************************************************************
 static int is_init_soa(const oarr_t* o){
 
-    return oarr_data(o) == NULL && oarr_nact(o) == 0 && o->nbases == 0 && oarr_trc_order(o) == 0
+    return oarr_data(o) == NULL && oarr_nact(o) == 0 && o->cap == 0 && oarr_trc_order(o) == 0
         && oarr_act_order(o) == 0 && oarr_nrows(o) == 0 && oarr_ncols(o) == 0 && oarr_size(o) == 0;
 
 }
@@ -842,8 +842,8 @@ static void test_scalar_layout(void){
     check(n == 64 + 8 * (1 + 2 + 3), "layout: scalar file size");
     check(buf[0] == 0x93 && buf[1] == 'O' && buf[2] == 'T' && buf[3] == 'D', "layout: magic");
     check(buf[4] == DNIO_VERSION && buf[5] == 0, "layout: version");
-    check(buf[6] == DNIO_TYPE_SCALAR && buf[7] == host && buf[8] == 8 && buf[9] == 0,
-        "layout: type, byte order, coefficient size, reserved");
+    check(buf[6] == DNIO_TYPE_SCALAR && buf[7] == host && buf[8] == 8 && buf[9] == DNIO_LAYOUT_F,
+        "layout: type, byte order, coefficient size, layout flag");
     check(buf[10] == 2 && buf[11] == 2, "layout: orders");
 
     {
@@ -856,11 +856,12 @@ static void test_scalar_layout(void){
     check(peek_u64(buf, 16) == 1 && peek_u64(buf, 24) == 1 && peek_u64(buf, 32) == 48,
         "layout: rows, columns, payload");
 
+    // Version 2: ndim (0 for a scalar) at 40, then reserved zeros; no extents follow.
     for (i = 40; i < 64; i++){
         ok = ok && buf[i] == 0;
     }
 
-    check(ok, "layout: reserved bytes are zero");
+    check(ok, "layout: ndim 0 and reserved bytes are zero");
     check(memcmp(buf + 64, &num.re, 8) == 0 && memcmp(buf + 72, num.p_im, 8 * 5) == 0,
         "layout: real part, then order 1 (2 directions), then order 2 (3 directions)");
 
@@ -895,14 +896,17 @@ static void test_soa_layout(void){
 
     buf = slurp(g_path, &n);
 
-    check(n == 64 + 8 * 6 * (1 + 5), "layout: SoA file size");
-    check(buf[6] == DNIO_TYPE_SOA && buf[10] == 2 && buf[11] == 2 && peek_u64(buf, 16) == 2
-        && peek_u64(buf, 24) == 3 && peek_u64(buf, 32) == 8 * 6 * 6, "layout: SoA header");
-    check(memcmp(buf + 64, oarr_data(&arr), 8 * 6 * 6) == 0, "layout: SoA blocks in memory order");
+    // Version 2: a 64-byte header, then the extents (2, 3), then the payload.
+    check(n == 64 + 16 + 8 * 6 * (1 + 5), "layout: SoA file size");
+    check(buf[6] == DNIO_TYPE_SOA && buf[9] == DNIO_LAYOUT_F && buf[10] == 2 && buf[11] == 2
+        && peek_u64(buf, 16) == 2 && peek_u64(buf, 24) == 3 && peek_u64(buf, 32) == 8 * 6 * 6
+        && buf[40] == 2 && buf[41] == 0 && peek_u64(buf, 64) == 2 && peek_u64(buf, 72) == 3,
+        "layout: SoA header (v2: layout F, ndim 2, extents)");
+    check(memcmp(buf + 80, oarr_data(&arr), 8 * 6 * 6) == 0, "layout: SoA blocks in memory order");
 
     // Element (1, 2), order 2 direction 1: block 1 + offset(2, 2) + 1 = 4, at 1 + 2 * 2 in the block.
     check(oarr_get_item_to(1, 2, &arr, &item) == DN_OK, "layout: get_item");
-    memcpy(&v, buf + 64 + 8 * (4 * 6 + 1 + 2 * 2), sizeof(v));
+    memcpy(&v, buf + 80 + 8 * (4 * 6 + 1 + 2 * 2), sizeof(v));
     check(v == oti_get_item(1, 2, &item), "layout: element (r, c) of a block is at r + c * nrows");
 
     free(buf);
@@ -913,7 +917,7 @@ static void test_soa_layout(void){
         && same_soa(&arr, &back), "layout: SoA with capacity slack round trips");
 
     buf = slurp(g_path, &n);
-    check(n == 64 + 8 * 6 * 6, "layout: SoA capacity slack is not written");
+    check(n == 64 + 16 + 8 * 6 * 6, "layout: SoA capacity slack is not written");
     free(buf);
 
     oarr_free(&back);
@@ -943,9 +947,11 @@ static void test_aos_layout(void){
     buf = slurp(g_path, &n);
 
     // Records: 8 + 8 * (1 + 1) = 24 bytes, and 8 + 8 * (1 + 2 + 3) = 56 bytes.
-    check(n == 64 + 24 + 56, "layout: AoS file size");
-    check(buf[6] == DNIO_TYPE_AOS && buf[10] == 2 && buf[11] == 1 && peek_u64(buf, 16) == 1
-        && peek_u64(buf, 24) == 2 && peek_u64(buf, 32) == 80, "layout: AoS header (maxima)");
+    check(n == 64 + 16 + 24 + 56, "layout: AoS file size");
+    check(buf[6] == DNIO_TYPE_AOS && buf[9] == DNIO_LAYOUT_C && buf[10] == 2 && buf[11] == 1
+        && peek_u64(buf, 16) == 1 && peek_u64(buf, 24) == 2 && peek_u64(buf, 32) == 80
+        && buf[40] == 2 && peek_u64(buf, 64) == 1 && peek_u64(buf, 72) == 2,
+        "layout: AoS header (maxima; v2: layout C, ndim 2, extents)");
 
     {
         uint32_t k;
@@ -954,16 +960,16 @@ static void test_aos_layout(void){
         check(k == 2, "layout: AoS header nact is the largest");
     }
 
-    memcpy(&k16, buf + 64 + 2, sizeof(k16));
-    check(buf[64] == 1 && buf[65] == 1 && k16 == 1 && buf[68] == 0 && buf[69] == 0 && buf[70] == 0
-        && buf[71] == 0, "layout: first record header (trc, act, k, zeros)");
-    check(memcmp(buf + 72, &arro_data(&arr)[0].re, 8) == 0
-        && memcmp(buf + 80, arro_data(&arr)[0].p_im, 8) == 0, "layout: first record data");
+    memcpy(&k16, buf + 80 + 2, sizeof(k16));
+    check(buf[80] == 1 && buf[81] == 1 && k16 == 1 && buf[84] == 0 && buf[85] == 0 && buf[86] == 0
+        && buf[87] == 0, "layout: first record header (trc, act, k, zeros)");
+    check(memcmp(buf + 88, &arro_data(&arr)[0].re, 8) == 0
+        && memcmp(buf + 96, arro_data(&arr)[0].p_im, 8) == 0, "layout: first record data");
 
-    memcpy(&k16, buf + 64 + 24 + 2, sizeof(k16));
-    check(buf[88] == 2 && buf[89] == 1 && k16 == 2, "layout: second record header");
-    check(memcmp(buf + 96, &arro_data(&arr)[1].re, 8) == 0
-        && memcmp(buf + 104, arro_data(&arr)[1].p_im, 8 * 5) == 0, "layout: second record data");
+    memcpy(&k16, buf + 80 + 24 + 2, sizeof(k16));
+    check(buf[104] == 2 && buf[105] == 1 && k16 == 2, "layout: second record header");
+    check(memcmp(buf + 112, &arro_data(&arr)[1].re, 8) == 0
+        && memcmp(buf + 120, arro_data(&arr)[1].p_im, 8 * 5) == 0, "layout: second record data");
 
     free(buf);
     arro_free(&back);
@@ -994,7 +1000,8 @@ static void test_peek(void){
         "peek: NULL arguments");
 
     check(oti_save(g_path, &num) == DNIO_OK, "peek: save");
-    check(dnio_peek(g_path, &info) == DNIO_OK && info.type == DNIO_TYPE_SCALAR && info.version == 1
+    check(dnio_peek(g_path, &info) == DNIO_OK && info.type == DNIO_TYPE_SCALAR
+        && info.version == DNIO_VERSION
         && info.trc_order == 3 && info.act_order == 2 && info.nact == 4,
         "peek: scalar fields");
 
@@ -1122,7 +1129,7 @@ static void test_bad_header_fields(void){
         { DNIO_TYPE_SCALAR, "scalar" }, { DNIO_TYPE_AOS, "AoS" }, { DNIO_TYPE_SOA, "SoA" },
     };
     const patch_t generic[] = {
-        { "version 2 is newer",              4,  2, 2,          DNIO_ERR_VERSION },
+        { "version 3 is newer",              4,  2, 3,          DNIO_ERR_VERSION },
         { "version 65535 is newer",          4,  2, 65535,      DNIO_ERR_VERSION },
         { "version 0",                       4,  2, 0,          DNIO_ERR_FORMAT },
         { "unknown type 0",                  6,  1, 0,          DNIO_ERR_FORMAT },
@@ -1131,7 +1138,7 @@ static void test_bad_header_fields(void){
         { "byte order 3",                    7,  1, 3,          DNIO_ERR_FORMAT },
         { "other byte order",                7,  1, (uint64_t)(3 - host_order()), DNIO_ERR_FORMAT },
         { "4-byte coefficients",             8,  1, 4,          DNIO_ERR_FORMAT },
-        { "reserved byte 9",                 9,  1, 1,          DNIO_ERR_FORMAT },
+        { "layout flag 7 (byte 9)",          9,  1, 7,          DNIO_ERR_FORMAT },
         { "active order above truncation",   11, 1, 4,          DNIO_ERR_FORMAT },
         { "truncation order 151",            10, 1, 151,        DNIO_ERR_FORMAT },
         { "truncation order 255",            10, 1, 255,        DNIO_ERR_FORMAT },
@@ -1140,7 +1147,7 @@ static void test_bad_header_fields(void){
         { "payload 0",                       32, 8, 0,          DNIO_ERR_FORMAT },
         { "payload 2^64 - 1",                32, 8, UINT64_MAX, DNIO_ERR_FORMAT },
         { "payload 2^64 - 64",               32, 8, UINT64_MAX - 63, DNIO_ERR_FORMAT },
-        { "reserved byte 40",                40, 1, 1,          DNIO_ERR_FORMAT },
+        { "ndim off by one (byte 40)",       40, 1, 1,          DNIO_ERR_FORMAT },
         { "reserved byte 63",                63, 1, 1,          DNIO_ERR_FORMAT },
     };
     size_t ik;
@@ -1185,8 +1192,8 @@ static void test_bad_shapes(void){
     };
     // AoS file: 2 x 2 (make_aos).
     const patch_t aos[] = {
-        { "3 rows (fewer bytes than records)", 16, 8, 3, DNIO_ERR_FORMAT, 1 },
-        { "1 row (records left over)",         16, 8, 1, DNIO_ERR_FORMAT, 1 },
+        { "3 rows (fewer bytes than records)", 16, 8, 3, DNIO_ERR_FORMAT, 0 },
+        { "1 row (records left over)",         16, 8, 1, DNIO_ERR_FORMAT, 0 },
         { "0 columns",                         24, 8, 0, DNIO_ERR_FORMAT },
         { "2^40 rows (2^41 elements)",         16, 8, 1ULL << 40, DNIO_ERR_FORMAT },
         { "payload 0",                         32, 8, 0, DNIO_ERR_FORMAT },
@@ -1227,7 +1234,7 @@ static void test_bad_shapes(void){
         check(arro_zeros_to(0, 3, 0, &empty) == DN_OK && arro_save(g_path, &empty) == DNIO_OK,
             "AoS empty: save");
         eb = slurp(g_path, &en);
-        check(en == 64 && dnio_peek(g_path, &info) == DNIO_OK && info.payload == 0
+        check(en == 64 + 16 && dnio_peek(g_path, &info) == DNIO_OK && info.payload == 0
             && info.trc_order == 0 && info.nact == 0, "AoS empty: header holds zeros");
 
         eb[10] = 1;
@@ -1279,8 +1286,11 @@ static void test_huge_claims(void){
     check(st[0] == DNIO_ERR_TRUNCATED, "scalar claiming 17 GB in a 64-byte file: truncated");
     check(dnio_peek(g_path, &(dnio_info_t){0}) == DNIO_ERR_TRUNCATED, "same file: peek");
 
-    // SoA with 2^20 x 2^20 elements of a real array (nact = 0, order 0): 8 TB.
+    // SoA with 2^20 x 2^20 elements of a real array (nact = 0, order 0): 8 TB. A version-1 header
+    // (no extents follow it; version 2 matricizes its extents, which a scalar header has not).
     memset(head + 12, 0, 4);
+    head[4]  = 1;
+    head[9]  = 0;
     head[6]  = DNIO_TYPE_SOA;
     head[10] = 0;
     head[11] = 0;

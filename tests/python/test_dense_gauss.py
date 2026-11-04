@@ -1824,7 +1824,7 @@ def test_gauss_unary_out_holder(name):
     expected = getattr(sp, name)(sparse_value)
     out = dn.otife(0.0, nip=nip, bases=bases, order=order)
 
-    assert getattr(dn, name)(value, out=out) is None
+    assert getattr(dn, name)(value, out=out) is out
     _assert_scalar_fe_matches(out, expected, bases, order)
 
 # end function
@@ -1999,7 +1999,7 @@ def test_dense_out_holder_of_the_other_kind():
     np.testing.assert_allclose(holder.real, dn.inv(matrix).real, rtol=RTOL, atol=ATOL)
 
     scalar_holder = dn.zero(nip=3)
-    assert dn.sin(scalar, out=scalar_holder) is None
+    assert dn.sin(scalar, out=scalar_holder) is scalar_holder
     np.testing.assert_allclose(scalar_holder.real, dn.sin(scalar).real, rtol=RTOL, atol=ATOL)
 
 # end function

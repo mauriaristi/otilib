@@ -212,7 +212,7 @@ def test_truncate_module_function():
     out = oti.zero(order=MAX_ORDER)
     result = oti.truncate([1], f, out=out)
 
-    assert result is None
+    assert result is out
     _assert_truncated(out, removed)
 
 # end function

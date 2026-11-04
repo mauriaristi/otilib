@@ -421,7 +421,7 @@ def read(filename):
     cdef dnio_info_t info
     cdef otinum_t num = oti_init()
     cdef arro_t aos = arro_init()
-    cdef oarr_t soa = oarr_init()
+    cdef omat soa
     cdef int status
 
     _io_check_read(filename)
@@ -463,16 +463,17 @@ def read(filename):
 
     # end if
 
-    status = oarr_read(path, &soa)
+    soa = omat.__new__(omat)
+    status = oarr_read(path, &soa.arr)
 
     if status != DNIO_OK:
 
-        oarr_free(&soa)
+        oarr_free(&soa.arr)
         _io_raise(status, filename, True)
 
     # end if
 
-    return omat.wrap(soa)
+    return soa
 
 # end function
 # --------------------------------------------------------------------------------------------------------

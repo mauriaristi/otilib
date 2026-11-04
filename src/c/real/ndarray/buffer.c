@@ -7,9 +7,37 @@
 // Every state transition is one CAS loop on the whole word (__atomic_* builtins on a plain uint64_t,
 // contracts S9). Public functions record their failure once with oti_ctx_set_error(); the ndb_
 // helpers return statuses only.
+//
+// Blocks (W4, the 7a allocation fix): a library array's control block is followed in the same
+// allocation by the caller's extra zone (nd_alloc_extra()) and, for data up to NDB_INLINE_MAX bytes,
+// by the data itself (64-byte aligned): one allocation per small array. Larger data is a second
+// allocation. Scratch arrays (ND_ALLOC_SCRATCH) take the whole block from the calling thread's arena,
+// a LIFO bump region: a released block is popped once every block above it is released too, and the
+// arena empties when its last block goes. A grown buffer always moves its data to the heap.
 
+#include <pthread.h>
 #include <stdlib.h>
 #include <string.h>
+
+// AddressSanitizer: released scratch blocks are poisoned so stale uses are reported.
+#ifdef __has_feature
+#if __has_feature(address_sanitizer)
+#define NDB_ASAN 1
+#endif
+#endif
+#if !defined(NDB_ASAN) && defined(__SANITIZE_ADDRESS__)
+#define NDB_ASAN 1
+#endif
+#ifdef NDB_ASAN
+#include <sanitizer/asan_interface.h>
+#define NDB_POISON(p, n) \
+    do { if ((p) != NULL && (n) > 0) ASAN_POISON_MEMORY_REGION((p), (size_t)(n)); } while (0)
+#define NDB_UNPOISON(p, n) \
+    do { if ((p) != NULL && (n) > 0) ASAN_UNPOISON_MEMORY_REGION((p), (size_t)(n)); } while (0)
+#else
+#define NDB_POISON(p, n) ((void)0)
+#define NDB_UNPOISON(p, n) ((void)0)
+#endif
 
 
 // -------------------------------------------------------------------------------------------------------
@@ -38,10 +66,20 @@
 // Alignment of library allocations (contracts 1.2).
 #define NDB_ALIGN 64
 
+// Data of at most this many bytes shares the control block's allocation.
+#define NDB_INLINE_MAX ((int64_t)4096)
+
+// Scratch arena: first capacity, largest capacity, largest block taken from it (else the heap).
+#define NDB_ARENA_MIN ((int64_t)16 * 1024)
+#define NDB_ARENA_MAX ((int64_t)1024 * 1024)
+#define NDB_SCRATCH_BLOCK_MAX ((int64_t)256 * 1024)
+
 
 // -------------------------------------------------------------------------------------------------------
 // ---------------------------------------    CONTROL BLOCK    -------------------------------------------
 // -------------------------------------------------------------------------------------------------------
+
+typedef struct ndb_arena_s ndb_arena_t;
 
 struct nd_buffer_s {
     uint64_t      state;        // atomic state word (ND_STATE_*); __atomic_* builtins only
@@ -49,7 +87,33 @@ struct nd_buffer_s {
     int64_t       nbytes;       // span length; -1 = unknown (foreign memory, no span check)
     nd_release_fn release;      // called exactly once when refs reach 0; may be NULL
     void*         release_ctx;  // argument of release
+    void*         inl;          // data stored inside this block's allocation (never freed alone), or NULL
+    void*         extra;        // the caller's zone (nd_alloc_extra()), right after this struct, or NULL
+    int64_t       extra_bytes;  // size of the zone
+    ndb_arena_t*  arena;        // scratch arena holding this block, or NULL (a heap block)
+    int64_t       ar_prev;      // scratch: arena offset of the block below, -1 for none
+    int64_t       ar_size;      // scratch: bytes of this block in the arena (a multiple of 64)
+    int64_t       ar_freed;     // scratch: released, popped once the blocks above it are
 };
+
+// The extra zone starts right after the struct: its size must keep the zone ND_EXTRA_ALIGN-aligned.
+typedef char ndb_assert_block_size[(sizeof(struct nd_buffer_s) % ND_EXTRA_ALIGN == 0) ? 1 : -1];
+
+// The calling thread's scratch arena (one per thread, freed at thread exit or nd_scratch_release()).
+struct ndb_arena_s {
+    char*   mem;     // NDB_ALIGN-aligned region of cap bytes, or NULL
+    int64_t cap;     // capacity
+    int64_t top;     // first free byte
+    int64_t last;    // offset of the topmost block, -1 for none
+    int64_t live;    // blocks not yet released
+    int64_t spill;   // bytes of the blocks that did not fit since the arena was last empty
+    int64_t want;    // capacity those requests needed (applied when the arena is next empty)
+};
+
+static _Thread_local ndb_arena_t* ndb_tls_arena = NULL;
+static pthread_key_t ndb_arena_key;
+static pthread_once_t ndb_arena_once = PTHREAD_ONCE_INIT;
+static int ndb_arena_key_ok = 0;
 
 // Countdown of nd_test_fail_alloc(); 0 = disabled.
 static int64_t ndb_fail_countdown = 0;
@@ -98,19 +162,237 @@ static void* ndb_malloc(size_t nbytes){
 
 
 // *******************************************************************************************************
-// 64-byte aligned allocation through the failure injection (array data, temporaries). Free with free().
-static void* ndb_aligned_alloc(size_t nbytes){
+// 64-byte aligned allocation without the failure injection. Free with free().
+static void* ndb_raw_aligned(size_t nbytes){
 
     void* p = NULL;
 
-    if (ndb_inject_fail()){
-        return NULL;
-    }
     if (posix_memalign(&p, NDB_ALIGN, nbytes > 0 ? nbytes : 1) != 0){
         return NULL;
     }
 
     return p;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// 64-byte aligned allocation through the failure injection (array data, temporaries). Free with free().
+static void* ndb_aligned_alloc(size_t nbytes){
+
+    if (ndb_inject_fail()){
+        return NULL;
+    }
+
+    return ndb_raw_aligned(nbytes);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Thread-exit destructor of an arena. Live blocks at thread exit break the scratch contract (released on
+// the allocating thread before it ends): their arena is then left allocated rather than freed under them.
+static void ndb_arena_destroy(void* p){
+
+    ndb_arena_t* ar = (ndb_arena_t*)p;
+
+    if (ndb_tls_arena == ar){
+        ndb_tls_arena = NULL;
+    }
+    if (ar->live == 0){
+        NDB_UNPOISON(ar->mem, ar->cap);
+        free(ar->mem);
+        free(ar);
+    }
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Creates the arena key (once per process).
+static void ndb_arena_key_create(void){
+
+    ndb_arena_key_ok = (pthread_key_create(&ndb_arena_key, ndb_arena_destroy) == 0);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// The calling thread's arena, created on first use and registered for its thread-exit destructor; NULL
+// when that fails (scratch arrays then come from the heap).
+static ndb_arena_t* ndb_arena(void){
+
+    ndb_arena_t* ar = ndb_tls_arena;
+
+    if (ar != NULL){
+        return ar;
+    }
+    (void)pthread_once(&ndb_arena_once, ndb_arena_key_create);
+    if (!ndb_arena_key_ok){
+        return NULL;
+    }
+    ar = (ndb_arena_t*)calloc(1, sizeof(ndb_arena_t));
+    if (ar == NULL){
+        return NULL;
+    }
+    ar->last = -1;
+    if (pthread_setspecific(ndb_arena_key, ar) != 0){
+        free(ar);
+        return NULL;
+    }
+    ndb_tls_arena = ar;
+
+    return ar;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Takes a block of size bytes (a multiple of NDB_ALIGN) from the top of the arena, or NULL when it does
+// not fit. An empty arena is first resized to what earlier requests wanted.
+static nd_buffer_t* ndb_arena_take(ndb_arena_t* ar, int64_t size){
+
+    nd_buffer_t* b;
+    int64_t cap;
+
+    if (ar->live == 0){
+        ar->top = 0;
+        ar->last = -1;
+        ar->spill = 0;
+        if (ar->mem == NULL || ar->cap < ar->want){
+            cap = NDB_ARENA_MIN;
+            while (cap < ar->want && cap < NDB_ARENA_MAX){
+                cap *= 2;
+            }
+            NDB_UNPOISON(ar->mem, ar->cap);
+            free(ar->mem);
+            ar->mem = (char*)ndb_raw_aligned((size_t)cap);
+            ar->cap = (ar->mem != NULL) ? cap : 0;
+            NDB_POISON(ar->mem, ar->cap);
+        }
+    }
+    if (ar->mem == NULL || size > ar->cap - ar->top){
+        // Peak demand: what is in the arena plus every block that spilled to the heap meanwhile.
+        ar->spill += size;
+        if (ar->top + ar->spill > ar->want){
+            ar->want = (ar->top + ar->spill < NDB_ARENA_MAX) ? ar->top + ar->spill : NDB_ARENA_MAX;
+        }
+        return NULL;
+    }
+    b = (nd_buffer_t*)(ar->mem + ar->top);
+    NDB_UNPOISON(b, size);
+    b->arena = ar;
+    b->ar_prev = ar->last;
+    b->ar_size = size;
+    b->ar_freed = 0;
+    ar->last = ar->top;
+    ar->top += size;
+    ar->live++;
+
+    return b;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Gives a scratch block back to its arena (on the allocating thread): pops it and every released block
+// below it while they are on top.
+static void ndb_arena_give(nd_buffer_t* b){
+
+    ndb_arena_t* ar = b->arena;
+    int64_t old_top = ar->top;
+    nd_buffer_t* t;
+
+#ifdef OTI_ND_DEBUG
+    assert(ar == ndb_tls_arena && ar->live > 0);    // released on the allocating thread
+#endif
+    b->ar_freed = 1;
+    NDB_POISON((char*)b + sizeof(nd_buffer_t), b->ar_size - (int64_t)sizeof(nd_buffer_t));
+    ar->live--;
+    if (ar->live == 0){
+        ar->top = 0;
+        ar->last = -1;
+    } else {
+        while (ar->last >= 0){
+            t = (nd_buffer_t*)(ar->mem + ar->last);
+            if (!t->ar_freed){
+                break;
+            }
+            ar->top = ar->last;
+            ar->last = t->ar_prev;
+        }
+    }
+    NDB_POISON(ar->mem + ar->top, old_top - ar->top);
+    (void)old_top;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// A new library block: control block, extra zone (zeroed) and data (contents unspecified), state refs
+// 1 | OWNS | GROWABLE | WRITEABLE (| SCRATCH). One allocation event of the failure injection, plus one
+// for data above NDB_INLINE_MAX bytes on the heap. NULL on failure (nothing remains allocated).
+static nd_buffer_t* ndb_block_new(int64_t nbytes, int64_t extra_bytes, int scratch){
+
+    int64_t xoff = (int64_t)sizeof(nd_buffer_t);
+    int64_t doff = (xoff + extra_bytes + NDB_ALIGN - 1) & ~(int64_t)(NDB_ALIGN - 1);
+    nd_buffer_t* b = NULL;
+    ndb_arena_t* ar;
+    char* data = NULL;
+
+    // nbytes is under the budget and extra_bytes <= ND_EXTRA_MAX_BYTES: no sum below overflows.
+    if (ndb_inject_fail()){
+        return NULL;
+    }
+    if (scratch && nbytes <= NDB_SCRATCH_BLOCK_MAX){
+        ar = ndb_arena();
+        if (ar != NULL){
+            b = ndb_arena_take(ar, (doff + nbytes + NDB_ALIGN - 1) & ~(int64_t)(NDB_ALIGN - 1));
+        }
+        if (b != NULL){
+            data = (char*)b + doff;
+        }
+    }
+    if (b == NULL && nbytes <= NDB_INLINE_MAX){
+        b = (nd_buffer_t*)ndb_raw_aligned((size_t)(doff + nbytes));
+        if (b == NULL){
+            return NULL;
+        }
+        b->arena = NULL;
+        data = (char*)b + doff;
+    } else if (b == NULL){
+        b = (nd_buffer_t*)ndb_raw_aligned((size_t)(xoff + extra_bytes));
+        if (b == NULL){
+            return NULL;
+        }
+        data = (char*)ndb_aligned_alloc((size_t)nbytes);
+        if (data == NULL){
+            free(b);
+            return NULL;
+        }
+        b->arena = NULL;
+    }
+    b->state = 1u | ND_STATE_OWNS | ND_STATE_GROWABLE | ND_STATE_WRITEABLE |    // S25
+               (scratch ? ND_STATE_SCRATCH : 0);
+    b->base = data;
+    b->nbytes = nbytes;
+    b->release = NULL;
+    b->release_ctx = NULL;
+    b->inl = (data == (char*)b + doff) ? data : NULL;
+    b->extra = (extra_bytes > 0) ? (char*)b + xoff : NULL;
+    b->extra_bytes = extra_bytes;
+    if (extra_bytes > 0){
+        memset(b->extra, 0, (size_t)extra_bytes);
+    }
+
+    return b;
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -123,13 +405,17 @@ static void ndb_destroy(nd_buffer_t* b){
     nd_release_fn release = b->release;
     void* rctx = b->release_ctx;
 
-    if (__atomic_load_n(&b->state, __ATOMIC_RELAXED) & ND_STATE_OWNS){
+    if ((__atomic_load_n(&b->state, __ATOMIC_RELAXED) & ND_STATE_OWNS) && b->base != b->inl){
         free(b->base);
     }
     if (release != NULL){
         release(rctx);
     }
-    free(b);
+    if (b->arena != NULL){
+        ndb_arena_give(b);
+    } else {
+        free(b);
+    }
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -147,6 +433,9 @@ static int ndb_retain(nd_buffer_t* b, uint64_t add){
         }
         if ((s & ND_STATE_REFS_MASK) == ND_STATE_REFS_MASK){
             return OTI_ERR_SIZE;
+        }
+        if ((add >> ND_STATE_EXPORTS_SHIFT) && (s & ND_STATE_SCRATCH)){
+            return OTI_ERR_BUSY;    // a call-local array never escapes
         }
         if ((add >> ND_STATE_EXPORTS_SHIFT) &&
             (s & ND_STATE_EXPORTS_MASK) == ND_STATE_EXPORTS_MASK){
@@ -257,11 +546,12 @@ static int ndb_strides_compact(int32_t ndim, const int64_t* shape, const int64_t
 
 
 // *******************************************************************************************************
-// The allocator of nd_alloc() (given == NULL: C or F layout) and nd_alloc_strided() (given strides,
-// checked compact), without last-error recording. Every library buffer is OWNS | GROWABLE (S25). On
-// failure res is empty and nothing remains allocated.
+// The allocator of nd_alloc() (given == NULL: C or F layout), nd_alloc_strided() (given strides,
+// checked compact) and nd_alloc_extra(), without last-error recording. Every library buffer is OWNS |
+// GROWABLE (S25). On failure res is empty, *extra NULL and nothing remains allocated.
 static int ndb_alloc_core(oti_ctx* ctx, int32_t dtype, int32_t ndim, const int64_t* shape,
-                          const int64_t* given, int32_t layout, int32_t alloc_flags, ndarr_t* res){
+                          const int64_t* given, int32_t layout, int32_t alloc_flags,
+                          int64_t extra_bytes, void** extra, ndarr_t* res){
 
     int64_t isz, nz = 1, nbytes;
     int64_t strides[OTI_ND_MAXDIM];
@@ -270,6 +560,9 @@ static int ndb_alloc_core(oti_ctx* ctx, int32_t dtype, int32_t ndim, const int64
     int32_t k;
     int st;
 
+    if (extra != NULL){
+        *extra = NULL;
+    }
     if (res == NULL){
         return OTI_ERR_ARGUMENT;
     }
@@ -291,7 +584,8 @@ static int ndb_alloc_core(oti_ctx* ctx, int32_t dtype, int32_t ndim, const int64
         return OTI_ERR_DTYPE;
     }
     if ((given == NULL && layout != ND_LAYOUT_C && layout != ND_LAYOUT_F) ||
-        (alloc_flags & ~(ND_ALLOC_ZERO | ND_ALLOC_GROWABLE)) != 0){
+        (alloc_flags & ~(ND_ALLOC_ZERO | ND_ALLOC_GROWABLE | ND_ALLOC_SCRATCH)) != 0 ||
+        extra_bytes < 0 || extra_bytes > ND_EXTRA_MAX_BYTES){
         return OTI_ERR_ARGUMENT;
     }
 
@@ -324,27 +618,24 @@ static int ndb_alloc_core(oti_ctx* ctx, int32_t dtype, int32_t ndim, const int64
         }
     }
     st = oti_ctx_check_alloc(ctx, nbytes);
+    if (st == OTI_OK && (alloc_flags & ND_ALLOC_SCRATCH)){
+        st = oti_ctx_check_temp(ctx, nbytes);
+    }
     if (st != OTI_OK){
         return st;
     }
 
-    b = (nd_buffer_t*)ndb_malloc(sizeof(nd_buffer_t));
+    b = ndb_block_new(nbytes, extra_bytes, (alloc_flags & ND_ALLOC_SCRATCH) != 0);
     if (b == NULL){
         return OTI_ERR_MEMORY;
     }
-    data = ndb_aligned_alloc((size_t)nbytes);
-    if (data == NULL){
-        free(b);
-        return OTI_ERR_MEMORY;
-    }
+    data = b->base;
     if (alloc_flags & ND_ALLOC_ZERO){
         memset(data, 0, (size_t)nbytes);
     }
-    b->base = data;
-    b->nbytes = nbytes;
-    b->release = NULL;
-    b->release_ctx = NULL;
-    b->state = 1u | ND_STATE_OWNS | ND_STATE_GROWABLE | ND_STATE_WRITEABLE;    // S25
+    if (extra != NULL){
+        *extra = b->extra;
+    }
 
     res->data = data;
     res->ndim = ndim;
@@ -368,7 +659,7 @@ static int ndb_alloc_core(oti_ctx* ctx, int32_t dtype, int32_t ndim, const int64
 static int ndb_alloc_array(oti_ctx* ctx, int32_t dtype, int32_t ndim, const int64_t* shape,
                            int32_t layout, int32_t alloc_flags, ndarr_t* res){
 
-    return ndb_alloc_core(ctx, dtype, ndim, shape, NULL, layout, alloc_flags, res);
+    return ndb_alloc_core(ctx, dtype, ndim, shape, NULL, layout, alloc_flags, 0, NULL, res);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -389,7 +680,7 @@ static int ndb_alloc_strided(oti_ctx* ctx, int32_t dtype, int32_t ndim, const in
 
     // Rank 0 has no strides: the C path allocates the one element.
     return ndb_alloc_core(ctx, dtype, ndim, shape, ndim > 0 ? strides : NULL, ND_LAYOUT_C, alloc_flags,
-                          res);
+                          0, NULL, res);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -439,6 +730,10 @@ static int ndb_wrap(const ndarr_t* desc, const void* span_lo, int64_t span_nbyte
     b->nbytes = (vflags & ND_V_SPAN) ? span_nbytes : -1;
     b->release = release;
     b->release_ctx = release_ctx;
+    b->inl = NULL;
+    b->extra = NULL;
+    b->extra_bytes = 0;
+    b->arena = NULL;
     b->state = 1u | ((desc->flags & ND_WRITEABLE) ? ND_STATE_WRITEABLE : 0);
 
     res->data = desc->data;
@@ -562,6 +857,37 @@ int nd_alloc_strided(oti_ctx* ctx, int32_t dtype, int32_t ndim, const int64_t* s
     }
     if (st != OTI_OK){
         oti_ctx_set_error(ctx, st, "nd_alloc_strided", NULL);
+    }
+
+    return st;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+int nd_alloc_extra(oti_ctx* ctx, int32_t dtype, int32_t ndim, const int64_t* shape,
+                   const int64_t* strides, int32_t layout, int32_t alloc_flags, int64_t extra_bytes,
+                   void** extra, ndarr_t* res){
+
+    int st = oti_ctx_check(ctx);
+
+    if (st != OTI_OK){
+        if (extra != NULL){
+            *extra = NULL;
+        }
+        if (res != NULL){
+            NDB_ASSERT_RECV(res);
+            nd_init_empty(res);
+        }
+    } else {
+        // Strides given: as nd_alloc_strided() (rank 0 has none and takes the C path).
+        st = ndb_alloc_core(ctx, dtype, ndim, shape, (ndim > 0) ? strides : NULL,
+                            (strides != NULL) ? ND_LAYOUT_C : layout, alloc_flags, extra_bytes, extra,
+                            res);
+    }
+    if (st != OTI_OK){
+        oti_ctx_set_error(ctx, st, "nd_alloc_extra", NULL);
     }
 
     return st;
@@ -868,7 +1194,13 @@ static int ndb_grow_held(oti_ctx* ctx, ndarr_t* root, int64_t nbytes, int64_t ke
     char* new_base;
     int st;
 
+    // A scratch buffer stays scratch after growth (its new data comes from the heap), so the new size is
+    // charged against the temporary budget too, as at allocation (checker W4 finding 1). Shared by
+    // nd_grow and nd_grow_locked; on rejection nothing has changed and the old data stays valid.
     st = oti_ctx_check_alloc(ctx, nbytes);
+    if (st == OTI_OK && (__atomic_load_n(&b->state, __ATOMIC_RELAXED) & ND_STATE_SCRATCH)){
+        st = oti_ctx_check_temp(ctx, nbytes);
+    }
     if (st != OTI_OK){
         return st;
     }
@@ -892,7 +1224,9 @@ static int ndb_grow_held(oti_ctx* ctx, ndarr_t* root, int64_t nbytes, int64_t ke
     root->data = new_base + ((char*)root->data - old_base);
     b->base = new_base;
     b->nbytes = nbytes;
-    free(old_base);
+    if ((void*)old_base != b->inl){
+        free(old_base);
+    }
 
     return OTI_OK;
 
@@ -1038,6 +1372,51 @@ const void* nd_buffer_base(const nd_buffer_t* buf){
 int64_t nd_buffer_nbytes(const nd_buffer_t* buf){
 
     return buf == NULL ? 0 : buf->nbytes;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+void* nd_buffer_extra(const nd_buffer_t* buf){
+
+    return buf == NULL ? NULL : buf->extra;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+int64_t nd_buffer_extra_bytes(const nd_buffer_t* buf){
+
+    return buf == NULL ? 0 : buf->extra_bytes;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+int nd_scratch_release(void){
+
+    ndb_arena_t* ar = ndb_tls_arena;
+
+    if (ar == NULL){
+        return OTI_OK;
+    }
+    if (ar->live > 0){
+        oti_ctx_set_error(NULL, OTI_ERR_BUSY, "nd_scratch_release", "scratch arrays are alive");
+        return OTI_ERR_BUSY;
+    }
+    NDB_UNPOISON(ar->mem, ar->cap);
+    free(ar->mem);
+    ar->mem = NULL;
+    ar->cap = 0;
+    ar->top = 0;
+    ar->last = -1;
+    ar->spill = 0;
+    ar->want = 0;
+
+    return OTI_OK;
 
 }
 // -------------------------------------------------------------------------------------------------------

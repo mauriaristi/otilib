@@ -370,7 +370,11 @@ cdef omat _csr_values(object data, uint64_t nnz):
 
         elif data.shape == (1, nnz):
 
-            return data.T
+            return data.T.copy()
+
+        elif data.shape == (nnz,):
+
+            return data.reshape((nnz, 1)).copy()
 
         # end if
 
@@ -451,13 +455,8 @@ cdef omat _csr_operand(object value, str operation):
 
         # end try
 
-        if real.ndim == 1:
-
-            real = real.reshape(-1, 1)
-
-        # end if
-
-        return omat.from_real(real)
+        # NumPy shapes (contracts 11.2): a 1-D input stays a vector.
+        return _soa_from_numpy(real, 0)
 
     # end if
 
@@ -486,10 +485,30 @@ cdef omat _csr_matmul(csr_matrix K, object other):
     """
 
     cdef omat x = _csr_operand(other, "matmul")
-    cdef omat result = omat.__new__(omat)
+    cdef omat result
     cdef csro_t view = _csr_view(K)
+    cdef bint vector = x.ndim == 1
 
+    # csr @ b: (m,) for b (n,), (m, k) for b (n, k) (contracts 11.3, k14).
+    if vector:
+
+        x = x[:, None]
+
+    elif x.ndim != 2:
+
+        raise ValueError("matmul: the dense operand must be 1-D or 2-D, got shape {}".format(x.shape))
+
+    # end if
+
+    result = omat.__new__(omat)
     _csr_status("matmul", csro_matmul_to(&view, &x.arr, &result.arr, _dhl))
+
+    if vector:
+
+        _soa_relabel(result, (result.shape[0],))
+
+    # end if
+
     return result
 
 # end function
@@ -698,11 +717,12 @@ def _csr_solve(K_in, b_in, out=None, solver='SuperLU', solver_args=None):
     Returns
     -------
     omat
-        Solution, or None when ``out`` is given.
+        Solution (``out`` itself when it is given).
     """
 
     cdef csr_matrix K = K_in
     cdef omat b = _csr_operand(b_in, "solve")
+    cdef bint vector = b.ndim == 1
     cdef omat u
     cdef csro_t view = _csr_view(K)
     cdef ord_t n
@@ -712,6 +732,17 @@ def _csr_solve(K_in, b_in, out=None, solver='SuperLU', solver_args=None):
     if K._nrows != K._ncols:
 
         raise ValueError("solve: the matrix must be square, got shape {}".format(K.shape))
+
+    # end if
+
+    # The solution has the shape of b (contracts 11.3, k14): a vector is solved as a column.
+    if vector:
+
+        b = b[:, None]
+
+    elif b.ndim != 2:
+
+        raise ValueError("solve: the right-hand side must be 1-D or 2-D, got shape {}".format(b.shape))
 
     # end if
 
@@ -742,6 +773,14 @@ def _csr_solve(K_in, b_in, out=None, solver='SuperLU', solver_args=None):
 
         # end for
 
+        del blocks
+
+    # end if
+
+    if vector:
+
+        _soa_relabel(u, (u.shape[0],))
+
     # end if
 
     return _finish(u, out)
@@ -771,22 +810,77 @@ cdef omat _csr_extract(omat val, object hum_dir, bint deriv):
     """
 
     cdef tuple pair = _direction(hum_dir)
-    cdef oarr_t res = oarr_init()
+    cdef omat res = omat.__new__(omat)
     cdef int status
 
     if deriv:
 
-        status = oarr_extract_deriv_to(pair[0], pair[1], &val.arr, &res)
+        status = oarr_extract_deriv_to(pair[0], pair[1], &val.arr, &res.arr)
 
     else:
 
-        status = oarr_extract_im_to(pair[0], pair[1], &val.arr, &res)
+        status = oarr_extract_im_to(pair[0], pair[1], &val.arr, &res.arr)
 
     # end if
 
-    _soa_ok("extract", status, &res)
+    _soa_ok("extract", status, &res.arr)
 
-    return omat.wrap(res)
+    return res
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+cdef object _csr_real(csr_matrix K, bint writeable):
+    """
+    The real part of a CSR matrix as a SciPy CSR matrix over the real block (contracts 11.11).
+
+    Parameters
+    ----------
+    K : csr_matrix
+        Matrix.
+    writeable : bool
+        Writable ``data`` (the internal or the explicit writable path).
+
+    Returns
+    -------
+    scipy.sparse.csr_matrix
+        Real part sharing memory; the canonical flags are truthful.
+    """
+
+    cdef object real = _sci_spr.csr_matrix((K._nrows, K._ncols), dtype=np.float64)
+    cdef object data = _soa_export(K._val, 0, writeable).reshape(-1)
+    cdef object indptr = np.asarray(K._indptr)
+    cdef object indices = np.asarray(K._indices)
+    cdef object steps
+    cdef bint canonical
+
+    real.data = data
+    real.indices = K._indices
+    real.indptr = K._indptr
+
+    # Every row's indices strictly increasing: sorted, and no duplicates (SciPy's canonical format).
+    steps = np.diff(indices) > 0
+
+    if indices.size > 1:
+
+        # Differences that cross a row boundary do not count.
+        boundary = np.zeros(indices.size - 1, dtype=bool)
+        starts = indptr[1:-1]
+        starts = starts[(starts > 0) & (starts < indices.size)]
+        boundary[starts - 1] = True
+        canonical = bool(np.all(steps | boundary))
+
+    else:
+
+        canonical = True
+
+    # end if
+
+    real.has_canonical_format = canonical
+    real.has_sorted_indices = canonical
+    return real
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -1073,13 +1167,11 @@ cdef class csr_matrix:
     @property
     def real(self):
         """
-        Return the real part as a SciPy CSR matrix sharing memory with this matrix.
-
-        Writing into its ``data`` changes the real part of this matrix; the index arrays are
-        read-only. The SciPy matrix keeps this one alive. It is a view for reading and writing
-        values only: SciPy calls that change the structure or need writable indices
-        (``eliminate_zeros``, ``sort_indices``, ``sum_duplicates``, ``spsolve`` through
-        scikit-umfpack, which rejects read-only int64 indices) need ``K.real.copy()``.
+        Return the real part as a read-only SciPy CSR matrix sharing memory with this matrix (contracts
+        11.11): its ``data`` is a read-only view of the real block, the index arrays are read-only, and
+        ``has_sorted_indices`` / ``has_canonical_format`` are computed from the pattern (an OTI CSR may
+        hold unsorted or duplicate indices). ``K.real.copy()`` gives a canonical writable SciPy matrix;
+        ``K.get_real(writeable=True)`` a writable view.
 
         Returns
         -------
@@ -1087,11 +1179,29 @@ cdef class csr_matrix:
             Real part, no copy.
         """
 
-        real = _sci_spr.csr_matrix((self._nrows, self._ncols), dtype=np.float64)
-        real.data = _soa_blocks(self._val)[0]
-        real.indices = self._indices
-        real.indptr = self._indptr
-        return real
+        return _csr_real(self, False)
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    def get_real(self, writeable=False):
+        """
+        Return the real part as a SciPy CSR matrix sharing memory with this matrix.
+
+        Parameters
+        ----------
+        writeable : bool
+            With True its ``data`` is writable and writes reach this matrix (the real block; no
+            active-order change is needed, contracts 7.4). Default: read-only, as ``real``.
+
+        Returns
+        -------
+        scipy.sparse.csr_matrix
+            Real part, no copy.
+        """
+
+        return _csr_real(self, writeable)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -1542,7 +1652,7 @@ cdef class csr_matrix:
         Returns
         -------
         omat
-            Product, or None when ``out`` is given.
+            Product (``out`` itself when it is given).
         """
 
         return _finish(_csr_matmul(self, other), out)

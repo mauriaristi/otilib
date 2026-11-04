@@ -34,7 +34,7 @@ def lu_factor(omat A, out=None):
     cdef _LU factor = _LU()
     cdef oarr_t copy
 
-    if oarr_nrows(&A.arr) != oarr_ncols(&A.arr):
+    if A.ndim != 2 or oarr_nrows(&A.arr) != oarr_ncols(&A.arr):
 
         raise ValueError("lu_factor: matrix must be square")
 
@@ -73,7 +73,7 @@ def lu_solve(_LU lu_and_piv, omat b, out=None):
     Returns
     -------
     omat
-        Solution, or None when ``out`` is given.
+        Solution (``out`` itself when it is given).
 
     Raises
     ------
@@ -81,16 +81,27 @@ def lu_solve(_LU lu_and_piv, omat b, out=None):
         If the right-hand side has a different number of rows.
     """
 
-    cdef oarr_t result = oarr_init()
+    cdef omat result
+    cdef omat rhs = b[:, None] if b.ndim == 1 else b
+    cdef omat x
 
-    if oarr_nrows(&lu_and_piv.factor.A) != oarr_nrows(&b.arr):
+    if rhs.ndim != 2 or oarr_nrows(&lu_and_piv.factor.A) != oarr_shape(&rhs.arr, 0):
 
         raise ValueError("lu_solve: incompatible right-hand-side rows")
 
     # end if
 
-    _soa_ok("lu_solve", oarr_lu_solve(&lu_and_piv.factor, &b.arr, &result, _dhl), &result)
-    return _finish(omat.wrap(result), out)
+    result = omat.__new__(omat)
+    _soa_ok("lu_solve", oarr_lu_solve(&lu_and_piv.factor, &rhs.arr, &result.arr, _dhl), &result.arr)
+    x = result
+
+    if b.ndim == 1:
+
+        _soa_relabel(x, b.shape)
+
+    # end if
+
+    return _finish(x, out)
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -120,7 +131,7 @@ def solve(K_in, b_in, out=None, solver='SuperLU', solver_args=None):
     Returns
     -------
     omat or arro
-        Solution, or None when ``out`` is given.
+        Solution (``out`` itself when it is given).
 
     Raises
     ------
@@ -132,10 +143,15 @@ def solve(K_in, b_in, out=None, solver='SuperLU', solver_args=None):
         If the real part of the matrix is singular.
     """
 
-    cdef oarr_t result = oarr_init()
-    cdef arro_t aos_result = arro_init()
-    cdef omat soa_matrix, soa_rhs
+    cdef arro_t aos_result
     cdef arro aos_matrix, aos_rhs
+
+    # The common case first: two SoA arrays, no holder (one C-level call; shapes read in C).
+    if out is None and isinstance(K_in, omat) and isinstance(b_in, omat):
+
+        return _soa_solve(K_in, b_in)
+
+    # end if
 
     if isinstance(K_in, csr_matrix):
 
@@ -153,6 +169,7 @@ def solve(K_in, b_in, out=None, solver='SuperLU', solver_args=None):
 
         aos_matrix = K_in
         aos_rhs = b_in
+        aos_result = arro_init()
 
         if arro_nrows(&aos_matrix.arr) != arro_ncols(&aos_matrix.arr) or (
             arro_nrows(&aos_matrix.arr) != arro_nrows(&aos_rhs.arr)
@@ -174,18 +191,48 @@ def solve(K_in, b_in, out=None, solver='SuperLU', solver_args=None):
 
     # end if
 
-    soa_matrix = K_in
-    soa_rhs = b_in
+    # NumPy 2's linalg.solve rule: 1-D b is one vector; batch axes broadcast (contracts 11.3).
+    return _soa_solve(K_in, b_in)
 
-    if (oarr_nrows(&soa_matrix.arr) != oarr_ncols(&soa_matrix.arr)
-            or oarr_nrows(&soa_matrix.arr) != oarr_nrows(&soa_rhs.arr)):
+# end function
+# --------------------------------------------------------------------------------------------------------
 
-        raise ValueError("solve: matrix must be square and match the right-hand-side rows")
+
+# ********************************************************************************************************
+cdef int _square_check(str operation, int32_t ndim, int64_t nrows, int64_t ncols) except -1:
+    """
+    The shape checks of inv / det, with NumPy's exception (numpy.linalg.LinAlgError, a ValueError).
+
+    Parameters
+    ----------
+    operation : str
+        Name of the operation (not in the message: NumPy's texts carry none).
+    ndim : int
+        Number of dimensions of the array.
+    nrows, ncols : int
+        Extents of the matrix.
+
+    Raises
+    ------
+    numpy.linalg.LinAlgError
+        An array of fewer than two dimensions (NumPy's text, W4 fix round 2) or a non-square matrix.
+    """
+
+    # NumPy's texts, the same in every algebra (agreed with py-ss and py, W4 fix round 2).
+    if ndim < 2:
+
+        raise np.linalg.LinAlgError("{}-dimensional array given. Array must be at least "
+                                    "two-dimensional".format(ndim))
 
     # end if
 
-    _soa_ok("solve", oarr_solve_to(&soa_matrix.arr, &soa_rhs.arr, &result, _dhl), &result)
-    return omat.wrap(result)
+    if nrows != ncols:
+
+        raise np.linalg.LinAlgError("Last 2 dimensions of the array must be square")
+
+    # end if
+
+    return 0
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -206,16 +253,15 @@ def inv(arr, out=None):
     Returns
     -------
     omat or arro
-        Inverse matrix, or None when ``out`` is given.
+        Inverse matrix (``out`` itself when it is given).
 
     Raises
     ------
     TypeError
         If ``arr`` is not a dense array.
-    ValueError
-        If the matrix is not square.
     numpy.linalg.LinAlgError
-        If the real part is singular.
+        If ``arr`` has fewer than two dimensions, the matrix is not square (both a ValueError, as
+        in NumPy) or the real part is singular.
     """
 
     if isinstance(arr, _dnfe):
@@ -224,20 +270,18 @@ def inv(arr, out=None):
 
     # end if
 
-    cdef oarr_t result = oarr_init()
-    cdef arro_t aos_result = arro_init()
+    cdef omat result
+    cdef arro_t aos_result
     cdef omat soa_matrix
     cdef arro aos_matrix
 
     if isinstance(arr, arro):
 
         aos_matrix = arr
+        aos_result = arro_init()
 
-        if arro_nrows(&aos_matrix.arr) != arro_ncols(&aos_matrix.arr):
-
-            raise ValueError("inv: matrix must be square")
-
-        # end if
+        _square_check("inv", arro_ndim(&aos_matrix.arr), arro_nrows(&aos_matrix.arr),
+                      arro_ncols(&aos_matrix.arr))
 
         _aos_ok("inv", arro_inv_to(&aos_matrix.arr, &aos_result, _dhl), &aos_result)
         return _finish(arro.wrap(aos_result), out)
@@ -252,14 +296,12 @@ def inv(arr, out=None):
 
     soa_matrix = arr
 
-    if oarr_nrows(&soa_matrix.arr) != oarr_ncols(&soa_matrix.arr):
+    _square_check("inv", oarr_ndim(&soa_matrix.arr), oarr_nrows(&soa_matrix.arr),
+                  oarr_ncols(&soa_matrix.arr))
 
-        raise ValueError("inv: matrix must be square")
-
-    # end if
-
-    _soa_ok("inv", oarr_inv_to(&soa_matrix.arr, &result, _dhl), &result)
-    return _finish(omat.wrap(result), out)
+    result = omat.__new__(omat)
+    _soa_ok("inv", oarr_inv_to(&soa_matrix.arr, &result.arr, _dhl), &result.arr)
+    return _finish(result, out)
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -280,16 +322,15 @@ def det(arr, out=None):
     Returns
     -------
     otinum
-        Determinant, or None when ``out`` is given.
+        Determinant (``out`` itself when it is given).
 
     Raises
     ------
     TypeError
         If ``arr`` is not a dense array.
-    ValueError
-        If the matrix is not square.
     numpy.linalg.LinAlgError
-        If the real part is singular.
+        If ``arr`` has fewer than two dimensions, the matrix is not square (both a ValueError, as
+        in NumPy) or the real part is singular.
     """
 
     if isinstance(arr, _dnfe):
@@ -307,11 +348,8 @@ def det(arr, out=None):
 
         aos_matrix = arr
 
-        if arro_nrows(&aos_matrix.arr) != arro_ncols(&aos_matrix.arr):
-
-            raise ValueError("det: matrix must be square")
-
-        # end if
+        _square_check("det", arro_ndim(&aos_matrix.arr), arro_nrows(&aos_matrix.arr),
+                      arro_ncols(&aos_matrix.arr))
 
         status = arro_det_to(&aos_matrix.arr, &result, _dhl)
 
@@ -319,11 +357,8 @@ def det(arr, out=None):
 
         soa_matrix = arr
 
-        if oarr_nrows(&soa_matrix.arr) != oarr_ncols(&soa_matrix.arr):
-
-            raise ValueError("det: matrix must be square")
-
-        # end if
+        _square_check("det", oarr_ndim(&soa_matrix.arr), oarr_nrows(&soa_matrix.arr),
+                      oarr_ncols(&soa_matrix.arr))
 
         status = oarr_det_to(&soa_matrix.arr, &result, _dhl)
 

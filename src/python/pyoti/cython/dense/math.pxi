@@ -142,7 +142,7 @@ cdef object _unary(object value, str name):
     cdef omat soa
     cdef arro aos
     cdef otinum_t result = oti_init()
-    cdef oarr_t soa_result = oarr_init()
+    cdef omat soa_result
     cdef arro_t aos_result = arro_init()
     cdef int status
     cdef int index
@@ -185,16 +185,17 @@ cdef object _unary(object value, str name):
     elif isinstance(value, omat):
 
         soa = value
-        status = _M_SOA[index](&soa.arr, &soa_result, _dhl)
+        soa_result = omat.__new__(omat)
+        status = _M_SOA[index](&soa.arr, &soa_result.arr, _dhl)
 
         if status != DN_OK:
 
-            oarr_free(&soa_result)
+            oarr_free(&soa_result.arr)
             _status(name, status)
 
         # end if
 
-        return omat.wrap(soa_result)
+        return soa_result
 
     elif isinstance(value, arro):
 
@@ -233,7 +234,7 @@ def sin(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Sine, or None when ``out`` is given.
+        Sine (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "sin"), out)
@@ -257,7 +258,7 @@ def cos(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Cosine, or None when ``out`` is given.
+        Cosine (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "cos"), out)
@@ -281,7 +282,7 @@ def tan(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Tangent, or None when ``out`` is given.
+        Tangent (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "tan"), out)
@@ -305,7 +306,7 @@ def asin(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Inverse sine, or None when ``out`` is given.
+        Inverse sine (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "asin"), out)
@@ -329,7 +330,7 @@ def acos(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Inverse cosine, or None when ``out`` is given.
+        Inverse cosine (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "acos"), out)
@@ -353,7 +354,7 @@ def atan(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Inverse tangent, or None when ``out`` is given.
+        Inverse tangent (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "atan"), out)
@@ -377,7 +378,7 @@ def sinh(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Hyperbolic sine, or None when ``out`` is given.
+        Hyperbolic sine (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "sinh"), out)
@@ -401,7 +402,7 @@ def cosh(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Hyperbolic cosine, or None when ``out`` is given.
+        Hyperbolic cosine (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "cosh"), out)
@@ -425,7 +426,7 @@ def tanh(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Hyperbolic tangent, or None when ``out`` is given.
+        Hyperbolic tangent (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "tanh"), out)
@@ -449,7 +450,7 @@ def asinh(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Inverse hyperbolic sine, or None when ``out`` is given.
+        Inverse hyperbolic sine (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "asinh"), out)
@@ -473,7 +474,7 @@ def acosh(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Inverse hyperbolic cosine, or None when ``out`` is given.
+        Inverse hyperbolic cosine (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "acosh"), out)
@@ -497,7 +498,7 @@ def atanh(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Inverse hyperbolic tangent, or None when ``out`` is given.
+        Inverse hyperbolic tangent (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "atanh"), out)
@@ -521,7 +522,7 @@ def exp(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Exponential, or None when ``out`` is given.
+        Exponential (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "exp"), out)
@@ -545,7 +546,7 @@ def log(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Natural logarithm, or None when ``out`` is given.
+        Natural logarithm (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "log"), out)
@@ -569,7 +570,7 @@ def log10(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Base-10 logarithm, or None when ``out`` is given.
+        Base-10 logarithm (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "log10"), out)
@@ -593,7 +594,7 @@ def sqrt(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Square root, or None when ``out`` is given.
+        Square root (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "sqrt"), out)
@@ -617,7 +618,7 @@ def cbrt(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Cube root, or None when ``out`` is given.
+        Cube root (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "cbrt"), out)
@@ -641,7 +642,7 @@ def erf(val, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Error function, or None when ``out`` is given.
+        Error function (``out`` itself when it is given).
     """
 
     return _finish(_unary(val, "erf"), out)
@@ -667,7 +668,7 @@ def pow(val, e, out=None):
     Returns
     -------
     otinum or omat or arro
-        Power, or None when ``out`` is given.
+        Power (``out`` itself when it is given).
     """
 
     return _finish(val ** e, out)
@@ -693,7 +694,7 @@ def logb(val, b, out=None):
     Returns
     -------
     float or otinum or omat or arro
-        Logarithm in the given base, or None when ``out`` is given.
+        Logarithm in the given base (``out`` itself when it is given).
 
     Raises
     ------

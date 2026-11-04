@@ -8,13 +8,16 @@
 # ********************************************************************************************************
 def dot(lhs, rhs, out=None):
     """
-    Multiply two semi-sparse matrices.
+    Multiply two semi-sparse matrices, with ``numpy.dot``'s rules.
+
+    A 1-D operand is a vector as in ``matmul``; a 0-D array or a scalar operand multiplies the other
+    one elementwise (``numpy.dot``, F5), where ``matmul`` raises.
 
     Parameters
     ----------
-    lhs : oarrss or arrss
+    lhs : oarrss or arrss or ssotinum or float
         Left factor.
-    rhs : oarrss or arrss
+    rhs : oarrss or arrss or ssotinum or float
         Right factor.
     out : oarrss or arrss, optional
         Holder for the product.
@@ -22,7 +25,7 @@ def dot(lhs, rhs, out=None):
     Returns
     -------
     oarrss or arrss
-        Matrix product, or None when ``out`` is given.
+        Matrix product; ``out`` itself when it is given.
     """
 
     if isinstance(lhs, _ssfe) or isinstance(rhs, _ssfe):
@@ -31,7 +34,41 @@ def dot(lhs, rhs, out=None):
 
     # end if
 
+    if _dot_scales(lhs) or _dot_scales(rhs):
+
+        return _finish(lhs * rhs, out)
+
+    # end if
+
     return _finish(lhs @ rhs, out)
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+cdef bint _dot_scales(object value):
+    """
+    Whether a ``dot`` operand is 0-D (a 0-D array or a scalar), so that ``dot`` multiplies.
+
+    Parameters
+    ----------
+    value : object
+        Operand.
+
+    Returns
+    -------
+    bool
+        True for a 0-D semi-sparse array, an ssotinum or a real number.
+    """
+
+    if isinstance(value, (oarrss, arrss)):
+
+        return _ndim_of(value) == 0
+
+    # end if
+
+    return isinstance(value, (ssotinum, Real))
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -54,7 +91,7 @@ def matmul(lhs, rhs, out=None):
     Returns
     -------
     oarrss or arrss
-        Matrix product, or None when ``out`` is given.
+        Matrix product; ``out`` itself when it is given.
     """
 
     if isinstance(lhs, _ssfe) or isinstance(rhs, _ssfe):
@@ -86,7 +123,7 @@ def sum(lhs, rhs, out=None):
     Returns
     -------
     object
-        Sum, or None when ``out`` is given.
+        Sum; ``out`` itself when it is given.
     """
 
     if isinstance(lhs, _ssfe) or isinstance(rhs, _ssfe):
@@ -118,7 +155,7 @@ def sub(lhs, rhs, out=None):
     Returns
     -------
     object
-        Difference, or None when ``out`` is given.
+        Difference; ``out`` itself when it is given.
     """
 
     if isinstance(lhs, _ssfe) or isinstance(rhs, _ssfe):
@@ -150,7 +187,7 @@ def mul(lhs, rhs, out=None):
     Returns
     -------
     object
-        Product, or None when ``out`` is given.
+        Product; ``out`` itself when it is given.
     """
 
     if isinstance(lhs, _ssfe) or isinstance(rhs, _ssfe):
@@ -182,7 +219,7 @@ def div(lhs, rhs, out=None):
     Returns
     -------
     object
-        Quotient, or None when ``out`` is given.
+        Quotient; ``out`` itself when it is given.
     """
 
     if isinstance(lhs, _ssfe) or isinstance(rhs, _ssfe):
@@ -212,7 +249,7 @@ def neg(val, out=None):
     Returns
     -------
     ssotinum or oarrss or arrss
-        Negated operand, or None when ``out`` is given.
+        Negated operand; ``out`` itself when it is given.
     """
 
     return _finish(-val, out)
@@ -236,7 +273,7 @@ def abs(val, out=None):
     Returns
     -------
     ssotinum or oarrss or arrss
-        Absolute value, or None when ``out`` is given.
+        Absolute value; ``out`` itself when it is given.
     """
 
     return _finish(_builtins.abs(val), out)
@@ -262,7 +299,7 @@ def norm(arr, p=2.0, out=None):
     Returns
     -------
     ssotinum
-        Norm, or None when ``out`` is given.
+        Norm; ``out`` itself when it is given.
     """
 
     cdef oarrss soa
@@ -301,7 +338,7 @@ def transpose(arr, out=None):
     Returns
     -------
     oarrss or arrss
-        Transposed copy, or None when ``out`` is given.
+        Transposed copy; ``out`` itself when it is given.
     """
 
     if isinstance(arr, _ssfe):
@@ -361,7 +398,7 @@ def truncate(humdir, val, out=None):
     Returns
     -------
     ssotinum or oarrss or arrss
-        Truncated copy, or None when ``out`` is given.
+        Truncated copy; ``out`` itself when it is given.
     """
 
     return _finish(val.truncate(humdir), out)
@@ -387,7 +424,7 @@ def get_im(humdir, val, out=None):
     Returns
     -------
     ssotinum or oarrss or arrss
-        Coefficient as the real part of the result, or None when ``out`` is given.
+        Coefficient as the real part of the result; ``out`` itself when it is given.
     """
 
     return _finish(_direction_holder(val, val.get_im(humdir)), out)
@@ -413,7 +450,7 @@ def get_deriv(humdir, val, out=None):
     Returns
     -------
     ssotinum or oarrss or arrss
-        Derivative as the real part of the result, or None when ``out`` is given.
+        Derivative as the real part of the result; ``out`` itself when it is given.
     """
 
     return _finish(_direction_holder(val, val.get_deriv(humdir)), out)

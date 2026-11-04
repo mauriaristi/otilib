@@ -279,25 +279,21 @@ cdef class elm_help:
     """
      
     cdef uint64_t i, j
-    cdef uint8_t res_flag = 1
     cdef dmat res
 
     if out is None:
-      res_flag = 0
-      res = out
+      res = zeros( (self.nbasis,1) )
     else:
-      res = zeros( (self.nbasis,1) ) 
+      res = out
     # end if 
 
     # Get element nodal values
     for i in range(self.nbasis):      
       j = elem_indices[i]
-      res[ i, 0 ] = a[ j, 0 ]
+      res[ i, 0 ] = a[ j, 0 ] if a.ndim == 2 else a[ j ]
     # end for
 
-    if res_flag:
-      return res
-    # end if 
+    return res
 
   #---------------------------------------------------------------------------------------------------
   

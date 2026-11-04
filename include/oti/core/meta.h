@@ -60,6 +60,10 @@ extern "C" {
  * Fields other than refs may be read directly; they change only inside a layout transaction
  * (oti_meta_layout_begin() .. oti_meta_layout_end()) or through the act functions.
  */
+/** @brief oti_meta_t.reserved flag: the struct lives in caller storage (oti_meta_init()), typically the
+ *         extra zone of the array's buffer (nd_alloc_extra()); the last release frees only the labels. */
+#define OTI_META_EMBEDDED 0x1
+
 typedef struct oti_meta_s {
     int64_t   refs;       ///< Root plus OTI views (atomic; use the functions below).
     int32_t   kind;       ///< OTI_META_DENSE or OTI_META_BASES.
@@ -67,7 +71,7 @@ typedef struct oti_meta_s {
     int32_t   act_order;  ///< Highest order that may hold nonzeros anywhere in the buffer (shared).
     int32_t   nbases;     ///< Layout bases k (dense: nact; semi-sparse: number of labels).
     int32_t   cap_bases;  ///< Capacity of bases (semi-sparse), >= nbases; 0 for dense.
-    int32_t   reserved;   ///< Zero.
+    int32_t   reserved;   ///< Flags: OTI_META_EMBEDDED (oti_meta_init()), else zero.
     bases_t*  bases;      ///< Sorted labels, length nbases; NULL for dense. Owned by the meta.
     int64_t*  bases_i64;  ///< int64 copy of bases for oti_view; NULL for dense. Owned by the meta.
 } oti_meta_t;
@@ -104,6 +108,25 @@ typedef struct oti_meta_s {
  */
 int oti_meta_create(int32_t kind, int32_t trc_order, int32_t nbases, const bases_t* bases,
                     int32_t cap_bases, oti_meta_t** res);
+
+/**
+ * @brief Initializes a meta in caller storage (refs 1, OTI_META_EMBEDDED), the same layout checks as
+ *        oti_meta_create(). The storage must stay valid until the last oti_meta_release(), which frees
+ *        only the labels (never the struct): for a dense array, the extra zone of its block buffer
+ *        (nd_alloc_extra()), which outlives every reference to the meta because every holder of the
+ *        meta also holds the buffer and releases the meta first (oarr_free()).
+ *
+ * @param[out] m         Storage of sizeof(oti_meta_t) bytes.
+ * @param[in]  kind      OTI_META_DENSE or OTI_META_BASES.
+ * @param[in]  trc_order Truncation order, 0 .. 150.
+ * @param[in]  nbases    Layout bases.
+ * @param[in]  bases     Labels (OTI_META_BASES), or NULL.
+ * @param[in]  cap_bases Capacity of the labels (OTI_META_BASES).
+ *
+ * @return OTI_OK; OTI_ERR_ARGUMENT, OTI_ERR_INDEX (as oti_meta_create()); OTI_ERR_MEMORY (labels).
+ */
+int oti_meta_init(oti_meta_t* m, int32_t kind, int32_t trc_order, int32_t nbases, const bases_t* bases,
+                  int32_t cap_bases);
 
 /**
  * @brief Adds a reference (relaxed increment).

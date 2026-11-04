@@ -155,6 +155,43 @@ cdef csr_matrix _csr_new(oarrss val, object indices, object indptr, uint64_t nro
 
 
 # ********************************************************************************************************
+cdef bint _csr_sorted(object indices, object indptr):
+    """
+    Whether every row of a CSR pattern has strictly increasing column indices (so no duplicates).
+
+    Parameters
+    ----------
+    indices : numpy.ndarray
+        Column indices, int64.
+    indptr : numpy.ndarray
+        Row pointers, int64.
+
+    Returns
+    -------
+    bool
+        True for a canonical pattern (sorted, no duplicates).
+    """
+
+    cdef Py_ssize_t nnz = indices.shape[0]
+    cdef object mask, starts
+
+    if nnz <= 1:
+
+        return True
+
+    # end if
+
+    mask = np.ones(nnz - 1, dtype=bool)
+    starts = np.asarray(indptr[1:-1])
+    starts = starts[(starts > 0) & (starts < nnz)]
+    mask[starts - 1] = False
+    return bool(np.all(np.diff(indices)[mask] > 0))
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
 cdef csr_matrix _csr_like(csr_matrix K, object val):
     """
     Build a CSR matrix with the pattern of another one and new values.
@@ -290,12 +327,12 @@ cdef oarrss _csr_values(object data, uint64_t nnz):
 # ********************************************************************************************************
 cdef oarrss _csr_operand(object value, str operation):
     """
-    Convert the dense operand of a CSR product or solve into a SoA array.
+    Convert the dense operand of a CSR product or solve into a SoA array (logical shape kept).
 
     Parameters
     ----------
     value : oarrss or arrss or matso or array_like
-        Operand; a real one-dimensional array becomes a column.
+        Operand; a 1-D operand stays 1-D (stored as a column).
     operation : str
         Name of the calling operation, for error messages.
 
@@ -322,13 +359,6 @@ cdef oarrss _csr_operand(object value, str operation):
     elif isinstance(value, (np.ndarray, list, tuple)):
 
         real = np.asarray(value, dtype=np.float64)
-
-        if real.ndim == 1:
-
-            real = real.reshape(-1, 1)
-
-        # end if
-
         return oarrss.from_real(real)
 
     # end if
@@ -361,8 +391,14 @@ cdef oarrss _csr_matmul(csr_matrix K, object other):
     cdef oarrss result = oarrss.__new__(oarrss)
     cdef csrss_t view = _csr_view(K)
 
+    if x._ndim == 0:
+
+        raise ValueError("matmul: an input operand does not have enough dimensions (0-D array)")
+
+    # end if
+
     _csr_status("matmul", csrss_matmul_to(&view, &x.arr, &result.arr, _dhl))
-    return result
+    return _same_nd(result, x)
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -555,7 +591,7 @@ def _csr_solve(csr_matrix K, rhs, out=None, solver='SuperLU', solver_args=None):
     Returns
     -------
     oarrss
-        Solution, or None when ``out`` is given.
+        Solution; ``out`` itself when it is given.
     """
 
     cdef oarrss b = _csr_operand(rhs, "solve")
@@ -598,7 +634,7 @@ def _csr_solve(csr_matrix K, rhs, out=None, solver='SuperLU', solver_args=None):
 
     # end if
 
-    return _finish(u, out)
+    return _finish(_same_nd(u, b), out)
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -868,10 +904,11 @@ cdef class csr_matrix:
     @property
     def real(self):
         """
-        Return the real part as a SciPy CSR matrix sharing memory with this matrix.
+        Return the real part as a SciPy CSR matrix over a read-only view of the real block.
 
-        Writing into its ``data`` changes the real part of this matrix; the index arrays are
-        read-only. The SciPy matrix keeps this one alive.
+        Same as ``get_real()``. Its ``data``, ``indices`` and ``indptr`` are read-only, so SciPy calls
+        that would change the matrix in place (``sort_indices``, ``sum_duplicates``,
+        ``eliminate_zeros``, writes into ``data``) raise; ``K.real.copy()`` is a writable SciPy copy.
 
         Returns
         -------
@@ -879,10 +916,41 @@ cdef class csr_matrix:
             Real part, no copy.
         """
 
+        return self.get_real()
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    def get_real(self, writeable=False):
+        """
+        Return the real part as a SciPy CSR matrix sharing memory with this matrix.
+
+        The canonical-format flags are computed from the pattern (an OTI CSR may hold unsorted or
+        duplicate column indices), never set unconditionally.
+
+        Parameters
+        ----------
+        writeable : bool, optional
+            Make ``data`` a writable view of the real block: writes into it change this matrix.
+
+        Returns
+        -------
+        scipy.sparse.csr_matrix
+            Real part, no copy. The index arrays are read-only int64 in both cases.
+        """
+
+        cdef object data = _export_view(self._val, self._val.arr.p_data, self._val.arr.size,
+                                        (self._val.arr.size,), writeable)
+        cdef object ordered
+
         real = _sci_spr.csr_matrix((self._nrows, self._ncols), dtype=np.float64)
-        real.data = _soa_blocks(self._val)[0]
+        real.data = data
         real.indices = self._indices
         real.indptr = self._indptr
+        ordered = _csr_sorted(self._indices, self._indptr)
+        real.has_sorted_indices = ordered
+        real.has_canonical_format = ordered
         return real
 
     # end function
@@ -1278,7 +1346,7 @@ cdef class csr_matrix:
         Returns
         -------
         oarrss
-            Product, or None when ``out`` is given.
+            Product; ``out`` itself when it is given.
         """
 
         return _finish(_csr_matmul(self, other), out)

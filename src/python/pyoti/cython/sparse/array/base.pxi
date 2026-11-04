@@ -15,6 +15,10 @@ cdef class matso:
   
   #                  --->      Look in include/sparse.pxd    <---
 
+  # matso is a sequence now (len, iter, getitem): tell NumPy to defer to the operators of this class
+  # (np.float64(2) * A must reach matso.__rmul__, not become an object ndarray).
+  __array_ufunc__ = None
+
   #-----------------------------------------------------------------------------
 
 
@@ -40,13 +44,22 @@ cdef class matso:
       ndim = realArray.ndim
       
       if ( ndim >= 3 ):
-      
-        raise ValueError("Only 1D and 2D arrays are supported.")
-      
+
+        raise ValueError("pyoti.sparse arrays have at most 2 dimensions")
+
+      elif ( ndim == 0 ):
+
+        self.arr = arrso_zeros_bases( 1, 1, nbases, order, dhl)
+        val = realArray.item()
+        arrso_set_item_ij_r( val, 0, 0, &self.arr, dhl)
+        self._lk = 2
+
       elif ( ndim == 1 ):
-      
-        ncols = 1      
+
+        ncols = 1
         nrows = realArray.shape[0]
+        self._lk = 1
+
 
         self.arr = arrso_zeros_bases( nrows, ncols, nbases, order, dhl)
 
@@ -103,11 +116,64 @@ cdef class matso:
     #***************************************************************************
     global dhl
     
-    cdef arrso_t res 
-      
+    cdef arrso_t res
+
+    if self._lk != 0:
+
+      # The transpose of a 1-D or 0-D array is the array itself (as NumPy): a copy here.
+      return self.copy()
+
+    # end if
+
     res = arrso_transpose( &self.arr,  dhl)
 
     return matso.create(&res)
+
+
+  #-----------------------------------------------------------------------------
+
+  #*****************************************************************************
+  def reshape(self, *shape, order = 'C'):
+    """
+    PURPOSE:      A copy with another shape of at most 2 dimensions (reshape(3, 4), reshape((3, 4)),
+                  reshape(-1)); one extent may be -1. Only order='C' (the row-major order of NumPy).
+    """
+    #***************************************************************************
+
+    cdef matso res
+    cdef tuple dims
+
+    if order != 'C':
+
+      raise ValueError("reshape: only order='C' is supported")
+
+    # end if
+
+    dims = reshape_shape(shape, self.arr.size, "pyoti.sparse")
+    res = self.copy()
+
+    # The elements stay in row-major order: only the header and the logical kind change.
+    if len(dims) == 2:
+
+      res.arr.nrows = dims[0]
+      res.arr.ncols = dims[1]
+      res._lk = 0
+
+    elif len(dims) == 1:
+
+      res.arr.nrows = dims[0]
+      res.arr.ncols = 1
+      res._lk = 1
+
+    else:
+
+      res.arr.nrows = 1
+      res.arr.ncols = 1
+      res._lk = 2
+
+    # end if
+
+    return res
 
   #-----------------------------------------------------------------------------
 
@@ -119,17 +185,41 @@ cdef class matso:
     """
     #***************************************************************************
 
-    return (self.arr.nrows,self.arr.ncols)
+    if self._lk == 0:
+
+      return (self.arr.nrows,self.arr.ncols)
+
+    elif self._lk == 1:
+
+      return (self.arr.nrows,)
+
+    # end if
+
+    return ()
 
   #-----------------------------------------------------------------------------
 
   #*****************************************************************************
   @property
-  def nrows(self): 
+  def ndim(self):
     """
-    PURPOSE:      Return the number of rows of the stored matrix. 
+    PURPOSE:      Return the number of dimensions of the logical shape (0, 1 or 2).
     """
     #***************************************************************************
+
+    return 2 - self._lk
+
+  #-----------------------------------------------------------------------------
+
+  #*****************************************************************************
+  @property
+  def nrows(self):
+    """
+    PURPOSE:      Number of rows of the stored 2-D struct (deprecated: use shape; 1-D: n, 0-D: 1).
+    """
+    #***************************************************************************
+
+    warnings.warn("nrows is deprecated, use shape", DeprecationWarning, stacklevel=2)
 
     return self.arr.nrows
 
@@ -137,13 +227,50 @@ cdef class matso:
 
   #*****************************************************************************
   @property
-  def ncols(self): 
+  def ncols(self):
     """
-    PURPOSE:      Return the number of columns of the stored matrix. 
+    PURPOSE:      Number of columns of the stored 2-D struct (deprecated: use shape; 1-D, 0-D: 1).
     """
     #***************************************************************************
 
+    warnings.warn("ncols is deprecated, use shape", DeprecationWarning, stacklevel=2)
+
     return self.arr.ncols
+
+  #-----------------------------------------------------------------------------
+
+  #*****************************************************************************
+  def __len__(self):
+    """
+    PURPOSE:      Length of the first axis; a 0-D array has none.
+    """
+    #***************************************************************************
+
+    if self._lk == 2:
+
+      raise TypeError("len() of a 0-d matso")
+
+    # end if
+
+    return self.arr.nrows
+
+  #-----------------------------------------------------------------------------
+
+  #*****************************************************************************
+  def __iter__(self):
+    """
+    PURPOSE:      Iterate over the first axis: rows with one axis fewer (OTI scalars for a 1-D array).
+    """
+    #***************************************************************************
+
+    if self._lk == 2:
+
+      raise TypeError("iteration over a 0-d matso")
+
+    # end if
+
+    return _matso_iter(self)
+
 
   #-----------------------------------------------------------------------------
 
@@ -176,7 +303,8 @@ cdef class matso:
   @property
   def real(self):
     """
-    PURPOSE:      Get a numpy array with all coefficients in the real direction.
+    PURPOSE:      Get a numpy array with all coefficients in the real direction: a READ-ONLY COPY of
+                  the array's logical shape (writes would not reach the matso; use get_real or copy()).
 
     """
     #***************************************************************************
@@ -184,16 +312,20 @@ cdef class matso:
     cdef np.ndarray[coeff_t, ndim=2] tmp
     cdef uint64_t i,j,k
 
-    tmp = np.empty( self.shape , dtype = np.float64)
+    tmp = np.empty( (self.arr.nrows, self.arr.ncols) , dtype = np.float64)
 
     for i in range(self.arr.nrows):
       for j in range(self.arr.ncols):
         k = j+i*self.arr.ncols
         tmp[i,j] = self.arr.p_data[k].re
-      # end for 
-    # end for 
+      # end for
+    # end for
 
-    return tmp
+    out = tmp.reshape(self.shape)
+    out.flags.writeable = False
+
+    return out
+
 
   #-----------------------------------------------------------------------------
 
@@ -275,6 +407,7 @@ cdef class matso:
 
     cdef uint64_t i,j 
     cdef sotinum tmp
+    cdef sotinum_t el
 
 
     out =  "matso< "
@@ -285,8 +418,9 @@ cdef class matso:
       for i in range(self.arr.nrows):
 
         out += "({0:d},{1:d}) ".format(i,j)
+        el = arrso_get_item_ij( &self.arr, i, j, dhl)
          
-        out += self[i,j].__str__()
+        out += sotinum.create(&el, FLAGS = 0).__str__()
         out += "\n"
 
       # end for 
@@ -361,135 +495,84 @@ cdef class matso:
   #*****************************************************************************
   def  __getitem__(self, val):
     """
-    PURPOSE: Get the value of an element of the item.
+    PURPOSE: NumPy basic indexing on the logical shape (ndim <= 2): an integer drops its axis, a
+             slice keeps it, one ellipsis expands, negative indices count from the end. One integer
+             per axis gives an OTI scalar; anything else gives a COPY (matso slices are copies).
     """
     #***************************************************************************
-    
+
     global dhl
 
     cdef sotinum_t ores
     cdef arrso_t   Ores
-    cdef object res = None
-    cdef int64_t starti, stopi, stepi
-    cdef int64_t startj, stopj, stepj
+    cdef matso     res
+    cdef int64_t i, j
+    cdef tuple r
+    cdef object shape
 
-    tval = type(val)
-    
-    if tval == int:
-      
-      # This is a slice
-      if val < self.arr.nrows:
-        
-        starti, stopi, stepi = slice( val, val+1, None).indices( self.arr.nrows )
-        startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+    if (self._lk == 0 and type(val) is tuple and len(val) == 2 and type(val[0]) is int
+        and type(val[1]) is int):
 
-        Ores = arrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
-        res  = matso.create(&Ores)
+      # The fast path of element access (assembly loops).
+      try:
 
-      else:
+        i = val[0]
+        j = val[1]
 
-        raise IndexError("Index out of bounds.")
+      except OverflowError:
 
-      # end if 
+        raise IndexError("index {} is out of bounds for an array of shape {}".format(
+                         val, self.shape)) from None
 
-    #   ores = arrso_get_item_ij( &self.arr, val[0], val[1], dhl)
-    #   res  = sotinum.create( &ores, FLAGS = 0 )
+      # end try
 
-    elif tval == slice: #slice of multiple items
-      
-      # print(val)
-      # This is a slice
-      starti, stopi, stepi = val.indices( self.arr.nrows )
-      startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+      if i < 0:
 
-      # print("i: ( {0}, {1}, {2})".format(starti, stopi, stepi) )
-      # print("j: ( {0}, {1}, {2})".format(startj, stopj, stepj) )
+        i += self.arr.nrows
 
-      Ores = arrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
-      res  = matso.create(&Ores)
-    
-    elif tval == tuple:
-      
-      if len(val) == 2:
+      # end if
 
-        tval0 = type(val[0])
-        tval1 = type(val[1])
+      if j < 0:
 
-        if   tval0 == int and tval1 == int:
-          
-          # print("Case 1")
-          if val[0] < self.arr.nrows and val[1] < self.arr.ncols:
-          
-            ores = arrso_get_item_ij( &self.arr, val[0], val[1], dhl)
-            res = sotinum.create(&ores, FLAGS = 0).copy() # Create copy of data.
-          
-          else:
+        j += self.arr.ncols
 
-            raise IndexError("Index out of bounds.")
+      # end if
 
-          # end if 
+      if i < 0 or i >= <int64_t>self.arr.nrows or j < 0 or j >= <int64_t>self.arr.ncols:
 
-        elif tval0 == int and tval1 == slice:
+        raise IndexError("index ({}, {}) is out of bounds for an array of shape {}".format(
+                         val[0], val[1], self.shape))
 
-          # print("Case 2")
-          if val[0] < self.arr.nrows:
+      # end if
 
-            starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
-            startj, stopj, stepj = val[1].indices( self.arr.ncols )
+      ores = arrso_get_item_ij( &self.arr, i, j, dhl)
 
-            Ores = arrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
-            res  = matso.create(&Ores)  
-
-          else:
-
-            raise IndexError("Index out of bounds.")
-
-          # end if 
-
-        elif tval0 == slice and tval1 == int:
-
-          # print("Case 3")
-          if val[1] < self.arr.ncols:
-
-            starti, stopi, stepi = val[0].indices( self.arr.nrows )
-            startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
-
-            Ores = arrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
-            res  = matso.create(&Ores)  
-
-          else:
-
-            raise IndexError("Index out of bounds.")
-
-          # end if 
-
-
-        elif tval0 == slice and tval1 == slice:
-
-          # print("Case 3")
-          starti, stopi, stepi = val[0].indices( self.arr.nrows )
-          startj, stopj, stepj = val[1].indices( self.arr.ncols )
-
-          Ores = arrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
-          res  = matso.create(&Ores) 
-
-        else:
-
-          raise IndexError("ERROR: double index ( , ) only integers, slices (`:`) are valid indices")
-
-        # end if 
-
-      else:
-
-        raise IndexError("ERROR: Getting integration points by index is not yet supported.")
-
-      # end if 
-
-    else:
-
-      raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
+      return sotinum.create(&ores, FLAGS = 0).copy()  # Create copy of data.
 
     # end if
+
+    r = key2d(val, 2 - self._lk, self.arr.nrows, self.arr.ncols, "pyoti.sparse")
+    shape = r[6]
+
+    if shape is None:
+
+      ores = arrso_get_item_ij( &self.arr, <int64_t>r[0], <int64_t>r[3], dhl)
+
+      return sotinum.create(&ores, FLAGS = 0).copy()
+
+    # end if
+
+    Ores = arrso_get_slice( &self.arr, r[0], r[1], r[2], r[3], r[4], r[5], dhl)
+
+    if len(shape) == 1 and Ores.nrows == 1 and Ores.ncols != 1:
+
+      # A 1-D result of a row key is stored as a column: same elements in row-major order.
+      Ores.nrows, Ores.ncols = Ores.ncols, Ores.nrows
+
+    # end if
+
+    res = matso.create(&Ores)
+    res._lk = 2 - len(shape)
 
     return res
 
@@ -499,375 +582,135 @@ cdef class matso:
   #*****************************************************************************
   def __setitem__(self, val, value):
     """
-    PURPOSE: Set an element of the item to the specified value.
+    PURPOSE: A[key] = value with NumPy's assignment rule (S1): the value (a real, an OTI scalar, a
+             matso, a dmat or an array_like) is broadcast to the shape of A[key]: trailing axes
+             aligned, extent 1 stretched, extra leading axes of extent 1 dropped. The right side is
+             read as if copied first (S2: a[::-1] = a works).
     """
     #***************************************************************************
-        
+
     global dhl
+
+    cdef sotinum_t ores
+    cdef sotinum   oval
+    cdef matso     Oval
+    cdef arrso_t   hdr
+    cdef tuple r
+    cdef object shape, tshape
+    cdef int64_t nr, nc, i, j, plan
+    cdef int64_t r0, r1, rt, c0, c1, ct
 
     tvalue = type(value)
+    r = key2d(val, 2 - self._lk, self.arr.nrows, self.arr.ncols, "pyoti.sparse")
+    shape = r[6]
+    r0, r1, rt, c0, c1, ct = r[0], r[1], r[2], r[3], r[4], r[5]
 
-    if ( tvalue == sotinum ):
+    if tvalue in number_types:
 
-      self.__setitem__o( val, value )
+      if shape is None:
 
-    elif ( tvalue == matso ):
-
-      self.__setitem__O( val, value )
-
-    elif ( tvalue == dmat ):
-
-      self.__setitem__R( val, value )
-
-    elif ( tvalue in number_types ):
-
-      self.__setitem__r( val, value )
-
-    else:
-
-      raise IndexError("ERROR: Cant set item of type {0} in matso object.".format(tvalue))
-
-    # end if 
-
-  #---------------------------------------------------------------------------------------------------  
-
-  #***************************************************************************************************
-  cdef __setitem__r(self, object val, coeff_t value):
-    """
-    PURPOSE: Set item from real value.
-    """
-    #*************************************************************************************************
-    global dhl
-
-    tval = type(val)
-
-    if tval == int:
-      
-      # This is a slice
-      if val < self.arr.nrows:
-        
-        starti, stopi, stepi = slice( val, val+1, None).indices( self.arr.nrows )
-        startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
-
-        arrso_set_slice_r( value, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
-        
-      else:
-        raise IndexError("Index out of bounds.")
-      # end if 
-
-    elif tval == slice: #slice of multiple items
-      
-      # This is a slice
-      starti, stopi, stepi = val.indices( self.arr.nrows )
-      startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
-
-      arrso_set_slice_r( value, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
-    
-    elif tval == tuple:
-      
-      if len(val) == 2:
-
-        tval0 = type(val[0])
-        tval1 = type(val[1])
-
-        if ( tval0 == int and tval1 == int ):
-          
-          if val[0] < self.arr.nrows and val[1] < self.arr.ncols:
-          
-            arrso_set_item_ij_r( value, val[0], val[1], &self.arr, dhl)
-            
-          else:
-            raise IndexError("Index out of bounds.")
-          # end if 
-
-        elif (tval0 == int and tval1 == slice):
-
-          if val[0] < self.arr.nrows:
-
-            starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
-            startj, stopj, stepj = val[1].indices( self.arr.ncols )
-
-            arrso_set_slice_r( value, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
-
-          else:
-            raise IndexError("Index out of bounds.")
-          # end if 
-
-        elif (tval0 == slice and tval1 == int):
-
-          if val[1] < self.arr.ncols:
-
-            starti, stopi, stepi = val[0].indices( self.arr.nrows )
-            startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
-
-            arrso_set_slice_r(value, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
-
-          else:
-            raise IndexError("Index out of bounds.")
-          # end if 
-
-        elif (tval0 == slice and tval1 == slice):
-
-          starti, stopi, stepi = val[0].indices( self.arr.nrows )
-          startj, stopj, stepj = val[1].indices( self.arr.ncols )
-
-          arrso_set_slice_r( value, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
-
-        else:
-          raise IndexError("ERROR: double index ( , ) only integers, slices (`:`) are valid indices")
-        # end if 
+        arrso_set_item_ij_r( value, r0, c0, &self.arr, dhl)
 
       else:
-        raise IndexError("ERROR: Getting integration points by index is not yet supported.")
-      # end if 
 
-    else:
-      raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
-    # end if
+        arrso_set_slice_r( value, r0, r1, rt, c0, c1, ct, &self.arr, dhl)
 
-  #---------------------------------------------------------------------------------------------------
+      # end if
 
-  #***************************************************************************************************
-  cdef __setitem__o(self,  object val, sotinum value):
-    """
-    PURPOSE: Set item from sotinum value.
-    """
-    #*************************************************************************************************
-    global dhl
-
-    tval = type(val)
-
-    if tval == int:
-      
-      # This is a slice
-      if val < self.arr.nrows:
-        
-        starti, stopi, stepi = slice( val, val+1, None).indices( self.arr.nrows )
-        startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
-
-        arrso_set_slice_o( &value.num, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
-        
-      else:
-
-        raise IndexError("Index out of bounds.")
-
-      # end if 
-
-    elif tval == slice: #slice of multiple items
-      
-      # This is a slice
-      starti, stopi, stepi = val.indices( self.arr.nrows )
-      startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
-
-      arrso_set_slice_o( &value.num, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
-    
-    elif tval == tuple:
-      
-      if len(val) == 2:
-
-        tval0 = type(val[0])
-        tval1 = type(val[1])
-
-        if ( tval0 == int and tval1 == int ):
-          
-          if val[0] < self.arr.nrows and val[1] < self.arr.ncols:
-          
-            arrso_set_item_ij_o( &value.num, val[0], val[1], &self.arr, dhl)
-            
-          else:
-
-            raise IndexError("Index out of bounds.")
-
-          # end if 
-
-        elif (tval0 == int and tval1 == slice):
-
-          if val[0] < self.arr.nrows:
-
-            starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
-            startj, stopj, stepj = val[1].indices( self.arr.ncols )
-
-            arrso_set_slice_o( &value.num, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
-
-          else:
-
-            raise IndexError("Index out of bounds.")
-
-          # end if 
-
-        elif (tval0 == slice and tval1 == int):
-
-          if val[1] < self.arr.ncols:
-
-            starti, stopi, stepi = val[0].indices( self.arr.nrows )
-            startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
-
-            arrso_set_slice_o( &value.num, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
-
-          else:
-
-            raise IndexError("Index out of bounds.")
-
-          # end if 
-
-        elif (tval0 == slice and tval1 == slice):
-
-          starti, stopi, stepi = val[0].indices( self.arr.nrows )
-          startj, stopj, stepj = val[1].indices( self.arr.ncols )
-
-          arrso_set_slice_o( &value.num, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
-
-        else:
-
-          raise IndexError("ERROR: double index ( , ) only integers, slices (`:`) are valid indices")
-
-        # end if 
-
-      else:
-
-        raise IndexError("ERROR: Getting integration points by index is not yet supported.")
-
-      # end if 
-
-    else:
-
-      raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
+      return
 
     # end if
 
+    if tvalue is sotinum:
 
-  #---------------------------------------------------------------------------------------------------
+      oval = value
 
-  #***************************************************************************************************
-  cdef __setitem__R(self,  object val, dmat value):
-    """
-    PURPOSE: Set item from real array.
-    """
-    #*************************************************************************************************
-    global dhl
+      if shape is None:
 
-    raise NotImplementedError("Error Setting from Real array not yet supported.")
-  #---------------------------------------------------------------------------------------------------
-
-  #***************************************************************************************************
-  cdef __setitem__O(self,  object val, matso value):
-    """
-    PURPOSE: Set item from OTI array.
-    """
-    #*************************************************************************************************
-    global dhl
-
-    tval = type(val)
-
-    if tval == int:
-      
-      # This is a slice
-      if val < self.arr.nrows:
-        
-        starti, stopi, stepi = slice( val, val+1, None).indices( self.arr.nrows )
-        startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
-
-        _check_slice_assign(value, starti, stopi, stepi, startj, stopj, stepj)
-        arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
-        
-      else:
-
-        raise IndexError("Index out of bounds.")
-
-      # end if 
-
-    elif tval == slice: #slice of multiple items
-      
-      # This is a slice
-      starti, stopi, stepi = val.indices( self.arr.nrows )
-      startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
-
-      _check_slice_assign(value, starti, stopi, stepi, startj, stopj, stepj)
-      arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
-    
-    elif tval == tuple:
-      
-      if len(val) == 2:
-
-        tval0 = type(val[0])
-        tval1 = type(val[1])
-
-        if ( tval0 == int and tval1 == int ):
-          
-          if val[0] < self.arr.nrows and val[1] < self.arr.ncols:
-          
-            starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
-            startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
-
-            _check_slice_assign(value, starti, stopi, stepi, startj, stopj, stepj)
-            arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
-            
-          else:
-
-            raise IndexError("Index out of bounds.")
-
-          # end if 
-
-        elif (tval0 == int and tval1 == slice):
-
-          if val[0] < self.arr.nrows:
-
-            starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
-            startj, stopj, stepj = val[1].indices( self.arr.ncols )
-
-            _check_slice_assign(value, starti, stopi, stepi, startj, stopj, stepj)
-            arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
-
-          else:
-
-            raise IndexError("Index out of bounds.")
-
-          # end if 
-
-        elif (tval0 == slice and tval1 == int):
-
-          if val[1] < self.arr.ncols:
-
-            starti, stopi, stepi = val[0].indices( self.arr.nrows )
-            startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
-
-            _check_slice_assign(value, starti, stopi, stepi, startj, stopj, stepj)
-            arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
-
-          else:
-
-            raise IndexError("Index out of bounds.")
-
-          # end if 
-
-        elif (tval0 == slice and tval1 == slice):
-
-          starti, stopi, stepi = val[0].indices( self.arr.nrows )
-          startj, stopj, stepj = val[1].indices( self.arr.ncols )
-
-          _check_slice_assign(value, starti, stopi, stepi, startj, stopj, stepj)
-          arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
-
-        else:
-
-          raise IndexError("ERROR: double index ( , ) only integers, slices (`:`) are valid indices")
-
-        # end if 
+        arrso_set_item_ij_o( &oval.num, r0, c0, &self.arr, dhl)
 
       else:
 
-        raise IndexError("ERROR: Getting integration points by index is not yet supported.")
+        arrso_set_slice_o( &oval.num, r0, r1, rt, c0, c1, ct, &self.arr, dhl)
 
-      # end if 
+      # end if
 
-    else:
-
-      raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
+      return
 
     # end if
 
+    if tvalue is not matso:
 
-  #-----------------------------------------------------------------------------
+      Oval = _as_matso(value)
+
+    else:
+
+      Oval = value
+
+      if Oval is self:
+
+        # S2: the right side is read as if it were copied first.
+        Oval = self.copy()
+
+      # end if
+
+    # end if
+
+    nr = len(range(r0, r1, rt))
+    nc = len(range(c0, c1, ct))
+    tshape = () if shape is None else shape
+    plan = assign_plan(Oval.shape, tshape)
+
+    hdr = Oval.arr
+
+    if plan == 1:
+
+      ores = arrso_get_item_i( &Oval.arr, 0, dhl)
+
+      if shape is None:
+
+        arrso_set_item_ij_o( &ores, r0, c0, &self.arr, dhl)
+
+      else:
+
+        arrso_set_slice_o( &ores, r0, r1, rt, c0, c1, ct, &self.arr, dhl)
+
+      # end if
+
+    elif plan == 0:
+
+      # Same shape: the same elements in row-major order, seen as the block of the 2-D struct.
+      hdr.nrows = nr
+      hdr.ncols = nc
+      arrso_set_slice_O( &hdr, r0, r1, rt, c0, c1, ct, &self.arr, dhl)
+
+    elif plan == 2:
+
+      # A row (b,) or (1, b) repeated over the a rows of the block.
+      hdr.nrows = 1
+      hdr.ncols = nc
+
+      for i in range(nr):
+
+        arrso_set_slice_O( &hdr, r0 + i*rt, r0 + i*rt + 1, 1, c0, c1, ct, &self.arr, dhl)
+
+      # end for
+
+    else:
+
+      # A column (a, 1) repeated over the b columns of the block.
+      hdr.nrows = nr
+      hdr.ncols = 1
+
+      for j in range(nc):
+
+        arrso_set_slice_O( &hdr, r0, r1, rt, c0 + j*ct, c0 + j*ct + 1, 1, &self.arr, dhl)
+
+      # end for
+
+    # end if
+
+  #---------------------------------------------------------------------------------------------------
 
   #*****************************************************************************
   def copy(self):
@@ -880,7 +723,7 @@ cdef class matso:
     
     cdef arrso_t res = arrso_copy(&self.arr, dhl)
 
-    return matso.create(&res)
+    return _sk(matso.create(&res), self._lk)
   #-----------------------------------------------------------------------------
 
 
@@ -895,7 +738,21 @@ cdef class matso:
     
     cdef arrso_t res = arrso_neg(&self.arr, dhl)
 
-    return matso.create(&res)
+    return _sk(matso.create(&res), self._lk)
+  #-----------------------------------------------------------------------------
+
+  #*****************************************************************************
+  def __abs__(self):
+    """
+    PURPOSE: Absolute value (an element with a negative real part is negated), same as the function abs.
+    """
+    #***************************************************************************
+
+    global dhl
+
+    cdef arrso_t res = arrso_abs(&self.arr, dhl)
+
+    return _sk(matso.create(&res), self._lk)
   #-----------------------------------------------------------------------------
 
   #*****************************************************************************
@@ -915,7 +772,13 @@ cdef class matso:
     tlhs = type(self)
     trhs = type(other)
 
-    _check_elementwise("addition", self, other)
+    _check_elementwise("addition", self, other, None, True)
+
+    if _shapes_differ(self, other):
+
+      return _matso_mixed(_op.add, self, other)
+
+    # end if
     
     if (tlhs == trhs):
 
@@ -970,7 +833,7 @@ cdef class matso:
 
     # end if 
       
-    return matso.create(&res)
+    return _sk(matso.create(&res), _op_kind(self, other))
 
   #-----------------------------------------------------------------------------
 
@@ -1004,7 +867,13 @@ cdef class matso:
     tlhs = type(self)
     trhs = type(other)
 
-    _check_elementwise("subtraction", self, other)
+    _check_elementwise("subtraction", self, other, None, True)
+
+    if _shapes_differ(self, other):
+
+      return _matso_mixed(_op.sub, self, other)
+
+    # end if
     
     if (tlhs == trhs):
 
@@ -1059,7 +928,7 @@ cdef class matso:
 
     # end if 
       
-    return matso.create(&res)
+    return _sk(matso.create(&res), _op_kind(self, other))
 
   #-----------------------------------------------------------------------------
 
@@ -1093,7 +962,13 @@ cdef class matso:
     tlhs = type(self)
     trhs = type(other)
 
-    _check_elementwise("multiplication", self, other)
+    _check_elementwise("multiplication", self, other, None, True)
+
+    if _shapes_differ(self, other):
+
+      return _matso_mixed(_op.mul, self, other)
+
+    # end if
     
     if (tlhs == trhs):
 
@@ -1148,7 +1023,7 @@ cdef class matso:
 
     # end if 
       
-    return matso.create(&res)
+    return _sk(matso.create(&res), _op_kind(self, other))
 
     
 
@@ -1184,7 +1059,13 @@ cdef class matso:
     tlhs = type(self)
     trhs = type(other)
 
-    _check_elementwise("division", self, other)
+    _check_elementwise("division", self, other, None, True)
+
+    if _shapes_differ(self, other):
+
+      return _matso_mixed(_op.truediv, self, other)
+
+    # end if
     
     if (tlhs == trhs):
 
@@ -1239,7 +1120,7 @@ cdef class matso:
 
     # end if 
       
-    return matso.create(&res)
+    return _sk(matso.create(&res), _op_kind(self, other))
 
   #-----------------------------------------------------------------------------
 
@@ -1303,13 +1184,11 @@ cdef class matso:
       # end if 
 
     else:
-
       return NotImplemented
+    # end if
 
-    # end if 
+    return _sk(matso.create(&res), S._lk)
 
-    
-    return matso.create(&res)
 
   #-----------------------------------------------------------------------------
 
@@ -1500,9 +1379,8 @@ cdef class matso:
     global dhl
 
     cdef list item = imdir(hum_dir)
-    cdef np.ndarray[coeff_t, ndim=2] tmp
+    cdef np.ndarray tmp
     cdef coeff_t factor = 1
-
     tmp = self.get_im(hum_dir)
 
     factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
@@ -1527,7 +1405,7 @@ cdef class matso:
 
     res_darr = arrso_get_im( item[ZERO],  item[ONE], &self.arr,  dhl)
 
-    res = np.empty( self.shape , dtype = np.float64)
+    res = np.empty( (self.arr.nrows, self.arr.ncols) , dtype = np.float64)
 
     k=0
 
@@ -1545,7 +1423,8 @@ cdef class matso:
     # Free memory from C.
     darr_free(&res_darr)
 
-    return res
+    return res.reshape(self.shape)
+
 
   #-----------------------------------------------------------------------------
 
@@ -1564,7 +1443,7 @@ cdef class matso:
 
     res = arrso_extract_im( item[ZERO],  item[ONE], &self.arr,  dhl)
 
-    return matso.create(&res)
+    return _sk(matso.create(&res), self._lk)
 
   #-----------------------------------------------------------------------------
   
@@ -1581,7 +1460,7 @@ cdef class matso:
     
     res = arrso_extract_deriv( item[ZERO],  item[ONE], &self.arr,  dhl)
 
-    return matso.create(&res)
+    return _sk(matso.create(&res), self._lk)
 
   #-----------------------------------------------------------------------------
   
@@ -1598,7 +1477,7 @@ cdef class matso:
     
     res = arrso_get_order_im( order, &self.arr,  dhl)
 
-    return matso.create(&res)
+    return _sk(matso.create(&res), self._lk)
 
   #-----------------------------------------------------------------------------
   
@@ -1620,7 +1499,7 @@ cdef class matso:
     
     res = arrso_truncate_im( indx, order, &self.arr, dhl) 
 
-    return matso.create(&res)
+    return _sk(matso.create(&res), self._lk)
 
   #-----------------------------------------------------------------------------
 
@@ -1660,45 +1539,34 @@ cdef class matso:
     
     res = arrso_truncate_order( order, &self.arr, dhl) 
 
-    return matso.create(&res)
+    return _sk(matso.create(&res), self._lk)
 
   #-----------------------------------------------------------------------------
 
   #*****************************************************************************
   cpdef set(self, object rhs):
     """
-    PURPOSE:  Sets from another value.
+    PURPOSE:  Sets from another value: ``A.set(rhs)`` is ``A[...] = rhs`` (rule S1c): rhs (an OTI
+              scalar, a number, a matso, a dmat, an array_like) broadcasts to A's shape as NumPy does.
     """
     #***************************************************************************
-    global dhl
-    
-    cdef sotinum orhs
-    cdef coeff_t rrhs
 
-    cdef matso Orhs
-    trhs = type(rhs)
+    try:
 
-    if   trhs is sotinum:
+      self[...] = rhs
 
-      orhs = rhs
-      arrso_set_o( &orhs.num, &self.arr, dhl)
+    except ValueError as ex:
 
-    elif trhs is matso:
+      if "could not broadcast" in str(ex):
 
-      _check_elementwise("set", self, rhs)
-      Orhs = rhs
-      arrso_set_O( &Orhs.arr, &self.arr, dhl)      
+        # 1.x said "different shapes": keep both phrases.
+        raise ValueError("set: the arrays have different shapes: {}".format(ex)) from None
 
-    elif trhs in number_types:
+      # end if
 
-      rrhs = rhs
-      arrso_set_r( rrhs, &self.arr, dhl)
+      raise
 
-    else:
-
-      raise ValueError( "Cant assign '{0}' into a matso object.".format(trhs) )
-      
-    # end if 
+    # end try
 
   #-----------------------------------------------------------------------------
 
@@ -1784,111 +1652,287 @@ cdef class matso:
 
     res = arrso_taylor_integrate( c_deltas, &self.arr, dhl)
 
-    return matso.create(&res)
+    return _sk(matso.create(&res), self._lk)
 
   #-----------------------------------------------------------------------------
 
   #*****************************************************************************
   @staticmethod
-  def dot( matso lhs, matso rhs, matso out = None): 
+  def dot( matso lhs, matso rhs, matso out = None):
     """
-    PURPOSE: Matrix multiplication.
+    PURPOSE: Matrix multiplication. Same as the module function ``dot``.
     """
-    global dhl
-
-    _check_matmul("dot", lhs, rhs, out)
-    
-    cdef arrso_t res 
-
-
-    if out is not None:
-      
-      arrso_matmul_OO_to( &lhs.arr, &rhs.arr ,&out.arr, dhl)
-
-    else:
-
-      res = arrso_matmul_OO( &lhs.arr, &rhs.arr , dhl)
-
-      return matso.create(&res)
-
-    # end if 
+    return dot( lhs, rhs, out)
 
   #-----------------------------------------------------------------------------
 
-  
-
   #*****************************************************************************
   @staticmethod
-  def inv( matso arr,  matso out = None): 
+  def inv( matso arr,  matso out = None):
     """
     PURPOSE: Matrix inversion. Same as the module function ``inv``.
-
     :raises numpy.linalg.LinAlgError: the real part of the array is singular.
     """
-
-    # Module-level inv (class-scope names are not visible here).
     return inv( arr, out = out)
 
   #-----------------------------------------------------------------------------
 
   #*****************************************************************************
   @staticmethod
-  def transpose( matso arr,  matso out = None ): 
+  def transpose( matso arr,  matso out = None ):
     """
-    PURPOSE: Matrix transpose.
+    PURPOSE: Matrix transpose. Same as the module function ``transpose``.
     """
-    global dhl
-
-    _check_out_shape("transpose", out, (arr.shape[1], arr.shape[0]))
-    
-    cdef arrso_t res 
-
-    if out is not None:
-      
-      arrso_transpose_to( &arr.arr, &out.arr, dhl)
-
-    else:
-
-      res = arrso_transpose( &arr.arr,  dhl)
-
-      return matso.create(&res)
-
-    # end if 
+    return transpose( arr, out)
 
   #-----------------------------------------------------------------------------
 
   #*****************************************************************************
   @staticmethod
-  def add( matso lhs, matso rhs, matso out = None): 
+  def add( matso lhs, matso rhs, matso out = None):
     """
-    PURPOSE: Matrix elementwise addition.
+    PURPOSE: Matrix elementwise addition. Same as the module function ``sum``.
     """
-    global dhl
-
-    _check_elementwise("add", lhs, rhs, out)
-    
-    cdef arrso_t res 
-
-
-    if out is not None:
-      
-      arrso_sum_OO_to( &lhs.arr, &rhs.arr ,&out.arr, dhl)
-
-    else:
-
-      res = arrso_sum_OO( &lhs.arr, &rhs.arr , dhl)
-
-      return matso.create(&res)
-
-    # end if 
+    return sum( lhs, rhs, out)
 
   #-----------------------------------------------------------------------------
-  
-# end class
-#-------------------------------------------------------------------------------
 
 
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# :::::::::::::::::::::::::: END OF CLASS matso ::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+#-----------------------------------------------------------------------------------------------------
+# 7b helpers: the logical shape kind of matso results (0: 2-D, 1: 1-D stored n x 1, 2: 0-D stored 1 x 1).
+#-----------------------------------------------------------------------------------------------------
 
+#*****************************************************************************************************
+cdef inline matso _sk(matso m, uint8_t lk):
+  """
+  PURPOSE:  Give a freshly created matso its logical shape kind and return it.
+  """
+  #***************************************************************************************************
+
+  m._lk = lk
+
+  return m
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+cdef uint8_t _op_kind(object lhs, object rhs):
+  """
+  PURPOSE:  The logical shape kind of an elementwise result: the one of the matso operand, else of the
+            dmat operand (scalars have none).
+  """
+  #***************************************************************************************************
+
+  cdef matso O
+  cdef dmat  R
+
+  if type(lhs) is matso:
+
+    O = lhs
+
+    return O._lk
+
+  elif type(rhs) is matso:
+
+    O = rhs
+
+    return O._lk
+
+  elif type(lhs) is dmat:
+
+    R = lhs
+
+    return R._lk
+
+  elif type(rhs) is dmat:
+
+    R = rhs
+
+    return R._lk
+
+  # end if
+
+  return 0
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+def _matso_iter(matso A):
+  """
+  PURPOSE:  The rows of A, one axis fewer (OTI scalars for a 1-D array): A[0], A[1], ...
+  """
+  #***************************************************************************************************
+
+  cdef uint64_t i
+
+  for i in range(A.arr.nrows):
+
+    yield A[i]
+
+  # end for
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+cdef matso _as_matso(object value):
+  """
+  PURPOSE:  A matso with the values of a dmat or an array_like (the right side of an assignment).
+  """
+  #***************************************************************************************************
+
+  cdef dmat R
+
+  if type(value) is dmat:
+
+    R = value
+    value = R.to_numpy()
+
+  # end if
+
+  try:
+
+    values = np.asarray(value, dtype=np.float64)
+
+  except (TypeError, ValueError):
+
+    if isinstance(value, (list, tuple)):
+
+      # A list of OTI scalars (or of lists of them): the creator reads OTI values.
+      try:
+
+        return array(value)
+
+      except (TypeError, ValueError, IndexError):
+
+        pass
+
+      # end try
+
+    # end if
+
+    raise IndexError("ERROR: Cant set item of type {0} in matso object.".format(type(value))) from None
+
+  # end try
+
+  return matso(values)
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+cdef object _shapes_differ(object lhs, object rhs):
+  """
+  PURPOSE:  True when both operands are arrays (matso, dmat) of different logical shapes.
+  """
+  #***************************************************************************************************
+
+  tl = type(lhs)
+  tr = type(rhs)
+
+  return (tl is matso or tl is dmat) and (tr is matso or tr is dmat) and lhs.shape != rhs.shape
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+def _matso_mixed(object op, object lhs, object rhs):
+  """
+  PURPOSE:  An elementwise operation between arrays of different logical shapes. An array with a single
+            element acts as a scalar; the result has NumPy's broadcast shape of the two operands
+            ((4,) + (1, 1) is (1, 4), as in pyoti.dense). Anything else is an error: a 2-D C struct
+            broadcasts only between equal shapes and single elements (11.2).
+  """
+  #***************************************************************************************************
+
+  cdef matso O
+  cdef dmat  R
+  cdef sotinum_t ores
+
+  lsize = _array_size(lhs)
+  rsize = _array_size(rhs)
+
+  if lsize != 1 and rsize != 1:
+
+    raise ValueError("operands have different shapes {} and {} and could not be broadcast together: "
+                     "broadcasting between shapes is supported by pyoti.dense only".format(
+                     lhs.shape, rhs.shape))
+
+  # end if
+
+  shape = tuple(np.broadcast_shapes(lhs.shape, rhs.shape))
+
+  if len(shape) > 2:
+
+    raise ValueError("pyoti.sparse arrays have at most 2 dimensions: the result of operands of shapes "
+                     "{} and {} would have shape {}".format(lhs.shape, rhs.shape, shape))
+
+  # end if
+
+  if lsize == 1 and (rsize != 1 or lhs.ndim >= rhs.ndim):
+
+    res = op(_single(lhs), rhs)
+
+  else:
+
+    res = op(lhs, _single(rhs))
+
+  # end if
+
+  if res.shape != shape:
+
+    res = res.reshape(shape)
+
+  # end if
+
+  return res
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+cdef object _array_size(object obj):
+  """
+  PURPOSE:  Number of elements of a matso or dmat.
+  """
+  #***************************************************************************************************
+
+  cdef matso O
+
+  if type(obj) is matso:
+
+    O = obj
+
+    return O.arr.size
+
+  # end if
+
+  return obj.size
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+cdef object _single(object obj):
+  """
+  PURPOSE:  The only element of a one-element matso (an OTI scalar copy) or dmat (a float).
+  """
+  #***************************************************************************************************
+
+  cdef matso O
+  cdef sotinum_t ores
+
+  if type(obj) is matso:
+
+    O = obj
+    ores = arrso_get_item_i( &O.arr, 0, dhl)
+
+    return sotinum.create(&ores, FLAGS = 0).copy()
+
+  # end if
+
+  return obj.to_numpy().reshape(-1)[0].item()
+
+#-----------------------------------------------------------------------------------------------------

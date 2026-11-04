@@ -456,6 +456,11 @@ cdef int _check_order(object order) except -1:
 # --------------------------------------------------------------------------------------------------------
 
 
+# Every growth refusal (contracts 11.6 G2): the phrase "live block views" stays (matched by the tests).
+_GROWTH_MESSAGE = ("cannot grow an array with live block views or exports; size it first with "
+                   "A.reserve(nbases=..., order=...) or create it with nbases= / bases= / order=")
+
+
 # ********************************************************************************************************
 cdef void _status(str operation, int status) except *:
     """
@@ -500,8 +505,7 @@ cdef void _status(str operation, int status) except *:
 
     elif status == OTI_ERR_BUSY:
 
-        raise BufferError("{}: the array's layout is fixed while views or exports of it live "
-                          "(reserve(...), or nbases= / order= at creation)".format(operation))
+        raise BufferError(_GROWTH_MESSAGE)
 
     elif status == OTI_ERR_SHAPE or status == OTI_ERR_LAYOUT or status == OTI_ERR_READONLY:
 
@@ -650,10 +654,11 @@ cdef double _deriv_factor(uint64_t index, ord_t order):
 # ********************************************************************************************************
 cdef np.ndarray _soa_blocks(omat value):
     """
-    Return all coefficient blocks of a SoA array as one writable (nblocks, size) NumPy view.
+    All coefficient blocks of a SoA array as one writable (nblocks, size) NumPy array: the internal
+    writable path (contracts 11.11) for library code, never returned to users.
 
-    The view keeps the array alive. Growing the array afterwards may reallocate its buffer and
-    invalidates outstanding views.
+    For a compact array (every root) it is a view that pins the buffer while it lives; for a strided
+    view it is a copy (read it only).
 
     Parameters
     ----------
@@ -663,12 +668,11 @@ cdef np.ndarray _soa_blocks(omat value):
     Returns
     -------
     numpy.ndarray
-        Shape (1 + number of imaginary directions, nrows * ncols), sharing native memory.
+        Shape (1 + number of imaginary directions, size), elements in column-major order.
     """
 
-    cdef np.npy_intp dims[2]
-    cdef np.ndarray flat
     cdef uint64_t nblocks = 1 + sshelp_ndir_total(oarr_nact(&value.arr), oarr_trc_order(&value.arr))
+    cdef object full
 
     if oarr_size(&value.arr) == 0 or oarr_data(&value.arr) == NULL:
 
@@ -676,64 +680,8 @@ cdef np.ndarray _soa_blocks(omat value):
 
     # end if
 
-    dims[0] = nblocks
-    dims[1] = oarr_size(&value.arr)
-    flat = np.PyArray_SimpleNewFromData(2, dims, np.NPY_DOUBLE, <void *>oarr_data(&value.arr))
-    np.set_array_base(flat, value)
-    return flat
-
-# end function
-# --------------------------------------------------------------------------------------------------------
-
-
-# ********************************************************************************************************
-cdef class _BlockExport:
-    """
-    Base object of a NumPy view returned by ``omat.get_block``.
-
-    It keeps the exporting array alive and is registered (weakly) in ``_BLOCK_EXPORTS``, so an
-    operation that would replace the array's native buffer can tell that views are alive.
-    """
-
-    cdef object owner
-    cdef object __weakref__
-
-    def __cinit__(self, owner):
-        self.owner = owner
-
-# end class
-# --------------------------------------------------------------------------------------------------------
-
-
-# Live block exports of each omat: {omat: WeakSet of _BlockExport} (both weak, so nothing is kept alive
-# beyond the views themselves).
-_BLOCK_EXPORTS = _weakref.WeakKeyDictionary()
-
-
-# ********************************************************************************************************
-cdef int _register_block_export(omat owner, _BlockExport export) except -1:
-    """
-    Record a block view of an array so that layout changes can be refused while it lives.
-
-    Parameters
-    ----------
-    owner : omat
-        Exporting array.
-    export : _BlockExport
-        Base object of the view; forgotten automatically when the last view is released.
-    """
-
-    exports = _BLOCK_EXPORTS.get(owner)
-
-    if exports is None:
-
-        exports = _weakref.WeakSet()
-        _BLOCK_EXPORTS[owner] = exports
-
-    # end if
-
-    exports.add(export)
-    return 0
+    full = nd_to_numpy(oarr_blocks(&value.arr), 1)
+    return full.reshape((nblocks, oarr_size(&value.arr)), order="F")
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -742,11 +690,7 @@ cdef int _register_block_export(omat owner, _BlockExport export) except -1:
 # ********************************************************************************************************
 cdef int _check_no_block_views(omat value) except -1:
     """
-    Refuse to replace or reshape the buffer of an array that has live block views.
-
-    Views made by ``get_block`` point into the array's native buffer; an operation that grows nact or
-    the truncation order, or swaps in a new buffer (``out=``), would leave them dangling (or pointing at
-    other blocks), as NumPy's ``resize`` refuses when references exist.
+    Refuse to replace or relayout an array whose layout is pinned by live views or exports.
 
     Parameters
     ----------
@@ -756,14 +700,12 @@ cdef int _check_no_block_views(omat value) except -1:
     Raises
     ------
     BufferError
-        If a view returned by ``get_block`` is still alive.
+        If the array is a view, or views or exports of it are alive (contracts 11.6 G2).
     """
 
-    exports = _BLOCK_EXPORTS.get(value)
+    if oarr_is_shared(&value.arr):
 
-    if exports is not None and len(exports) > 0:
-
-        raise BufferError("cannot grow an array with live block views")
+        raise BufferError(_GROWTH_MESSAGE)
 
     # end if
 
@@ -776,7 +718,7 @@ cdef int _check_no_block_views(omat value) except -1:
 # ********************************************************************************************************
 cdef int _check_growth(omat value, bases_t nact, ord_t order) except -1:
     """
-    Refuse a layout change (larger nact or truncation order) while block views are alive.
+    Refuse a layout change (larger nact or truncation order) of a pinned array.
 
     Parameters
     ----------
@@ -790,7 +732,7 @@ cdef int _check_growth(omat value, bases_t nact, ord_t order) except -1:
     Raises
     ------
     BufferError
-        If the layout would change and a view returned by ``get_block`` is still alive.
+        If the layout would change while it is pinned (contracts 11.6 G1, G2).
     """
 
     if nact > oarr_nact(&value.arr) or order > oarr_trc_order(&value.arr):
@@ -826,9 +768,7 @@ cdef void _raise_soa_order(omat value, ord_t order) except *:
 
     if order > oarr_trc_order(&value.arr):
 
-        _check_no_block_views(value)
-        _status("raise order", oarr_reserve(&value.arr, oarr_nact(&value.arr), oarr_nrows(&value.arr),
-                                            oarr_ncols(&value.arr), order))
+        _status("raise order", oarr_grow_layout(&value.arr, oarr_nact(&value.arr), order))
 
     # end if
 
@@ -888,28 +828,7 @@ cdef object _assign_out(object out, object result):
 
     if isinstance(out, omat) and isinstance(result, omat):
 
-        if not (<omat>out).FLAGS & 1:
-
-            raise ValueError("out is a view of another object and cannot receive a result")
-
-        # end if
-
-        if oarr_nrows(&(<omat>out).arr) != oarr_nrows(&(<omat>result).arr) or (
-            oarr_ncols(&(<omat>out).arr) != oarr_ncols(&(<omat>result).arr)
-        ):
-
-            raise ValueError("out has shape {}, expected {}".format(
-                (oarr_nrows(&(<omat>out).arr), oarr_ncols(&(<omat>out).arr)),
-                (oarr_nrows(&(<omat>result).arr), oarr_ncols(&(<omat>result).arr))))
-
-        # end if
-
-        # The swap replaces the buffer of out: block views of it would dangle.
-        _check_no_block_views(<omat>out)
-
-        atmp = (<omat>out).arr
-        (<omat>out).arr = (<omat>result).arr
-        (<omat>result).arr = atmp
+        _soa_store_out(<omat>out, <omat>result)
         return out
 
     # end if
@@ -946,6 +865,59 @@ cdef object _assign_out(object out, object result):
 
 
 # ********************************************************************************************************
+cdef int _soa_store_out(omat out, omat result) except -1:
+    """
+    Store a result into ``out=`` (contracts 7.3, 11.5 S1b, 11.6 G1.3).
+
+    A root nobody shares takes the result (its layout becomes the result's, as in 1.x). A view, or a
+    root with live views or exports, is written in place: the result must fit its layout (truncation
+    order and bases), else BufferError; nothing is clipped. ``out`` may have extra leading axes of
+    extent 1 (rule S1b): the result is written into the view of ``out`` without them.
+
+    Parameters
+    ----------
+    out : omat
+        Holder.
+    result : omat
+        Computed result (a new root).
+    """
+
+    cdef tuple oshape = out.shape
+    cdef tuple rshape = result.shape
+    cdef int32_t extra = len(oshape) - len(rshape)
+    cdef oarr_t atmp
+    cdef omat target
+
+    if not out.FLAGS & 1:
+
+        raise ValueError("out is a view of another object and cannot receive a result")
+
+    # end if
+
+    if extra < 0 or oshape[extra:] != rshape or any(x != 1 for x in oshape[:extra]):
+
+        raise ValueError("out has shape {}, expected {}".format(oshape, rshape))
+
+    # end if
+
+    if extra == 0 and not oarr_is_shared(&out.arr) and not oarr_is_view(&result.arr):
+
+        atmp       = out.arr
+        out.arr    = result.arr
+        result.arr = atmp
+        return 0
+
+    # end if
+
+    target = out if extra == 0 else out[(0,) * extra + (Ellipsis,)]
+    _status("out", oarr_assign_to(&result.arr, &target.arr))
+    return 0
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
 cdef object _finish(object result, object out):
     """
     Return a result, or store it in ``out`` when a holder was given.
@@ -960,7 +932,8 @@ cdef object _finish(object result, object out):
     Returns
     -------
     object
-        ``result`` when ``out`` is None, otherwise None (the result went into ``out``).
+        ``result`` when ``out`` is None, otherwise ``out`` itself, holding the result (contracts 11.5
+        S1b, NumPy's ``out=``).
     """
 
     if out is None:
@@ -972,12 +945,12 @@ cdef object _finish(object result, object out):
     if isinstance(out, _dnfe) or isinstance(result, _dnfe):
 
         _fe_store(result, out)
-        return None
+        return out
 
     # end if
 
     _assign_out(out, result)
-    return None
+    return out
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -1331,7 +1304,8 @@ cdef str _scalar_text(otinum value):
 # ********************************************************************************************************
 cdef str _array_text(object value):
     """
-    Format an array the way ``str(pyoti.sparse.matso)`` does: one line per element, by columns.
+    Format an array the way ``str(pyoti.sparse.matso)`` does: one line per element, by columns,
+    under a header with the array's own type name (F14: ``omat<`` / ``arro<``, not ``matso<``).
 
     Parameters
     ----------
@@ -1341,13 +1315,29 @@ cdef str _array_text(object value):
     Returns
     -------
     str
-        Text with the header ``matso< shape: (r, c),`` and ``(i,j) element`` lines.
+        Text with the header ``omat< shape: (r, c),`` (or ``arro<``) and ``(i,j) element`` lines.
     """
 
-    cdef uint64_t nrows = value.shape[0]
-    cdef uint64_t ncols = value.shape[1]
+    cdef tuple shape = value.shape
+    cdef uint64_t nrows, ncols
     cdef uint64_t i, j
-    cdef str out = "matso< shape: " + str(value.shape) + ", \n"
+    cdef str out = ("omat" if isinstance(value, omat) else "arro") + "< shape: " + str(shape) + ", \n"
+
+    if len(shape) != 2:
+
+        # Any other rank: one line per element, in C index order.
+        for index in np.ndindex(shape):
+
+            out += str(index) + " " + str(value[index]) + "\n"
+
+        # end for
+
+        return out + ">"
+
+    # end if
+
+    nrows = shape[0]
+    ncols = shape[1]
 
     for j in range(ncols):
 

@@ -39,19 +39,8 @@ cdef omat _order_to_soa(object value, str op):
 
         real = np.asarray(value, dtype=np.float64)
 
-        if real.ndim == 1:
-
-            real = real.reshape((-1, 1))
-
-        # end if
-
-        if real.ndim != 2:
-
-            raise ValueError("{0}: real operands must be one- or two-dimensional".format(op))
-
-        # end if
-
-        return _soa_from_real(real, 0)
+        # NumPy shapes (contracts 11.2): a 1-D input stays 1-D.
+        return _soa_from_numpy(real, 0)
 
     # end if
 
@@ -206,7 +195,7 @@ def get_order_im(order, val, out=None):
     Returns
     -------
     otinum or omat or arro
-        The order-``order`` part, or None when ``out`` is given.
+        The order-``order`` part (``out`` itself when it is given).
 
     Examples
     --------
@@ -216,7 +205,7 @@ def get_order_im(order, val, out=None):
     """
 
     cdef otinum sres
-    cdef oarr_t ores = oarr_init()
+    cdef omat ores
     cdef arro_t ares = arro_init()
 
     _check_order(order)
@@ -229,8 +218,9 @@ def get_order_im(order, val, out=None):
 
     elif isinstance(val, omat):
 
-        _soa_ok("get_order_im", oarr_get_order_im_to(order, &(<omat>val).arr, &ores), &ores)
-        return _finish(omat.wrap(ores), out)
+        ores = omat.__new__(omat)
+        _soa_ok("get_order_im", oarr_get_order_im_to(order, &(<omat>val).arr, &ores.arr), &ores.arr)
+        return _finish(ores, out)
 
     elif isinstance(val, arro):
 
@@ -265,14 +255,14 @@ cdef object _order_extract(object humdir, object val, object out, bint deriv):
     Returns
     -------
     object
-        Result, or None when ``out`` is given.
+        Result (``out`` itself when it is given).
     """
 
     cdef str op = "extract_deriv" if deriv else "extract_im"
     cdef tuple pair
     cdef imdir_t idx
     cdef ord_t order
-    cdef oarr_t ores = oarr_init()
+    cdef omat ores
     cdef arro A, R
     cdef uint64_t e
     cdef int status
@@ -293,18 +283,20 @@ cdef object _order_extract(object humdir, object val, object out, bint deriv):
 
     elif isinstance(val, omat):
 
+        ores = omat.__new__(omat)
+
         if deriv:
 
-            status = oarr_extract_deriv_to(idx, order, &(<omat>val).arr, &ores)
+            status = oarr_extract_deriv_to(idx, order, &(<omat>val).arr, &ores.arr)
 
         else:
 
-            status = oarr_extract_im_to(idx, order, &(<omat>val).arr, &ores)
+            status = oarr_extract_im_to(idx, order, &(<omat>val).arr, &ores.arr)
 
         # end if
 
-        _soa_ok(op, status, &ores)
-        return _finish(omat.wrap(ores), out)
+        _soa_ok(op, status, &ores.arr)
+        return _finish(ores, out)
 
     # end if
 
@@ -354,7 +346,7 @@ def extract_im(humdir, val, out=None):
     Returns
     -------
     otinum or omat or arro
-        Extracted value, or None when ``out`` is given.
+        Extracted value (``out`` itself when it is given).
 
     Examples
     --------
@@ -390,7 +382,7 @@ def extract_deriv(humdir, val, out=None):
     Returns
     -------
     otinum or omat or arro
-        Extracted value, or None when ``out`` is given.
+        Extracted value (``out`` itself when it is given).
 
     Examples
     --------
@@ -662,7 +654,7 @@ def trunc_dot(ordlhs, lhs, ordrhs, rhs, out=None):
     Returns
     -------
     omat or arro
-        The product (AoS only when both operands are AoS), or None when ``out`` is given.
+        The product (AoS only when both operands are AoS) (``out`` itself when it is given).
 
     Examples
     --------
@@ -672,9 +664,10 @@ def trunc_dot(ordlhs, lhs, ordrhs, rhs, out=None):
     2.0
     """
 
-    cdef omat L, R
-    cdef oarr_t res = oarr_init()
+    cdef omat L, R, result
+    cdef omat res
     cdef bint aos = isinstance(lhs, arro) and isinstance(rhs, arro)
+    cdef int32_t nl, nr
 
     if not isinstance(lhs, (omat, arro)) or not isinstance(rhs, (omat, arro, np.ndarray)):
 
@@ -687,24 +680,60 @@ def trunc_dot(ordlhs, lhs, ordrhs, rhs, out=None):
     _check_order(ordrhs)
     L = _order_to_soa(lhs, "trunc_dot")
     R = _order_to_soa(rhs, "trunc_dot")
+    nl = L.ndim
+    nr = R.ndim
 
-    if oarr_ncols(&L.arr) != oarr_nrows(&R.arr):
+    # numpy.dot's shape rules (contracts 11.3, k6): a 1-D left operand is a row, a 1-D right operand a
+    # column; the promoted axis is removed.
+    if nl == 0 or nr == 0 or nl > 2 or nr > 2:
 
-        raise ValueError("trunc_dot: shapes {0} and {1} not aligned".format(
-            (oarr_nrows(&L.arr), oarr_ncols(&L.arr)), (oarr_nrows(&R.arr), oarr_ncols(&R.arr))))
+        raise ValueError("trunc_dot: operands must be 1-D or 2-D, got shapes {} and {}".format(
+            L.shape, R.shape))
 
     # end if
 
-    _soa_ok("trunc_dot", oarr_trunc_matmul_OO_to(ordlhs, &L.arr, ordrhs, &R.arr, &res, _dhl),
-            &res)
+    if nl == 1:
+
+        L = L[None, :]
+
+    # end if
+
+    if nr == 1:
+
+        R = R[:, None]
+
+    # end if
+
+    if L.shape[1] != R.shape[0]:
+
+        raise ValueError("trunc_dot: shapes {0} and {1} not aligned".format(L.shape, R.shape))
+
+    # end if
+
+    res = omat.__new__(omat)
+    _soa_ok("trunc_dot", oarr_trunc_matmul_OO_to(ordlhs, &L.arr, ordrhs, &R.arr, &res.arr, _dhl),
+            &res.arr)
+    result = res
+
+    if nl == 1 and nr == 1:
+
+        return _finish(result[0, 0], out)
+
+    # end if
+
+    if nl == 1 or nr == 1:
+
+        _soa_relabel(result, (result.shape[1],) if nl == 1 else (result.shape[0],))
+
+    # end if
 
     if aos:
 
-        return _finish(_to_aos(omat.wrap(res)), out)
+        return _finish(_to_aos(result), out)
 
     # end if
 
-    return _finish(omat.wrap(res), out)
+    return _finish(result, out)
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -733,7 +762,7 @@ def trunc_sub(order, Olhs, Orhs, out=None):
     Returns
     -------
     otinum or omat or arro
-        The order-``order`` part of the difference, or None when ``out`` is given.
+        The order-``order`` part of the difference (``out`` itself when it is given).
 
     Examples
     --------
@@ -743,7 +772,7 @@ def trunc_sub(order, Olhs, Orhs, out=None):
     """
 
     cdef otinum sres
-    cdef oarr_t ores = oarr_init()
+    cdef omat ores
     cdef arro A, B, C
     cdef uint64_t e
 
@@ -758,9 +787,10 @@ def trunc_sub(order, Olhs, Orhs, out=None):
     elif isinstance(Olhs, omat) and isinstance(Orhs, omat):
 
         _check_order(order)
+        ores = omat.__new__(omat)
         _soa_ok("trunc_sub", oarr_trunc_sub_OO_to(order, &(<omat>Olhs).arr, &(<omat>Orhs).arr,
-                                                  &ores), &ores)
-        return _finish(omat.wrap(ores), out)
+                                                  &ores.arr), &ores.arr)
+        return _finish(ores, out)
 
     elif isinstance(Olhs, arro) and isinstance(Orhs, arro):
 
@@ -819,7 +849,7 @@ def dot_product(lhs, rhs, out=None):
     Returns
     -------
     otinum
-        The dot product, or None when ``out`` is given.
+        The dot product (``out`` itself when it is given).
 
     Examples
     --------
@@ -919,7 +949,7 @@ def interp1d(x, xvals, yvals, out=None):
     Returns
     -------
     otinum or omat or arro
-        Interpolated value(s), or None when ``out`` is given.
+        Interpolated value(s) (``out`` itself when it is given).
 
     Examples
     --------
@@ -933,7 +963,7 @@ def interp1d(x, xvals, yvals, out=None):
     cdef omat Y = _order_to_soa(yvals, "interp1d")
     cdef omat P
     cdef otinum px, sres
-    cdef oarr_t ores = oarr_init()
+    cdef omat ores
 
     if isinstance(x, Real):
 
@@ -951,15 +981,16 @@ def interp1d(x, xvals, yvals, out=None):
     elif isinstance(x, (omat, arro)):
 
         P = _order_to_soa(x, "interp1d")
-        _soa_ok("interp1d", oarr_interp1d_O_to(&X.arr, &Y.arr, &P.arr, &ores, _dhl), &ores)
+        ores = omat.__new__(omat)
+        _soa_ok("interp1d", oarr_interp1d_O_to(&X.arr, &Y.arr, &P.arr, &ores.arr, _dhl), &ores.arr)
 
         if isinstance(x, arro):
 
-            return _finish(_to_aos(omat.wrap(ores)), out)
+            return _finish(_to_aos(ores), out)
 
         # end if
 
-        return _finish(omat.wrap(ores), out)
+        return _finish(ores, out)
 
     # end if
 
@@ -998,7 +1029,7 @@ def moving_average(data, size):
     """
 
     cdef omat D
-    cdef oarr_t res = oarr_init()
+    cdef omat res
 
     if not isinstance(data, (omat, arro)):
 
@@ -1013,15 +1044,16 @@ def moving_average(data, size):
     # end if
 
     D = _order_to_soa(data, "moving_average")
-    _soa_ok("moving_average", oarr_moving_average_to(&D.arr, size, &res), &res)
+    res = omat.__new__(omat)
+    _soa_ok("moving_average", oarr_moving_average_to(&D.arr, size, &res.arr), &res.arr)
 
     if isinstance(data, arro):
 
-        return _to_aos(omat.wrap(res))
+        return _to_aos(res)
 
     # end if
 
-    return omat.wrap(res)
+    return res
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -1046,7 +1078,7 @@ def inv_block(arr, out=None):
     Returns
     -------
     omat or arro
-        The inverse, or None when ``out`` is given.
+        The inverse (``out`` itself when it is given).
 
     Raises
     ------
@@ -1060,7 +1092,7 @@ def inv_block(arr, out=None):
     -0.25
     """
 
-    cdef oarr_t ores = oarr_init()
+    cdef omat ores
     cdef arro_t ares = arro_init()
 
     if isinstance(arr, omat):
@@ -1071,8 +1103,9 @@ def inv_block(arr, out=None):
 
         # end if
 
-        _soa_ok("inv_block", oarr_inv_to(&(<omat>arr).arr, &ores, _dhl), &ores)
-        return _finish(omat.wrap(ores), out)
+        ores = omat.__new__(omat)
+        _soa_ok("inv_block", oarr_inv_to(&(<omat>arr).arr, &ores.arr, _dhl), &ores.arr)
+        return _finish(ores, out)
 
     elif isinstance(arr, arro):
 
@@ -1169,7 +1202,7 @@ def _order_rom_eval(value, bases, deltas):
     cdef np.ndarray loc
     cdef omat S
     cdef arro A, R
-    cdef oarr_t ores = oarr_init()
+    cdef omat ores
     cdef bases_t nact
     cdef uint64_t e
     cdef coeff_t val
@@ -1196,8 +1229,9 @@ def _order_rom_eval(value, bases, deltas):
         if isinstance(value, omat):
 
             S = value
-            _soa_ok("rom_eval", oarr_rom_eval_to(&S.arr, <coeff_t *>loc.data, &ores), &ores)
-            return omat.wrap(ores)
+            ores = omat.__new__(omat)
+            _soa_ok("rom_eval", oarr_rom_eval_to(&S.arr, <coeff_t *>loc.data, &ores.arr), &ores.arr)
+            return ores
 
         # end if
 

@@ -9,10 +9,14 @@ cimport cython
 @cython.freelist(32)
 cdef class omat:
     """
-    Column-major structure-of-arrays dense OTI matrix.
+    Dense OTI array of any shape, structure of arrays (one block per direction, column-major inside a
+    block by default).
 
-    Create with ``zeros``, ``from_sparse`` or ``from_real``. Views returned by ``get_block``
-    retain this array, but must not be used after an operation that grows its active set.
+    Indexing follows NumPy (PLAN-ndarray-contracts.md 11.3): one integer per axis gives an OTI scalar,
+    basic keys and ``.T`` / ``reshape`` give views that share this array's memory and layout, advanced
+    keys give copies. ``.real`` and ``get_block`` are read-only NumPy views. While a view or an export
+    lives, the layout (truncation order, active bases) of the array is fixed: an assignment that would
+    grow it raises BufferError (size it first with ``reserve`` or ``nbases=`` / ``order=``).
     """
 
     # ****************************************************************************************************
@@ -71,12 +75,12 @@ cdef class omat:
     @classmethod
     def zeros(cls, shape, bases=(), order=0):
         """
-        Allocate a zero SoA matrix over the bases 1..max(bases).
+        Allocate a zero SoA array over the bases 1..max(bases).
 
         Parameters
         ----------
-        shape : tuple of int
-            Matrix rows and columns.
+        shape : int or tuple of int
+            Shape (NumPy rules: an int is a 1-D shape).
         bases : iterable of int
             Basis labels; the array is dense over 1..max(bases) (nact 0 when empty).
         order : int
@@ -85,7 +89,7 @@ cdef class omat:
         Returns
         -------
         omat
-            Zero matrix.
+            Zero array.
 
         Raises
         ------
@@ -95,14 +99,8 @@ cdef class omat:
             If the array is too large.
         """
 
-        if len(shape) != 2 or any(not isinstance(x, int) or x < 0 for x in shape):
-
-            raise ValueError("shape must be (nonnegative rows, nonnegative columns)")
-
-        # end if
-
         _check_order(order)
-        return _soa_zeros((shape[0], shape[1]), _nact_of(bases), order)
+        return _soa_zeros_nd(_shape_of(shape), _nact_of(bases), order)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -204,15 +202,155 @@ cdef class omat:
     @property
     def shape(self):
         """
-        Return the matrix dimensions.
+        Return the shape.
 
         Returns
         -------
-        tuple
-            Number of rows and columns.
+        tuple of int
+            Extents of the axes.
         """
 
-        return oarr_nrows(&self.arr), oarr_ncols(&self.arr)
+        return tuple([oarr_shape(&self.arr, d) for d in range(oarr_ndim(&self.arr))])
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    @property
+    def ndim(self):
+        """
+        Return the number of axes.
+
+        Returns
+        -------
+        int
+            ``len(self.shape)``.
+        """
+
+        return oarr_ndim(&self.arr)
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    def __len__(self):
+        """
+        Return the extent of the first axis (contracts 11.3 I2).
+
+        Returns
+        -------
+        int
+            ``self.shape[0]``.
+
+        Raises
+        ------
+        TypeError
+            For a 0-D array.
+        """
+
+        if oarr_ndim(&self.arr) == 0:
+
+            raise TypeError("len() of unsized object")
+
+        # end if
+
+        return oarr_shape(&self.arr, 0)
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    def __iter__(self):
+        """
+        Iterate over the first axis: views with one axis fewer, OTI scalars for a 1-D array.
+
+        Returns
+        -------
+        iterator
+            ``self[0], self[1], ...``.
+
+        Raises
+        ------
+        TypeError
+            For a 0-D array.
+        """
+
+        if oarr_ndim(&self.arr) == 0:
+
+            raise TypeError("iteration over a 0-d array")
+
+        # end if
+
+        return _soa_iter(self)
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    def reshape(self, *shape, order="C"):
+        """
+        Give a new shape: a view sharing this array's memory when the strides allow it, else a copy.
+
+        Parameters
+        ----------
+        *shape : int or tuple of int
+            New shape (one -1 allowed), as one tuple or as separate integers.
+        order : str
+            Index order, ``'C'`` (default, NumPy's) or ``'F'``.
+
+        Returns
+        -------
+        omat
+            View or copy.
+        """
+
+        return _soa_reshape(self, shape[0] if len(shape) == 1 else shape, order)
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    def reserve(self, nbases=None, order=None):
+        """
+        Grow the layout now, so that later assignments of values over nbases bases up to this order
+        never grow it (contracts 11.6 G4); the elements are zero-extended.
+
+        Parameters
+        ----------
+        nbases : int, optional
+            Number of active bases to hold (the array becomes dense over 1..nbases at least).
+        order : int, optional
+            Truncation order to hold.
+
+        Raises
+        ------
+        BufferError
+            When the layout must grow while views or exports of the array are alive.
+        """
+
+        cdef bases_t k = oarr_nact(&self.arr)
+        cdef ord_t trc = oarr_trc_order(&self.arr)
+
+        if nbases is not None:
+
+            if nbases < 0:
+
+                raise ValueError("nbases must be nonnegative")
+
+            # end if
+
+            k = max(k, nbases)
+
+        # end if
+
+        if order is not None:
+
+            _check_order(order)
+            trc = max(trc, order)
+
+        # end if
+
+        _status("reserve", oarr_grow_layout(&self.arr, k, trc))
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -306,42 +444,43 @@ cdef class omat:
     @property
     def T(self):
         """
-        Return a transposed copy of every coefficient block.
+        Return the transpose as a view (the axes reversed; a 1-D array is unchanged), as NumPy does.
 
         Returns
         -------
         omat
-            Transposed matrix.
+            View sharing this array's memory.
         """
 
-        cdef oarr_t result = oarr_init()
+        cdef omat result = omat.__new__(omat)
 
-        _soa_ok("transpose", oarr_transpose_to(&self.arr, &result, _dhl), &result)
-        return omat.wrap(result)
+        _soa_ok("transpose", oarr_view_transpose(&self.arr, 0, NULL, &result.arr), &result.arr)
+        return result
 
     # end function
     # ----------------------------------------------------------------------------------------------------
 
     # ****************************************************************************************************
-    def get_block(self, humdir):
+    def get_block(self, humdir, writeable=False):
         """
-        Return a writable Fortran-ordered NumPy view of one direction block.
+        Return one direction block as a NumPy view of the array's memory (contracts 11.11).
 
-        The view keeps the array alive and is tracked: while it exists, an operation that would
-        replace the native buffer (growing nact or the truncation order by assignment or ``set_im``,
-        or ``out=`` into this array) raises BufferError instead of leaving the view dangling. Writes
-        through the view and same-layout assignments are allowed.
+        The view is read-only by default. It pins the array's layout while it lives: an operation that
+        would grow the array (truncation order, active bases) raises BufferError. With
+        ``writeable=True`` the view is writable and its writes reach the array; for an imaginary
+        direction the array's active order first rises to its truncation order (contracts 7.4).
 
         Parameters
         ----------
         humdir : int or list or tuple
             Direction in any pyoti.sparse format, or a rawdir; 0 or [] selects the real block.
+        writeable : bool
+            Return a writable view.
 
         Returns
         -------
         numpy.ndarray
-            Shape (nrows, ncols), sharing native memory; an empty array (not shared) for a zero-size
-            matrix.
+            The block, of the array's shape and strides.
 
         Raises
         ------
@@ -351,30 +490,24 @@ cdef class omat:
         """
 
         cdef tuple pair = _direction(humdir)
-        cdef _BlockExport export = _BlockExport(self)
-        cdef object view = _soa_block_view(self, pair[0], pair[1], export)
+        cdef uint64_t index = pair[0]
+        cdef ord_t order = pair[1]
 
-        if view is None and oarr_size(&self.arr) == 0:
-
-            # A zero-size array has no native buffer: the block of a direction inside the layout
-            # (order 0, or an index below N_order(nact) at an order up to the truncation order) is empty.
-            if pair[1] == 0 or (pair[1] <= oarr_trc_order(&self.arr) and
-                                pair[0] < comb(oarr_nact(&self.arr) + pair[1] - 1, pair[1])):
-
-                return np.empty(self.shape, dtype=np.float64)
-
-            # end if
-
-        # end if
-
-        if view is None:
+        if order > oarr_trc_order(&self.arr) or (
+            order > 0 and index >= <uint64_t>comb(oarr_nact(&self.arr) + order - 1, order)
+        ):
 
             raise KeyError("direction is not in the array's active set")
 
         # end if
 
-        _register_block_export(self, export)
-        return view
+        if writeable and order > 0:
+
+            oarr_raise_act(&self.arr, oarr_trc_order(&self.arr))
+
+        # end if
+
+        return _soa_export(self, oarr_block_index(oarr_nact(&self.arr), order, index), writeable)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -386,15 +519,20 @@ cdef class omat:
     @property
     def nrows(self):
         """
-        Return the number of rows.
+        Return the number of rows (deprecated in 2.0.0: use ``shape``).
 
         Returns
         -------
         int
-            Row count.
+            ``shape[0]`` for a 2-D array, ``n`` for a 1-D array, 1 for a 0-D array.
+
+        Raises
+        ------
+        AttributeError
+            For an array of more than two dimensions.
         """
 
-        return oarr_nrows(&self.arr)
+        return _deprecated_dim(self.shape, 0)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -403,15 +541,20 @@ cdef class omat:
     @property
     def ncols(self):
         """
-        Return the number of columns.
+        Return the number of columns (deprecated in 2.0.0: use ``shape``).
 
         Returns
         -------
         int
-            Column count.
+            ``shape[1]`` for a 2-D array, 1 for a 1-D or 0-D array.
+
+        Raises
+        ------
+        AttributeError
+            For an array of more than two dimensions.
         """
 
-        return oarr_ncols(&self.arr)
+        return _deprecated_dim(self.shape, 1)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -425,7 +568,7 @@ cdef class omat:
         Returns
         -------
         int
-            Rows times columns.
+            Product of the extents.
         """
 
         return oarr_size(&self.arr)
@@ -437,12 +580,12 @@ cdef class omat:
     @property
     def real(self):
         """
-        Copy the real parts into a NumPy matrix.
+        Return the real parts as a read-only NumPy view of the array's memory (contracts 11.11).
 
         Returns
         -------
         numpy.ndarray
-            Real coefficients, shape (nrows, ncols).
+            Real coefficients, of the array's shape; ``.copy()`` gives a writable copy.
         """
 
         return _array_real(self)
@@ -461,10 +604,10 @@ cdef class omat:
             Independent copy.
         """
 
-        cdef oarr_t result = oarr_init()
+        cdef omat result = omat.__new__(omat)
 
-        _soa_ok("copy", oarr_copy_to(&self.arr, &result), &result)
-        return omat.wrap(result)
+        _soa_ok("copy", oarr_copy_to(&self.arr, &result.arr), &result.arr)
+        return result
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -555,10 +698,11 @@ cdef class omat:
         Parameters
         ----------
         rhs : float or otinum or sotinum or array
-            New value; the truncation order rises to the value's when it is larger.
+            New value; the truncation order rises to the value's when it is larger (contracts 11.6 G1:
+            BufferError while views or exports of the array are alive).
         """
 
-        self[:, :] = rhs
+        self[...] = rhs
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -594,7 +738,7 @@ cdef class omat:
         Returns
         -------
         omat
-            Product, or None when ``out`` is given.
+            Product (``out`` itself when it is given).
         """
 
         return dot(lhs, rhs, out)
@@ -615,7 +759,7 @@ cdef class omat:
         Returns
         -------
         omat
-            Inverse, or None when ``out`` is given.
+            Inverse (``out`` itself when it is given).
         """
 
         return inv(arr, out)
@@ -636,7 +780,7 @@ cdef class omat:
         Returns
         -------
         omat
-            Transposed copy, or None when ``out`` is given.
+            Transposed copy (``out`` itself when it is given).
         """
 
         return transpose(arr, out)
@@ -917,9 +1061,9 @@ cdef class omat:
         """
 
         cdef tuple pair = _direction(humdir)
-        cdef oarr_t result = oarr_init()
-        _soa_ok("truncate", oarr_truncate_im_to(pair[0], pair[1], &self.arr, &result), &result)
-        return omat.wrap(result)
+        cdef omat result = omat.__new__(omat)
+        _soa_ok("truncate", oarr_truncate_im_to(pair[0], pair[1], &self.arr, &result.arr), &result.arr)
+        return result
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -940,9 +1084,9 @@ cdef class omat:
             Truncated copy.
         """
 
-        cdef oarr_t result = oarr_init()
-        _soa_ok("truncate_order", oarr_truncate_order_to(order, &self.arr, &result), &result)
-        return omat.wrap(result)
+        cdef omat result = omat.__new__(omat)
+        _soa_ok("truncate_order", oarr_truncate_order_to(order, &self.arr, &result.arr), &result.arr)
+        return result
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -963,9 +1107,9 @@ cdef class omat:
             Extracted copy.
         """
 
-        cdef oarr_t result = oarr_init()
-        _soa_ok("get_order_im", oarr_get_order_im_to(order, &self.arr, &result), &result)
-        return omat.wrap(result)
+        cdef omat result = omat.__new__(omat)
+        _soa_ok("get_order_im", oarr_get_order_im_to(order, &self.arr, &result.arr), &result.arr)
+        return result
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -981,9 +1125,9 @@ cdef class omat:
             Compact copy.
         """
 
-        cdef oarr_t result = oarr_init()
-        _soa_ok("compact", oarr_compact_to(&self.arr, &result), &result)
-        return omat.wrap(result)
+        cdef omat result = omat.__new__(omat)
+        _soa_ok("compact", oarr_compact_to(&self.arr, &result.arr), &result.arr)
+        return result
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -1167,9 +1311,9 @@ cdef class omat:
             Negated array.
         """
 
-        cdef oarr_t result = oarr_init()
-        _soa_ok("neg", oarr_neg_to(&self.arr, &result, _dhl), &result)
-        return omat.wrap(result)
+        cdef omat result = omat.__new__(omat)
+        _soa_ok("neg", oarr_neg_to(&self.arr, &result.arr, _dhl), &result.arr)
+        return result
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -1192,7 +1336,7 @@ cdef class omat:
             Elementwise power.
         """
 
-        cdef oarr_t result = oarr_init()
+        cdef omat result
 
         if modulus is not None or not isinstance(exponent, Real):
 
@@ -1200,8 +1344,9 @@ cdef class omat:
 
         # end if
 
-        _soa_ok("pow", oarr_pow_to(&(<omat>self).arr, exponent, &result, _dhl), &result)
-        return omat.wrap(result)
+        result = omat.__new__(omat)
+        _soa_ok("pow", oarr_pow_to(&(<omat>self).arr, exponent, &result.arr, _dhl), &result.arr)
+        return result
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -1209,20 +1354,19 @@ cdef class omat:
     # ****************************************************************************************************
     def __matmul__(self, other):
         """
-        Perform coefficient-aware matrix multiplication.
+        Matrix product with numpy.matmul's rules (contracts 11.3 I3): 1-D operands are promoted and
+        the promoted axis is removed; batch axes broadcast.
 
         Parameters
         ----------
         other : omat
-            Right matrix.
+            Right operand.
 
         Returns
         -------
-        omat or NotImplemented
-            Matrix product.
+        omat or otinum or NotImplemented
+            The product (an OTI scalar for two 1-D operands).
         """
-
-        cdef oarr_t result = oarr_init()
 
         if not isinstance(other, omat):
 
@@ -1230,15 +1374,7 @@ cdef class omat:
 
         # end if
 
-        if oarr_ncols(&self.arr) != oarr_nrows(&(<omat>other).arr):
-
-            raise ValueError("matmul: incompatible matrix dimensions")
-
-        # end if
-
-        _soa_ok("matmul", oarr_matmul_OO_to(&(<omat>self).arr, &(<omat>other).arr, &result, _dhl),
-                &result)
-        return omat.wrap(result)
+        return _soa_matmul(self, <omat>other, False)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -1392,7 +1528,7 @@ cdef class omat:
         Returns
         -------
         omat
-            Sum, or None when ``out`` is given.
+            Sum (``out`` itself when it is given).
         """
 
         return _finish(lhs + rhs, out)

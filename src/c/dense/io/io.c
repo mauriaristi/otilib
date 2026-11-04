@@ -169,13 +169,47 @@ static int dnis_all_zero(const coeff_t* p, uint64_t lo, uint64_t hi){
 
 
 // *******************************************************************************************************
-// Writes the 64-byte header.
-static int dnis_header_write(FILE* file, int type, ord_t trc, ord_t act, uint32_t nact,
-                             uint64_t nrows, uint64_t ncols, uint64_t payload){
+// Matricized rows and columns of an element shape (the v1 fields): (1, 1) for 0-D, (n, 1) for 1-D,
+// (S[0], prod S[1..]) otherwise. DNIO_ERR_ARGUMENT when the product overflows.
+static int dnis_matricize(int32_t ndim, const uint64_t* shape, uint64_t* p_nrows, uint64_t* p_ncols){
+
+    uint64_t nc = 1;
+    int32_t d;
+
+    for (d = 1; d < ndim; d++){
+
+        if (shape[d] != 0 && nc > UINT64_MAX / shape[d]){
+            return DNIO_ERR_ARGUMENT;
+        }
+
+        nc *= shape[d];
+
+    }
+
+    *p_nrows = (ndim >= 1) ? shape[0] : 1;
+    *p_ncols = nc;
+
+    return DNIO_OK;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Writes a version-2 header: the 64 fixed bytes (the v1 fields, with rows and columns the matricized
+// shape), the layout flag at byte 9 and ndim at bytes 40..43, then the ndim extents (uint64).
+static int dnis_header_write(FILE* file, int type, ord_t trc, ord_t act, uint32_t nact, int32_t ndim,
+                             const uint64_t* shape, int layout, uint64_t payload){
 
     uint8_t head[DNIO_HEADER_BYTES];
     const char magic[4] = {(char)0x93, 'O', 'T', 'D'};
     const uint16_t version = DNIO_VERSION;
+    const uint32_t nd = (uint32_t)ndim;
+    uint64_t nrows, ncols;
+
+    if (ndim < 0 || ndim > DNIO_MAXDIM || dnis_matricize(ndim, shape, &nrows, &ncols) != DNIO_OK){
+        return DNIO_ERR_ARGUMENT;
+    }
 
     memset(head, 0, sizeof(head));
     memcpy(head, magic, 4);
@@ -184,6 +218,7 @@ static int dnis_header_write(FILE* file, int type, ord_t trc, ord_t act, uint32_
     head[6]  = (uint8_t)type;
     head[7]  = (uint8_t)dnis_host_order();
     head[8]  = (uint8_t)sizeof(coeff_t);
+    head[9]  = (uint8_t)layout;
     head[10] = trc;
     head[11] = act;
 
@@ -191,8 +226,17 @@ static int dnis_header_write(FILE* file, int type, ord_t trc, ord_t act, uint32_
     memcpy(head + 16, &nrows, sizeof(nrows));
     memcpy(head + 24, &ncols, sizeof(ncols));
     memcpy(head + 32, &payload, sizeof(payload));
+    memcpy(head + 40, &nd, sizeof(nd));
 
-    return (fwrite(head, 1, sizeof(head), file) == sizeof(head)) ? DNIO_OK : DNIO_ERR_IO;
+    if (fwrite(head, 1, sizeof(head), file) != sizeof(head)){
+        return DNIO_ERR_IO;
+    }
+
+    if (ndim > 0 && fwrite(shape, sizeof(uint64_t), (size_t)ndim, file) != (size_t)ndim){
+        return DNIO_ERR_IO;
+    }
+
+    return DNIO_OK;
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -230,7 +274,8 @@ static int dnis_header_read(FILE* file, dnio_info_t* p_info){
 
     uint8_t head[DNIO_HEADER_BYTES];
     uint16_t version;
-    uint64_t file_bytes, expected, size, i;
+    uint32_t nd;
+    uint64_t file_bytes, expected, size, i, rows, cols;
     size_t got;
     int status;
     dnio_info_t info;
@@ -262,7 +307,7 @@ static int dnis_header_read(FILE* file, dnio_info_t* p_info){
         return DNIO_ERR_VERSION;
     }
 
-    if (version != DNIO_VERSION){
+    if (version != 1 && version != 2){
         return DNIO_ERR_FORMAT;
     }
 
@@ -276,14 +321,68 @@ static int dnis_header_read(FILE* file, dnio_info_t* p_info){
     memcpy(&info.ncols, head + 24, sizeof(info.ncols));
     memcpy(&info.payload, head + 32, sizeof(info.payload));
 
-    if (head[8] != sizeof(coeff_t) || head[9] != 0){
+    if (head[8] != sizeof(coeff_t)){
         return DNIO_ERR_FORMAT;
     }
 
+    // Version 1: no layout flag, a 2-D shape (nrows, ncols) and SoA blocks in column-major order.
+    // Version 2: the layout flag, ndim and the extents after the fixed header.
+    nd = 2;
+
+    if (version == 1){
+
+        if (head[9] != 0){
+            return DNIO_ERR_FORMAT;
+        }
+
+        info.layout = (head[6] == DNIO_TYPE_AOS) ? DNIO_LAYOUT_C : DNIO_LAYOUT_F;
+
+    } else {
+
+        memcpy(&nd, head + 40, sizeof(nd));
+        info.layout = head[9];
+
+        if (nd > DNIO_MAXDIM || (info.layout != DNIO_LAYOUT_F && info.layout != DNIO_LAYOUT_C)){
+            return DNIO_ERR_FORMAT;
+        }
+
+    }
+
     // Reserved bytes are zero.
-    for (i = 40; i < DNIO_HEADER_BYTES; i++){
+    for (i = (version == 1) ? 40 : 44; i < DNIO_HEADER_BYTES; i++){
 
         if (head[i] != 0){
+            return DNIO_ERR_FORMAT;
+        }
+
+    }
+
+    info.ndim       = (int32_t)nd;
+    info.head_bytes = DNIO_HEADER_BYTES + ((version == 1) ? 0 : 8 * (uint64_t)nd);
+
+    if (version == 1){
+
+        info.shape[0] = info.nrows;
+        info.shape[1] = info.ncols;
+
+    } else {
+
+        if (nd > 0 && (file_bytes < info.head_bytes
+                       || fread(info.shape, sizeof(uint64_t), (size_t)nd, file) != (size_t)nd)){
+            return DNIO_ERR_TRUNCATED;
+        }
+
+        // The extents must matricize to the v1 fields and fit a descriptor.
+        for (i = 0; i < nd; i++){
+
+            if (info.shape[i] > (uint64_t)INT64_MAX){
+                return DNIO_ERR_FORMAT;
+            }
+
+        }
+
+        if (dnis_matricize((int32_t)nd, info.shape, &rows, &cols) != DNIO_OK || rows != info.nrows
+            || cols != info.ncols){
             return DNIO_ERR_FORMAT;
         }
 
@@ -298,13 +397,13 @@ static int dnis_header_read(FILE* file, dnio_info_t* p_info){
         return DNIO_ERR_FORMAT;
     }
 
-    if (info.payload > UINT64_MAX - DNIO_HEADER_BYTES){
+    if (info.payload > UINT64_MAX - info.head_bytes){
         return DNIO_ERR_FORMAT;
     }
 
     if (info.type == DNIO_TYPE_SCALAR){
 
-        if (info.nrows != 1 || info.ncols != 1
+        if (info.nrows != 1 || info.ncols != 1 || (version == 2 && info.ndim != 0)
             || dnis_scalar_bytes((bases_t)info.nact, info.trc_order, &expected) != DNIO_OK
             || expected != info.payload){
             return DNIO_ERR_FORMAT;
@@ -336,11 +435,11 @@ static int dnis_header_read(FILE* file, dnio_info_t* p_info){
 
     }
 
-    if (file_bytes < DNIO_HEADER_BYTES + info.payload){
+    if (file_bytes < info.head_bytes + info.payload){
         return DNIO_ERR_TRUNCATED;
     }
 
-    if (file_bytes > DNIO_HEADER_BYTES + info.payload){
+    if (file_bytes > info.head_bytes + info.payload){
         return DNIO_ERR_SIZE;
     }
 
@@ -574,8 +673,8 @@ int oti_save(const char* filename, const otinum_t* num){
         return status;
     }
 
-    status = dnis_header_write(file, DNIO_TYPE_SCALAR, num->trc_order, num->act_order, num->nact, 1, 1,
-        payload);
+    status = dnis_header_write(file, DNIO_TYPE_SCALAR, num->trc_order, num->act_order, num->nact, 0, NULL,
+                               DNIO_LAYOUT_F, payload);
 
     if (status == DNIO_OK){
         status = dnis_scalar_write(file, num);
@@ -644,7 +743,8 @@ int oarr_save(const char* filename, const oarr_t* arr){
 
     FILE* file;
     char* tmp;
-    uint64_t payload = 0, nreal;
+    uint64_t payload = 0, nreal, shape[DNIO_MAXDIM];
+    int32_t d;
     int status;
 
     if (filename == NULL || arr == NULL || oarr_act_order(arr) > oarr_trc_order(arr)
@@ -659,6 +759,26 @@ int oarr_save(const char* filename, const oarr_t* arr){
 
     if (nreal > 0 && oarr_data(arr) == NULL){
         return DNIO_ERR_ARGUMENT;
+    }
+
+    // A view is saved through a canonical copy (a root saves its own blocks).
+    if (!dnob_canon(arr)){
+
+        oarr_t t = oarr_init();
+        dnob_shape_t S = dnob_shape_of(arr);
+        int st;
+
+        S.layout = ND_LAYOUT_F;
+
+        if (dnob_pack(arr, &S, &t) != DN_OK){
+            return DNIO_ERR_MEMORY;
+        }
+
+        st = oarr_save(filename, &t);
+        oarr_free(&t);
+
+        return st;
+
     }
 
     // Blocks above the active order must be zero, or the file would not read back.
@@ -676,9 +796,13 @@ int oarr_save(const char* filename, const oarr_t* arr){
         return status;
     }
 
+    // The array is canonical here: its blocks are compact in F order (layout flag F).
+    for (d = 0; d < oarr_ndim(arr); d++){
+        shape[d] = (uint64_t)oarr_shape(arr, d);
+    }
+
     status = dnis_header_write(file, DNIO_TYPE_SOA, oarr_trc_order(arr), oarr_act_order(arr),
-                               oarr_nact(arr),
-        oarr_nrows(arr), oarr_ncols(arr), payload);
+                               oarr_nact(arr), oarr_ndim(arr), shape, DNIO_LAYOUT_F, payload);
 
     if (status == DNIO_OK){
         status = dnis_write(file, oarr_data(arr), (size_t)nreal * sizeof(coeff_t));
@@ -728,8 +852,21 @@ int oarr_read(const char* filename, oarr_t* res){
     }
 
     // The header check made the payload size equal to the file size, so the allocation is bounded.
+    // Version 1 gives the 2-D shape it stored (a (n, 1) file reads back as (n, 1)); version 2 its
+    // shape, compact in the order of its layout flag.
     if (status == DNIO_OK){
-        status = dnis_map(oarr_zeros_to(k, info.nrows, info.ncols, info.trc_order, &arr));
+
+        int64_t shape[DNIO_MAXDIM];
+        int32_t d;
+
+        for (d = 0; d < info.ndim; d++){
+            shape[d] = (int64_t)info.shape[d];
+        }
+
+        status = dnis_map(oarr_zeros_nd_to(k, info.ndim, shape,
+                                           (info.layout == DNIO_LAYOUT_C) ? ND_LAYOUT_C : ND_LAYOUT_F,
+                                           info.trc_order, &arr));
+
     }
 
     if (status == DNIO_OK){
@@ -769,7 +906,9 @@ int arro_save(const char* filename, const arro_t* arr){
 
     FILE* file;
     char* tmp;
-    uint64_t payload = 0, i, bytes;
+    uint64_t payload = 0, i, n, bytes, shape[DNIO_MAXDIM];
+    const otinum_t* xd;
+    int32_t d;
     ord_t trc = 0, act = 0;
     bases_t nact = 0;
     int status = DNIO_OK;
@@ -781,10 +920,14 @@ int arro_save(const char* filename, const arro_t* arr){
         return DNIO_ERR_ARGUMENT;
     }
 
-    // Validate every element and gather the payload size and the maxima for the header.
-    for (i = 0; i < arro_size(arr); i++){
+    // Validate every element and gather the payload size and the maxima for the header (size and data
+    // read once).
+    n  = arro_size(arr);
+    xd = arro_data(arr);
 
-        const otinum_t* num = &arro_data(arr)[i];
+    for (i = 0; i < n; i++){
+
+        const otinum_t* num = &xd[i];
 
         if (dnis_scalar_check(num, &bytes) != DNIO_OK || bytes > UINT64_MAX - 8 - payload){
             return DNIO_ERR_ARGUMENT;
@@ -803,12 +946,16 @@ int arro_save(const char* filename, const arro_t* arr){
         return status;
     }
 
-    status = dnis_header_write(file, DNIO_TYPE_AOS, trc, act, nact, arro_nrows(arr), arro_ncols(arr),
+    for (d = 0; d < arro_ndim(arr); d++){
+        shape[d] = (uint64_t)arro_shape(arr, d);
+    }
+
+    status = dnis_header_write(file, DNIO_TYPE_AOS, trc, act, nact, arro_ndim(arr), shape, DNIO_LAYOUT_C,
                                payload);
 
-    for (i = 0; i < arro_size(arr) && status == DNIO_OK; i++){
+    for (i = 0; i < n && status == DNIO_OK; i++){
 
-        const otinum_t* num = &arro_data(arr)[i];
+        const otinum_t* num = &xd[i];
         uint8_t head[8] = {0, 0, 0, 0, 0, 0, 0, 0};
         uint16_t k = (uint16_t)num->nact;
 
@@ -867,6 +1014,20 @@ int arro_read(const char* filename, arro_t* res){
     // least), so this allocation is bounded by the size of the file.
     if (status == DNIO_OK){
         status = dnis_map(arro_zeros_to(info.nrows, info.ncols, 0, &arr));
+
+        // The stored shape (v1: 2-D) over the row-major records.
+        if (status == DNIO_OK && info.ndim != 2){
+
+            int64_t shape[DNIO_MAXDIM];
+            int32_t d;
+
+            for (d = 0; d < info.ndim; d++){
+                shape[d] = (int64_t)info.shape[d];
+            }
+
+            status = dnis_map(arro_reshape(info.ndim, shape, &arr));
+
+        }
     }
 
     size = arro_size(&arr);

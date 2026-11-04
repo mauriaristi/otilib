@@ -922,7 +922,7 @@ def _with_out(func, shape):
         """
         out = _stale_holder(shape)
         ret = func(*args, out=out)
-        assert ret is None, "functions called with out= must return None"
+        assert ret is out, "functions called with out= must return the out"
 
         return out
 
@@ -1405,7 +1405,7 @@ def test_math_function_on_array_out(name, func, x0):
     out = _stale_holder(arr.shape)
     ret = func(arr, out=out)
 
-    assert ret is None
+    assert ret is out
     _assert_oti_equal(out, func(arr), name)
 
 # end function
@@ -1425,9 +1425,9 @@ def test_array_constructors():
 
     np.testing.assert_array_equal(oti.array(data).real, np.array(data))
     np.testing.assert_array_equal(oti.array(np.array(data)).real, np.array(data))
-    assert oti.array([1.0, 2.0, 3.0]).shape == (3, 1)
+    assert oti.array([1.0, 2.0, 3.0]).shape == (3,)
     np.testing.assert_array_equal(oti.zeros((2, 3)).real, np.zeros((2, 3)))
-    assert oti.zeros(3).shape == (3, 1)
+    assert oti.zeros(3).shape == (3,)
     np.testing.assert_array_equal(oti.ones((2, 3)).real, np.ones((2, 3)))
     np.testing.assert_array_equal(oti.eye(3).real, np.eye(3))
 
@@ -1481,10 +1481,10 @@ def test_array_getitem():
     row = arr[1, :]
     col = arr[:, 2]
 
-    assert row.shape == (1, 3)
-    assert col.shape == (2, 1)
-    _assert_oti_equal(row, _entries(arr)[1:2, :], "row slice")
-    _assert_oti_equal(col, _entries(arr)[:, 2:3], "column slice")
+    assert row.shape == (3,)
+    assert col.shape == (2,)
+    _assert_oti_equal(row, _entries(arr)[1, :], "row slice")
+    _assert_oti_equal(col, _entries(arr)[:, 2], "column slice")
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -1679,7 +1679,7 @@ def test_array_utility_functions_out(name, func):
     out = _stale_holder(arr.shape)
     ret = func(arr, out=out)
 
-    assert ret is None
+    assert ret is out
     _assert_oti_equal(out, _entries(func(arr)), name)
 
 # end function
@@ -1900,7 +1900,7 @@ def _interp_ref(x, xvals, yvals):
     xvals : list of float
         Ascending interpolation abscissae.
     yvals : matso
-        Column array of ordinates.
+        One-dimensional array of ordinates.
 
     Returns
     -------
@@ -1913,9 +1913,9 @@ def _interp_ref(x, xvals, yvals):
     1.0
     """
     k = int(np.searchsorted(xvals, x.real)) - 1
-    slope = (yvals[k + 1, 0] - yvals[k, 0]) / (xvals[k + 1] - xvals[k])
+    slope = (yvals[k + 1] - yvals[k]) / (xvals[k + 1] - xvals[k])
 
-    return yvals[k, 0] + (x - xvals[k]) * slope
+    return yvals[k] + (x - xvals[k]) * slope
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -1936,11 +1936,11 @@ def test_interp1d():
     _assert_oti_equal(oti.interp1d(xq, oti.array(xvals), yvals), _interp_ref(xq, xvals, yvals),
                       "interp1d scalar")
 
-    expected = np.array([[_interp_ref(xarr[i, 0], xvals, yvals)] for i in range(3)], dtype=object)
+    expected = np.array([_interp_ref(xarr[i], xvals, yvals) for i in range(3)], dtype=object)
     _assert_oti_equal(oti.interp1d(xarr, oti.array(xvals), yvals), expected, "interp1d array")
 
     scalar_out = _stale_holder(None)
-    array_out = _stale_holder((3, 1))
+    array_out = _stale_holder((3,))
     oti.interp1d(xq, oti.array(xvals), yvals, out=scalar_out)
     oti.interp1d(xarr, oti.array(xvals), yvals, out=array_out)
 
@@ -1973,11 +1973,11 @@ def test_moving_average(size):
 
     for a, b in [(0, 0), (1, 0)]:
 
-        vals = _oti_value(data, a, b)[:, 0]
+        vals = _oti_value(data, a, b)
         padded = np.concatenate([np.repeat(vals[0], lefti), vals, np.repeat(vals[-1], righti - 1)])
         ref = np.array([padded[k:k + size].mean() for k in range(npts)])
 
-        np.testing.assert_allclose(_oti_value(res, a, b)[:, 0], ref, rtol=REL_TOL)
+        np.testing.assert_allclose(_oti_value(res, a, b), ref, rtol=REL_TOL)
 
     # end for
 
@@ -2056,7 +2056,7 @@ def test_inv_block_out():
     out = _stale_holder(arr.shape)
     ret = oti.inv_block(arr, out=out)
 
-    assert ret is None
+    assert ret is out
     _assert_oti_equal(out, oti.inv_block(arr), "inv_block out")
 
 # end function
@@ -2328,7 +2328,7 @@ def test_solve_rhs_is_out():
     ref = oti.solve(kmat, rhs)
     ret = oti.solve(kmat, rhs, out=rhs)
 
-    assert ret is None
+    assert ret is rhs
     _assert_oti_equal(rhs, ref, "solve out=b")
 
 # end function
@@ -2518,8 +2518,8 @@ def test_fe_inv_det(n):
     # Stale out= holders: every integration point starts with coefficients in every direction.
     inv_out = oti.zeros((n, n), nip=nip) + _stale_holder((n, n))
     det_out = oti.zero(nip=nip) + stale
-    assert oti.inv(fe_arr, out=inv_out) is None
-    assert oti.det(fe_arr, out=det_out) is None
+    assert oti.inv(fe_arr, out=inv_out) is inv_out
+    assert oti.det(fe_arr, out=det_out) is det_out
 
     for fe_inv, fe_det, kind in [(oti.inv(fe_arr), oti.det(fe_arr), "alloc"),
                                  (inv_out, det_out, "out")]:

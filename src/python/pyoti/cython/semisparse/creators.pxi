@@ -1,8 +1,63 @@
 # Creators: e, zero, one, number, zeros, ones, eye, array.
 #
-# Calls follow pyoti.sparse. The nbases argument is a capacity hint of the sparse types: it is
-# accepted and has no effect, since semi-sparse numbers grow their active set on demand. A positive
-# nip builds a Gauss-point type through the hooks _fe_zeros / _fe_scalar (semisparse/gauss/base.pxi).
+# Calls follow pyoti.sparse; shapes follow NumPy (rule C1, 7b): an int or a 1-tuple gives a 1-D array,
+# 1-D data a 1-D array, a scalar or () a 0-D array (ndim <= 2 until Phase 8). ``zeros(bases=)``
+# reserves the labels (the view-stable layout) and ``nbases=K`` is capacity only: room for K labels is
+# allocated but no label is reserved (decision A1). Scalar creators accept nbases and ignore it. A
+# positive nip builds a Gauss-point type through the hooks _fe_zeros / _fe_scalar
+# (semisparse/gauss/base.pxi), whose shapes keep the 1.x matrix rule (11.8).
+
+
+# ********************************************************************************************************
+cdef object _reserve_creation(object result, object nbases, object bases):
+    """
+    Apply the ``bases=`` labels and the ``nbases=`` capacity of an array creator.
+
+    Parameters
+    ----------
+    result : oarrss
+        Freshly created array (no view can exist yet).
+    nbases : int
+        Base capacity to allocate (no label is reserved).
+    bases : iterable of int
+        Labels to add to the active set.
+
+    Returns
+    -------
+    oarrss
+        ``result``.
+    """
+
+    cdef oarrss soa = result
+    cdef list active = _bases(bases)
+    cdef np.ndarray[np.uint16_t, ndim=1] labels
+
+    if active:
+
+        labels = np.asarray(active, dtype=np.uint16)
+        _check_alloc(comb(len(set(active).union(soa.active_bases)) + soa.arr.trc_order,
+                          soa.arr.trc_order) * soa.arr.size * 8)
+        oarrss_add_bases(<bases_t *>labels.data, len(active), &soa.arr)
+
+    # end if
+
+    if nbases > soa.arr.cap_bases:
+
+        if nbases > 65535:
+
+            raise ValueError("nbases must be at most 65535")
+
+        # end if
+
+        _check_alloc(comb(nbases + soa.arr.trc_order, soa.arr.trc_order) * soa.arr.size * 8)
+        oarrss_reserve(&soa.arr, nbases, soa.arr.nrows, soa.arr.ncols, soa.arr.trc_order)
+
+    # end if
+
+    return result
+
+# end function
+# --------------------------------------------------------------------------------------------------------
 
 
 # ********************************************************************************************************
@@ -181,27 +236,29 @@ def one(nbases=0, order=0, nip=0):
 # ********************************************************************************************************
 def zeros(shape_in, nbases=0, order=0, nip=0, bases=()):
     """
-    Create a zero SoA matrix, optionally over a given active basis set.
+    Create a zero SoA array, optionally over a given active basis set.
 
     The argument order matches ``pyoti.sparse.zeros``; ``bases`` is the semi-sparse extra.
 
     Parameters
     ----------
     shape_in : int or tuple of int
-        An int or a 1-tuple is a column vector; otherwise (rows, columns).
+        An int or a 1-tuple gives a 1-D array, a 2-tuple a matrix and ``()`` a 0-D array
+        (Gauss arrays, ``nip > 0``, keep the 1.x rule: an int is a column).
     nbases : int
-        Capacity hint of the sparse API; no effect here.
+        Base capacity (no label is reserved; use ``bases`` for that).
     order : int
         Truncation order.
     nip : int
         Number of integration points; a positive value builds a Gauss-point array.
     bases : iterable of int
-        Strictly increasing global basis labels of the initial active set.
+        Strictly increasing global basis labels of the initial active set (reserved: assignments
+        within them never relayout the array).
 
     Returns
     -------
     oarrss
-        Zero matrix.
+        Zero array.
     """
 
     cdef tuple dims
@@ -214,7 +271,7 @@ def zeros(shape_in, nbases=0, order=0, nip=0, bases=()):
         dims = <tuple>shape_in
 
         if type(dims[0]) is int and type(dims[1]) is int and (
-            dims[0] >= 0 and dims[1] >= 0 and 0 <= order <= 255 and nbases >= 0
+            dims[0] >= 0 and dims[1] >= 0 and 0 <= order <= 255 and nbases == 0
         ):
 
             return oarrss.wrap(oarrss_zeros(NULL, 0, dims[0], dims[1], order))
@@ -223,16 +280,15 @@ def zeros(shape_in, nbases=0, order=0, nip=0, bases=()):
 
     # end if
 
-    dims = _process_shape(shape_in)
     _check_creation(nbases, order, nip)
 
     if nip != 0:
 
-        return _fe_zeros(dims, list(bases), order, nip)
+        return _fe_zeros(_process_shape(shape_in), list(bases), order, nip)
 
     # end if
 
-    return oarrss.zeros(dims, bases=bases, order=order)
+    return _reserve_creation(oarrss.zeros(shape_in, bases=bases, order=order), nbases, ())
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -241,14 +297,14 @@ def zeros(shape_in, nbases=0, order=0, nip=0, bases=()):
 # ********************************************************************************************************
 def ones(shape_in, nbases=0, order=0, nip=0):
     """
-    Create a SoA matrix whose elements are all 1.
+    Create a SoA array whose elements are all 1.
 
     Parameters
     ----------
     shape_in : int or tuple of int
-        An int or a 1-tuple is a column vector; otherwise (rows, columns).
+        Shape as in ``zeros`` (NumPy's rule; Gauss arrays keep the 1.x rule).
     nbases : int
-        Capacity hint of the sparse API; no effect here.
+        Base capacity (no label is reserved).
     order : int
         Truncation order.
     nip : int
@@ -257,16 +313,18 @@ def ones(shape_in, nbases=0, order=0, nip=0):
     Returns
     -------
     oarrss
-        Matrix of ones.
+        Array of ones.
     """
 
-    cdef tuple dims = _process_shape(shape_in)
+    cdef tuple dims
     cdef object result
     cdef uint64_t i, j
 
     _check_creation(nbases, order, nip)
 
     if nip != 0:
+
+        dims = _process_shape(shape_in)
 
         result = _fe_zeros(dims, [], order, nip)
 
@@ -284,7 +342,11 @@ def ones(shape_in, nbases=0, order=0, nip=0):
 
     # end if
 
-    return oarrss.from_real(np.ones(dims, dtype=np.float64), order=order)
+    dims = _creator_dims(shape_in)
+    _check_alloc(dims[1] * dims[2] * 8)
+    result = oarrss.from_real(np.ones(_lshape(dims[0], dims[1], dims[2]), dtype=np.float64),
+                              order=order)
+    return _reserve_creation(result, nbases, ())
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -300,7 +362,7 @@ def eye(size, nbases=0, order=0, nip=0):
     size : int
         Dimension.
     nbases : int
-        Capacity hint of the sparse API; no effect here.
+        Base capacity (no label is reserved).
     order : int
         Truncation order.
     nip : int
@@ -337,7 +399,8 @@ def eye(size, nbases=0, order=0, nip=0):
 
     # end if
 
-    return oarrss.wrap(oarrss_eye(size, order))
+    _check_alloc(size * size * 8)
+    return _reserve_creation(oarrss.wrap(oarrss_eye(size, order)), nbases, ())
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -346,18 +409,19 @@ def eye(size, nbases=0, order=0, nip=0):
 # ********************************************************************************************************
 def array(arr, nbases=0, order=0, nip=0):
     """
-    Create a SoA matrix from a scalar, a list or a NumPy array of reals and OTI scalars.
+    Create a SoA array from a scalar, a list or a NumPy array of reals and OTI scalars.
 
-    A scalar gives a 1 x 1 matrix and a 1-D input gives a column; the truncation order is the
-    larger of ``order`` and the orders of the elements. A 3-D input has integration points on its
-    last axis and needs ``nip`` types (the Gauss-point hooks).
+    Shapes follow NumPy (rule C1): a scalar gives a 0-D array, 1-D input a 1-D array and nested
+    lists their nesting depth (at most 2). The truncation order is the larger of ``order`` and the
+    orders of the elements. A 3-D input has integration points on its last axis and builds a
+    Gauss-point array (the Gauss hooks, whose shapes keep the 1.x matrix rule).
 
     Parameters
     ----------
     arr : object
         Real or OTI scalar, or nested lists / arrays of them. An existing array is copied.
     nbases : int
-        Capacity hint of the sparse API; no effect here.
+        Base capacity (no label is reserved).
     order : int
         Minimum truncation order.
     nip : int
@@ -366,12 +430,13 @@ def array(arr, nbases=0, order=0, nip=0):
     Returns
     -------
     oarrss
-        The matrix.
+        The array.
     """
 
     cdef np.ndarray values
     cdef object result
     cdef object dims
+    cdef int ndim
     cdef uint64_t i, j, k
 
     _check_creation(nbases, order, nip)
@@ -382,7 +447,7 @@ def array(arr, nbases=0, order=0, nip=0):
 
         if result is not None:
 
-            return result
+            return _reserve_creation(result, nbases, ())
 
         # end if
 
@@ -390,17 +455,26 @@ def array(arr, nbases=0, order=0, nip=0):
 
     if isinstance(arr, (oarrss, arrss)):
 
-        return arr.copy()
+        result = arr.copy()
+
+        if isinstance(result, arrss):
+
+            return result
+
+        # end if
+
+        return _reserve_creation(result, nbases, ())
 
     # end if
 
     if isinstance(arr, matso):
 
-        return oarrss.from_sparse(arr)
+        return _reserve_creation(oarrss.from_sparse(arr), nbases, ())
 
     # end if
 
     values = np.array(arr, dtype=object)
+    ndim = values.ndim
 
     if values.ndim == 0:
 
@@ -418,7 +492,7 @@ def array(arr, nbases=0, order=0, nip=0):
 
     else:
 
-        raise ValueError("Error: Can not create an array of such dimensions.")
+        raise ValueError(_RANK_ERROR)
 
     # end if
 
@@ -460,7 +534,8 @@ def array(arr, nbases=0, order=0, nip=0):
 
     if all(isinstance(item, Real) for item in values.ravel()):
 
-        return oarrss.from_real(values.astype(np.float64), order=order)
+        result = _nd(oarrss.from_real(values.astype(np.float64), order=order), ndim)
+        return _reserve_creation(result, nbases, ())
 
     # end if
 
@@ -476,7 +551,7 @@ def array(arr, nbases=0, order=0, nip=0):
 
     # end for
 
-    return result
+    return _reserve_creation(_nd(result, ndim), nbases, ())
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -490,7 +565,7 @@ cdef object _array_from_lists(object arr, ord_t order):
     Parameters
     ----------
     arr : list or tuple
-        A list of numbers (a column) or a list of equally long lists of numbers (a matrix).
+        A list of numbers (a 1-D array) or a list of equally long lists of numbers (a matrix).
     order : int
         Minimum truncation order.
 
@@ -599,7 +674,7 @@ cdef object _array_from_lists(object arr, ord_t order):
 
     # end for
 
-    return result
+    return result if nested else _nd(result, 1)
 
 # end function
 # --------------------------------------------------------------------------------------------------------

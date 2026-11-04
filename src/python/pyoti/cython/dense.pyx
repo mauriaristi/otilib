@@ -10,7 +10,7 @@ All C values returned here are owned by their Python wrappers.
 
 import numpy as np
 cimport numpy as np
-from libc.stdint cimport uint8_t, uint64_t
+from libc.stdint cimport uint8_t, uint64_t, INT64_MAX
 from pyoti.c_otilib cimport *
 from pyoti.core cimport dHelp, get_cython_dHelp
 from pyoti.core import expand_imdir as _expand_direction
@@ -23,7 +23,9 @@ cdef dHelp _helper = get_cython_dHelp()
 cdef dhelpl_t _dhl = _helper.dhl
 
 
+include "real/ndarray/base.pxi"
 include "dense/utils.pxi"
+include "dense/ndarray.pxi"
 include "dense/scalar/base.pxi"
 include "dense/soa/base.pxi"
 include "dense/aos/base.pxi"

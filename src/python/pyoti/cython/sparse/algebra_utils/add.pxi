@@ -100,6 +100,8 @@ cdef object __add__FX__(matsofe Flhs, object rhs, object out = None):
     return res
   # end if
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
 
 
@@ -145,11 +147,11 @@ cdef object __add__OX__(matso Olhs, object rhs, object out = None):
   if trhs == sotinum:
     orhs = rhs
     if res_flag:
-      Ores = out
+      Ores = _out_matso(out, Olhs)
       arrso_sum_oO_to( &orhs.num, &Olhs.arr, &Ores.arr, dhl )
     else:
       cOres = arrso_sum_oO( &orhs.num, &Olhs.arr, dhl )
-      res = matso.create( &cOres )
+      res = _sk(matso.create(&cOres), Olhs._lk)
     # end if
   elif trhs == matsofe:
     Frhs = rhs
@@ -163,30 +165,30 @@ cdef object __add__OX__(matso Olhs, object rhs, object out = None):
   elif trhs == matso:
     Orhs = rhs
     if res_flag:
-      Ores = out
+      Ores = _out_matso(out, Olhs)
       arrso_sum_OO_to( &Olhs.arr, &Orhs.arr, &Ores.arr, dhl )
     else:
       cOres = arrso_sum_OO( &Olhs.arr, &Orhs.arr, dhl )
-      res = matso.create( &cOres )
+      res = _sk(matso.create(&cOres), Olhs._lk)
     # end if
   elif trhs == dmat:
     Rrhs = rhs
     Rrhs._sync()
     if res_flag:
-      Ores = out
+      Ores = _out_matso(out, Olhs)
       arrso_sum_RO_to( &Rrhs.arr, &Olhs.arr, &Ores.arr, dhl )
     else:
       cOres = arrso_sum_RO( &Rrhs.arr, &Olhs.arr, dhl )
-      res = matso.create( &cOres )
+      res = _sk(matso.create(&cOres), Olhs._lk)
     # end if
   elif trhs in number_types:
     rrhs = rhs
     if res_flag:
-      Ores = out
+      Ores = _out_matso(out, Olhs)
       arrso_sum_rO_to( rrhs, &Olhs.arr, &Ores.arr, dhl )
     else:
       cOres = arrso_sum_rO( rrhs, &Olhs.arr, dhl )
-      res = matso.create( &cOres )
+      res = _sk(matso.create(&cOres), Olhs._lk)
     # end if
   else:
     raise TypeError("Unsupported add operation between {0} and {1}.".format(type(Olhs),trhs))
@@ -195,6 +197,8 @@ cdef object __add__OX__(matso Olhs, object rhs, object out = None):
   if res_flag == 0:
     return res
   # end if
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -251,32 +255,32 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
   elif trhs == matso:
     Orhs = rhs
     if res_flag:
-      Ores = out
+      Ores = _out_matso(out, Orhs)
       arrso_sum_RO_to( &Rlhs.arr, &Orhs.arr, &Ores.arr, dhl )
     else:
       cOres = arrso_sum_RO( &Rlhs.arr, &Orhs.arr, dhl )
-      res = matso.create( &cOres )
+      res = _sk(matso.create(&cOres), Orhs._lk)
     # end if
   elif trhs == dmat:
     Rrhs = rhs
     Rrhs._sync()
     if res_flag:
-      Rres = out
+      Rres = _dmat_out(out, Rlhs)
       Rres._check_out()
       darr_sum_RR_to( &Rlhs.arr, &Rrhs.arr, &Rres.arr )
     else:
       cRres = darr_sum_RR( &Rlhs.arr, &Rrhs.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), Rlhs )
     # end if
   elif trhs in number_types:
     rrhs = rhs
     if res_flag:
-      Rres = out
+      Rres = _dmat_out(out, Rlhs)
       Rres._check_out()
       darr_sum_rR_to( rrhs, &Rlhs.arr, &Rres.arr )
     else:
       cRres = darr_sum_rR( rrhs, &Rlhs.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), Rlhs )
     # end if
   else:
     raise TypeError("Unsupported add operation between {0} and {1}.".format(type(Rlhs),trhs))
@@ -285,6 +289,8 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
   if res_flag == 0:
     return res
   # end if
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -358,11 +364,11 @@ cdef object __add__oX__(sotinum olhs, object rhs, object out = None):
   elif trhs == matso:
     Orhs = rhs
     if res_flag:
-      Ores = out
+      Ores = _out_matso(out, Orhs)
       arrso_sum_oO_to( &olhs.num, &Orhs.arr, &Ores.arr, dhl )
     else:
       cOres = arrso_sum_oO( &olhs.num, &Orhs.arr, dhl )
-      res = matso.create( &cOres )
+      res = _sk(matso.create(&cOres), Orhs._lk)
     # end if
   elif trhs in number_types:
     rrhs = rhs
@@ -380,6 +386,8 @@ cdef object __add__oX__(sotinum olhs, object rhs, object out = None):
   if res_flag == 0:
     return res
   # end if
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -467,6 +475,8 @@ cdef object __add__fX__(sotife flhs, object rhs, object out = None):
     return res
   # end if
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
 
 
@@ -539,22 +549,22 @@ cdef object __add__rX__(coeff_t rlhs, object rhs, object out = None):
   elif trhs == matso:
     Orhs = rhs
     if res_flag:
-      Ores = out
+      Ores = _out_matso(out, Orhs)
       arrso_sum_rO_to( rlhs, &Orhs.arr, &Ores.arr, dhl )
     else:
       cOres = arrso_sum_rO( rlhs, &Orhs.arr, dhl )
-      res = matso.create( &cOres )
+      res = _sk(matso.create(&cOres), Orhs._lk)
     # end if
   elif trhs == dmat:
     Rrhs = rhs
     Rrhs._sync()
     if res_flag:
-      Rres = out
+      Rres = _dmat_out(out, Rrhs)
       Rres._check_out()
       darr_sum_rR_to( rlhs, &Rrhs.arr, &Rres.arr )
     else:
       cRres = darr_sum_rR( rlhs, &Rrhs.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_like( dmat.create( &cRres ), Rrhs )
     # end if
   elif trhs in number_types:
     rrhs = rhs
@@ -566,6 +576,8 @@ cdef object __add__rX__(coeff_t rlhs, object rhs, object out = None):
   if res_flag == 0:
     return res
   # end if
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 

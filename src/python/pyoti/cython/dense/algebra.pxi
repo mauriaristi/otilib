@@ -8,7 +8,9 @@
 # ********************************************************************************************************
 def dot(lhs, rhs, out=None):
     """
-    Multiply two dense matrices.
+    Multiply two dense arrays with numpy.dot's rules for ndim <= 2 (contracts 11.3 I3): 1-D @ 1-D is the
+    inner product (an OTI scalar), a 1-D left operand is a row and a 1-D right operand a column, the
+    promoted axis removed.
 
     Parameters
     ----------
@@ -17,17 +19,23 @@ def dot(lhs, rhs, out=None):
     rhs : omat or arro
         Right factor.
     out : omat or arro, optional
-        Holder for the product.
+        Holder for the product (extra leading axes of extent 1 allowed, rule S1b).
 
     Returns
     -------
-    omat or arro
-        Matrix product, or None when ``out`` is given.
+    omat or arro or otinum
+        Product (``out`` itself when it is given).
     """
 
     if isinstance(lhs, _dnfe) or isinstance(rhs, _dnfe):
 
         return _fe_dot(lhs, rhs, out)
+
+    # end if
+
+    if isinstance(lhs, omat) and isinstance(rhs, omat):
+
+        return _finish(_soa_matmul(lhs, rhs, True), out)
 
     # end if
 
@@ -40,7 +48,8 @@ def dot(lhs, rhs, out=None):
 # ********************************************************************************************************
 def matmul(lhs, rhs, out=None):
     """
-    Multiply two dense matrices.
+    Multiply two dense arrays with numpy.matmul's rules (contracts 11.3 I3): 1-D operands promoted and
+    the promoted axis removed, batch axes broadcast.
 
     Parameters
     ----------
@@ -49,17 +58,23 @@ def matmul(lhs, rhs, out=None):
     rhs : omat or arro
         Right factor.
     out : omat or arro, optional
-        Holder for the product.
+        Holder for the product (extra leading axes of extent 1 allowed, rule S1b).
 
     Returns
     -------
-    omat or arro
-        Matrix product, or None when ``out`` is given.
+    omat or arro or otinum
+        Product (``out`` itself when it is given).
     """
 
     if isinstance(lhs, _dnfe) or isinstance(rhs, _dnfe):
 
         return _fe_dot(lhs, rhs, out)
+
+    # end if
+
+    if isinstance(lhs, omat) and isinstance(rhs, omat):
+
+        return _finish(_soa_matmul(lhs, rhs, False), out)
 
     # end if
 
@@ -86,7 +101,7 @@ def sum(lhs, rhs, out=None):
     Returns
     -------
     object
-        Sum, or None when ``out`` is given.
+        Sum (``out`` itself when it is given).
     """
 
     if isinstance(lhs, _dnfe) or isinstance(rhs, _dnfe):
@@ -118,7 +133,7 @@ def sub(lhs, rhs, out=None):
     Returns
     -------
     object
-        Difference, or None when ``out`` is given.
+        Difference (``out`` itself when it is given).
     """
 
     if isinstance(lhs, _dnfe) or isinstance(rhs, _dnfe):
@@ -150,7 +165,7 @@ def mul(lhs, rhs, out=None):
     Returns
     -------
     object
-        Product, or None when ``out`` is given.
+        Product (``out`` itself when it is given).
     """
 
     if isinstance(lhs, _dnfe) or isinstance(rhs, _dnfe):
@@ -182,7 +197,7 @@ def div(lhs, rhs, out=None):
     Returns
     -------
     object
-        Quotient, or None when ``out`` is given.
+        Quotient (``out`` itself when it is given).
     """
 
     if isinstance(lhs, _dnfe) or isinstance(rhs, _dnfe):
@@ -212,7 +227,7 @@ def neg(val, out=None):
     Returns
     -------
     otinum or omat or arro
-        Negated operand, or None when ``out`` is given.
+        Negated operand (``out`` itself when it is given).
     """
 
     return _finish(-val, out)
@@ -236,7 +251,7 @@ def abs(val, out=None):
     Returns
     -------
     otinum or omat or arro
-        Absolute value, or None when ``out`` is given.
+        Absolute value (``out`` itself when it is given).
     """
 
     return _finish(_builtins.abs(val), out)
@@ -262,7 +277,7 @@ def norm(arr, p=2.0, out=None):
     Returns
     -------
     otinum
-        Norm, or None when ``out`` is given.
+        Norm (``out`` itself when it is given).
 
     Raises
     ------
@@ -306,7 +321,7 @@ def transpose(arr, out=None):
     Returns
     -------
     omat or arro
-        Transposed copy, or None when ``out`` is given.
+        Transposed copy (``out`` itself when it is given).
     """
 
     if isinstance(arr, _dnfe):
@@ -366,7 +381,7 @@ def truncate(humdir, val, out=None):
     Returns
     -------
     otinum or omat or arro
-        Truncated copy, or None when ``out`` is given.
+        Truncated copy (``out`` itself when it is given).
     """
 
     return _finish(val.truncate(humdir), out)
@@ -392,7 +407,7 @@ def get_im(humdir, val, out=None):
     Returns
     -------
     otinum or omat or arro
-        Coefficient as the real part of the result, or None when ``out`` is given.
+        Coefficient as the real part of the result (``out`` itself when it is given).
     """
 
     return _finish(_direction_holder(val, val.get_im(humdir)), out)
@@ -418,7 +433,7 @@ def get_deriv(humdir, val, out=None):
     Returns
     -------
     otinum or omat or arro
-        Derivative as the real part of the result, or None when ``out`` is given.
+        Derivative as the real part of the result (``out`` itself when it is given).
     """
 
     return _finish(_direction_holder(val, val.get_deriv(humdir)), out)

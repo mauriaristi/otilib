@@ -125,13 +125,41 @@ static int ssio_soa_bytes(bases_t k, ord_t trc, uint64_t nrows, uint64_t ncols, 
 
 
 // *******************************************************************************************************
-// Writes the 64-byte header.
+// Whether a logical shape matches the 2-D C dimensions under the matricization of the one v2 header
+// rule (contracts 11.12): nrows = S[0] and ncols = the product of S[1..] (1 for 1-D); 0-D is 1 x 1.
+static int ssio_shape_ok(int ndim, const uint64_t* shape, uint64_t nrows, uint64_t ncols){
+
+    uint64_t cols = 1;
+    int i;
+
+    if (ndim == 0){
+        return nrows == 1 && ncols == 1;
+    }
+
+    for (i = 1; i < ndim; i++){
+        if (shape[i] != 0 && cols > UINT64_MAX / shape[i]){
+            return 0;
+        }
+        cols *= shape[i];
+    }
+
+    return shape[0] == nrows && cols == ncols;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Writes the header: the 64-byte fixed part (version 2: ndim uint32 at 40, layout flag at 44), then the
+// extents S[0 .. ndim-1] as uint64 (contracts 11.12, the one v2 header rule).
 static int ssio_header_write(FILE* file, int type, ord_t trc, ord_t act, uint32_t nbases,
-                             uint64_t nrows, uint64_t ncols, uint64_t payload){
+                             uint64_t nrows, uint64_t ncols, uint64_t payload, int ndim,
+                             const uint64_t* shape){
 
     uint8_t head[SSIO_HEADER_BYTES];
     const char magic[4] = {(char)0x93, 'O', 'T', 'S'};
     const uint16_t version = SSIO_VERSION;
+    const uint32_t nd = (uint32_t)ndim;
 
     memset(head, 0, sizeof(head));
     memcpy(head, magic, 4);
@@ -148,8 +176,19 @@ static int ssio_header_write(FILE* file, int type, ord_t trc, ord_t act, uint32_
     memcpy(head + 16, &nrows, sizeof(nrows));
     memcpy(head + 24, &ncols, sizeof(ncols));
     memcpy(head + 32, &payload, sizeof(payload));
+    memcpy(head + 40, &nd, sizeof(nd));
 
-    return (fwrite(head, 1, sizeof(head), file) == sizeof(head)) ? SSIO_OK : SSIO_ERR_IO;
+    head[44] = (uint8_t)((type == SSIO_TYPE_AOS) ? SSIO_LAYOUT_C : SSIO_LAYOUT_F);
+
+    if (fwrite(head, 1, sizeof(head), file) != sizeof(head)){
+        return SSIO_ERR_IO;
+    }
+
+    if (ndim > 0 && fwrite(shape, sizeof(uint64_t), (size_t)ndim, file) != (size_t)ndim){
+        return SSIO_ERR_IO;
+    }
+
+    return SSIO_OK;
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -209,7 +248,7 @@ static int ssio_header_read(FILE* file, ssio_info_t* p_info){
 
     memcpy(&version, head + 4, sizeof(version));
 
-    if (version != SSIO_VERSION){
+    if (version != SSIO_VERSION && version != SSIO_VERSION_1){
         return SSIO_ERR_VERSION;
     }
 
@@ -240,15 +279,66 @@ static int ssio_header_read(FILE* file, ssio_info_t* p_info){
         return SSIO_ERR_FORMAT;
     }
 
-    if (info.payload > UINT64_MAX - SSIO_HEADER_BYTES){
+    memset(info.shape, 0, sizeof(info.shape));
+    info.head_bytes = SSIO_HEADER_BYTES;
+
+    if (version == SSIO_VERSION_1){
+
+        // A 1.x file holds its 2-D shape (a scalar is 0-D); bytes 40-63 are not inspected.
+        info.layout = (info.type == SSIO_TYPE_SOA) ? SSIO_LAYOUT_F : SSIO_LAYOUT_C;
+        info.ndim = (info.type == SSIO_TYPE_SCALAR) ? 0 : 2;
+        info.shape[0] = (info.ndim == 2) ? info.nrows : 0;
+        info.shape[1] = (info.ndim == 2) ? info.ncols : 0;
+
+    } else {
+
+        uint32_t nd;
+        int i;
+
+        memcpy(&nd, head + 40, sizeof(nd));
+        info.layout = head[44];
+
+        // The layout of the payload is the type's own (SoA F, AoS C; a scalar either); the
+        // develop-only layout of 2026-11-02 (ndim u8 at 40, 'F' / 'C' at 41) fails here.
+        if (nd > SSIO_MAX_NDIM || (info.type == SSIO_TYPE_SCALAR && nd != 0)
+            || (info.layout != SSIO_LAYOUT_F && info.layout != SSIO_LAYOUT_C)
+            || (info.type == SSIO_TYPE_SOA && info.layout != SSIO_LAYOUT_F)
+            || (info.type == SSIO_TYPE_AOS && info.layout != SSIO_LAYOUT_C)){
+            return SSIO_ERR_FORMAT;
+        }
+
+        for (i = 45; i < SSIO_HEADER_BYTES; i++){
+            if (head[i] != 0){
+                return SSIO_ERR_FORMAT;
+            }
+        }
+
+        info.ndim = (int)nd;
+        info.head_bytes = SSIO_HEADER_BYTES + 8 * (uint64_t)nd;
+
+        if (file_bytes < info.head_bytes){
+            return SSIO_ERR_TRUNCATED;
+        }
+
+        if (nd > 0 && fread(info.shape, sizeof(uint64_t), nd, file) != nd){
+            return SSIO_ERR_TRUNCATED;
+        }
+
+        if (!ssio_shape_ok(info.ndim, info.shape, info.nrows, info.ncols)){
+            return SSIO_ERR_FORMAT;
+        }
+
+    }
+
+    if (info.payload > UINT64_MAX - info.head_bytes){
         return SSIO_ERR_FORMAT;
     }
 
-    if (file_bytes < SSIO_HEADER_BYTES + info.payload){
+    if (file_bytes < info.head_bytes + info.payload){
         return SSIO_ERR_TRUNCATED;
     }
 
-    if (file_bytes > SSIO_HEADER_BYTES + info.payload){
+    if (file_bytes > info.head_bytes + info.payload){
         return SSIO_ERR_SIZE;
     }
 
@@ -459,7 +549,7 @@ int ssoti_save(const char* filename, const ssotinum_t* num){
     }
 
     status = ssio_header_write(file, SSIO_TYPE_SCALAR, num->trc_order, num->act_order, num->nbases, 1,
-        1, payload);
+        1, payload, 0, NULL);
 
     if (status == SSIO_OK){
         status = ssio_labels_write(file, num->p_bases, num->nbases);
@@ -537,6 +627,24 @@ int ssoti_read(const char* filename, ssotinum_t* res){
 // *******************************************************************************************************
 int oarrss_save(const char* filename, const oarrss_t* arr){
 
+    uint64_t shape[2] = {0, 0};
+
+    if (arr == NULL){
+        return SSIO_ERR_ARGUMENT;
+    }
+
+    shape[0] = arr->nrows;
+    shape[1] = arr->ncols;
+
+    return oarrss_save_shape(filename, arr, 2, shape);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+int oarrss_save_shape(const char* filename, const oarrss_t* arr, int ndim, const uint64_t* shape){
+
     FILE* file;
     uint64_t payload = 0;
     size_t nreal = 0;
@@ -544,7 +652,9 @@ int oarrss_save(const char* filename, const oarrss_t* arr){
 
     if (filename == NULL || arr == NULL || (arr->nbases > 0 && arr->p_bases == NULL)
         || arr->act_order > arr->trc_order || arr->size != arr->nrows * arr->ncols
-        || !ssio_labels_sorted(arr->p_bases, arr->nbases)){
+        || !ssio_labels_sorted(arr->p_bases, arr->nbases)
+        || ndim < 0 || ndim > SSIO_MAX_NDIM || (ndim > 0 && shape == NULL)
+        || !ssio_shape_ok(ndim, shape, arr->nrows, arr->ncols)){
         return SSIO_ERR_ARGUMENT;
     }
 
@@ -567,7 +677,7 @@ int oarrss_save(const char* filename, const oarrss_t* arr){
     }
 
     status = ssio_header_write(file, SSIO_TYPE_SOA, arr->trc_order, arr->act_order, arr->nbases,
-        arr->nrows, arr->ncols, payload);
+        arr->nrows, arr->ncols, payload, ndim, shape);
 
     if (status == SSIO_OK){
         status = ssio_labels_write(file, arr->p_bases, arr->nbases);
@@ -706,13 +816,33 @@ static int ssio_aos_record_bytes(bases_t k, ord_t trc, uint64_t* p_bytes){
 // *******************************************************************************************************
 int arrss_save(const char* filename, const arrss_t* arr){
 
+    uint64_t shape[2] = {0, 0};
+
+    if (arr == NULL){
+        return SSIO_ERR_ARGUMENT;
+    }
+
+    shape[0] = arr->nrows;
+    shape[1] = arr->ncols;
+
+    return arrss_save_shape(filename, arr, 2, shape);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+int arrss_save_shape(const char* filename, const arrss_t* arr, int ndim, const uint64_t* shape){
+
     FILE* file;
     uint64_t payload = 0, i, bytes;
     ord_t trc = 0, act = 0;
     int status = SSIO_OK;
 
     if (filename == NULL || arr == NULL || arr->size != arr->nrows * arr->ncols
-        || (arr->size > 0 && arr->p_data == NULL)){
+        || (arr->size > 0 && arr->p_data == NULL)
+        || ndim < 0 || ndim > SSIO_MAX_NDIM || (ndim > 0 && shape == NULL)
+        || !ssio_shape_ok(ndim, shape, arr->nrows, arr->ncols)){
         return SSIO_ERR_ARGUMENT;
     }
 
@@ -740,7 +870,8 @@ int arrss_save(const char* filename, const arrss_t* arr){
         return SSIO_ERR_OPEN;
     }
 
-    status = ssio_header_write(file, SSIO_TYPE_AOS, trc, act, 0, arr->nrows, arr->ncols, payload);
+    status = ssio_header_write(file, SSIO_TYPE_AOS, trc, act, 0, arr->nrows, arr->ncols, payload,
+                               ndim, shape);
 
     for (i = 0; i < arr->size && status == SSIO_OK; i++){
 

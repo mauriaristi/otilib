@@ -529,7 +529,9 @@ sshelp_ws_t* oti_ws(void);
 
 
 /**
- * @brief Releases the calling thread's scratch workspace.
+ * @brief Releases the calling thread's scratch workspace, and its ndarray scratch arena
+ *        (nd_scratch_release(): the call-local arrays of oarr_inv_to(), oarr_solve_to() and
+ *        oarr_det_to(); kept while one of its blocks is in use).
  */
 void oti_ws_release(void);
 // -------------------------------------------------------------------------------------------------------

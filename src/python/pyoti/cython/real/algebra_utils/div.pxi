@@ -74,6 +74,8 @@ cdef object __div__FX__(dmatfe Flhs, object rhs, object out = None):
     return res
   # end if
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
 
 
@@ -121,23 +123,29 @@ cdef object __div__RX__(dmat Rlhs, object rhs, object out = None):
   elif trhs == dmat:
     Rrhs = rhs
     Rrhs._sync()
+    if not _dmat_same_shape(Rlhs, Rrhs):
+      if res_flag:
+        raise ValueError("out= requires operands of equal shapes")
+      # end if
+      return _dmat_mixed(_op.truediv, Rlhs, Rrhs)
+    # end if
     if res_flag:
-      Rres = out
+      Rres = _dmat_out(out, Rlhs)
       Rres._check_out()
       darr_div_RR_to( &Rlhs.arr, &Rrhs.arr, &Rres.arr )
     else:
       cRres = darr_div_RR( &Rlhs.arr, &Rrhs.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_k(dmat.create( &cRres ), Rlhs._lk)
     # end if
   elif trhs in number_types:
     rrhs = rhs
     if res_flag:
-      Rres = out
+      Rres = _dmat_out(out, Rlhs)
       Rres._check_out()
       darr_div_Rr_to( &Rlhs.arr, rrhs, &Rres.arr )
     else:
       cRres = darr_div_Rr( &Rlhs.arr, rrhs )
-      res = dmat.create( &cRres )
+      res = _dmat_k(dmat.create( &cRres ), Rlhs._lk)
     # end if
   else:
     raise TypeError("Unsupported div operation between {0} and {1}.".format(type(Rlhs),trhs))
@@ -146,6 +154,8 @@ cdef object __div__RX__(dmat Rlhs, object rhs, object out = None):
   if res_flag == 0:
     return res
   # end if
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -216,6 +226,8 @@ cdef object __div__fX__(dnumfe flhs, object rhs, object out = None):
     return res
   # end if
 
+  return out
+
 #-----------------------------------------------------------------------------------------------------
 
 
@@ -272,12 +284,12 @@ cdef object __div__rX__(coeff_t rlhs, object rhs, object out = None):
     Rrhs = rhs
     Rrhs._sync()
     if res_flag:
-      Rres = out
+      Rres = _dmat_out(out, Rrhs)
       Rres._check_out()
       darr_div_rR_to( rlhs, &Rrhs.arr, &Rres.arr )
     else:
       cRres = darr_div_rR( rlhs, &Rrhs.arr )
-      res = dmat.create( &cRres )
+      res = _dmat_k(dmat.create( &cRres ), Rrhs._lk)
     # end if
   elif trhs in number_types:
     rrhs = rhs
@@ -289,6 +301,8 @@ cdef object __div__rX__(coeff_t rlhs, object rhs, object out = None):
   if res_flag == 0:
     return res
   # end if
+
+  return out
 
 #-----------------------------------------------------------------------------------------------------
 

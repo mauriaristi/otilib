@@ -343,13 +343,26 @@ cdef class csr_matrix:
   @property
   def real(self):
     """
-    PURPOSE:      Get a numpy array with all coefficients in the real direction.
+    PURPOSE:      The real part as a SciPy CSR matrix: a READ-ONLY COPY (its data cannot be written; use
+                  get_real(writeable=True) for a writable copy).
+    """
+    #*************************************************************************************************
 
+    return self.get_real(False)
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def get_real(self, writeable = False):
+    """
+    PURPOSE:      The real part as a SciPy CSR matrix. For this algebra the matrix is always a copy:
+                  read-only by default, writable with writeable=True (writes do not reach this matrix).
     """
     #*************************************************************************************************
 
     cdef np.ndarray[coeff_t, ndim=1] data
-    cdef uint64_t i,j,k = 0
+    cdef uint64_t i
+
     data = np.empty( (self.nnz,), dtype=np.float64 )
 
     for i in range( self.arr.size ):
@@ -357,6 +370,8 @@ cdef class csr_matrix:
       data[i] = self.arr.p_data[i].re
 
     # end for
+
+    data.flags.writeable = bool(writeable)
 
     return sci_spr.csr_matrix((data, self.indices, self.indptr ), shape = self.shape)
 
@@ -781,6 +796,23 @@ cdef class csr_matrix:
     return res
 
   #***************************************************************************************************
+  def __matmul__(self, other):
+    """
+    PURPOSE: Matrix product (self @ other): (m,) for a 1-D matso (n,), (m, k) for (n, k).
+    """
+    #*************************************************************************************************
+
+    if type(other) is matso:
+
+      return dot(self, other)
+
+    # end if
+
+    return NotImplemented
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
   def zeros_like(self):
     """
     PURPOSE: Create new object with OTI zeros in positions.
@@ -999,7 +1031,7 @@ cdef void csrmatrix_matmul_SO_to(csr_matrix lhs, matso rhs, matso res):
   cdef sotinum olhs;
 
   # check for dimensions.
-  if (lhs.ncols != rhs.nrows) or (lhs.nrows != res.nrows) or (rhs.ncols != res.ncols):
+  if (lhs.ncols != rhs.arr.nrows) or (lhs.nrows != res.arr.nrows) or (rhs.arr.ncols != res.arr.ncols):
     raise ValueError("Shapes < {0}, {1} > = < {2} > not aligned.".format(lhs.shape,rhs.shape,res.shape))
 
   # end if
@@ -1010,7 +1042,7 @@ cdef void csrmatrix_matmul_SO_to(csr_matrix lhs, matso rhs, matso res):
 
   for i in range(lhs.nrows):
       
-    for j in range(rhs.ncols):
+    for j in range(rhs.arr.ncols):
 
       # tmp = 0
       soti_set_r( 0.0, &tmp, dhl)
@@ -1021,7 +1053,7 @@ cdef void csrmatrix_matmul_SO_to(csr_matrix lhs, matso rhs, matso res):
         k = lhs.p_indices[l]
 
         soti_gem_oo_to( &lhs.arr.p_data[ l ],
-                        &rhs.arr.p_data[ j + k * rhs.ncols ],
+                        &rhs.arr.p_data[ j + k * rhs.arr.ncols ],
                         &tmp, &tmp, dhl)
 
       # end for
@@ -1044,7 +1076,7 @@ cdef matso csrmatrix_matmul_SO(csr_matrix lhs, matso rhs):
   global dhl
   cdef matso res
   
-  res = zeros((lhs.nrows,rhs.ncols))
+  res = zeros((lhs.nrows,rhs.arr.ncols))
 
   csrmatrix_matmul_SO_to( lhs, rhs, res)
 
@@ -1081,7 +1113,7 @@ cdef void csrmatrix_trunc_matmul_SO_to(ord_t ordlhs, csr_matrix lhs, ord_t ordrh
   cdef sotinum olhs;
 
   # check for dimensions.
-  if (lhs.ncols != rhs.nrows) or (lhs.nrows != res.nrows) or (rhs.ncols != res.ncols):
+  if (lhs.ncols != rhs.arr.nrows) or (lhs.nrows != res.arr.nrows) or (rhs.arr.ncols != res.arr.ncols):
     raise ValueError("Shapes < {0}, {1} > = < {2} > not aligned.".format(lhs.shape,rhs.shape,res.shape))
   # end if
 
@@ -1093,7 +1125,7 @@ cdef void csrmatrix_trunc_matmul_SO_to(ord_t ordlhs, csr_matrix lhs, ord_t ordrh
   
   # input()
   for i in range(lhs.nrows):      
-    for j in range(rhs.ncols):
+    for j in range(rhs.arr.ncols):
 
       # tmp = 0
       soti_set_r( 0.0, &tmp, dhl)
@@ -1106,11 +1138,10 @@ cdef void csrmatrix_trunc_matmul_SO_to(ord_t ordlhs, csr_matrix lhs, ord_t ordrh
         # tmp = arr1[i,k] * arr2[k,j] + tmp
         k = lhs.p_indices[l]
         # soti_print(&lhs.arr.p_data[ l ], dhl)
-        # soti_print(&rhs.arr.p_data[ j + k * rhs.ncols ], dhl)
-        # print(" ++++ +++ lhs.act_ord",lhs.arr.p_data[ l ].act_order, " ----- rhs.act_ord",rhs.arr.p_data[ j + k * rhs.ncols ].act_order)
+        # soti_print(&rhs.arr.p_data[ j + k * rhs.arr.ncols ], dhl)
         # input()
         soti_trunc_gem_oo_to( ordlhs, &lhs.arr.p_data[ l ],
-                              ordrhs, &rhs.arr.p_data[ j + k * rhs.ncols ],
+                              ordrhs, &rhs.arr.p_data[ j + k * rhs.arr.ncols ],
                               &tmp, &tmp, dhl)
 
       # end for
@@ -1133,7 +1164,7 @@ cdef matso csrmatrix_trunc_matmul_SO(ord_t ordlhs, csr_matrix lhs, ord_t ordrhs,
   global dhl
   cdef matso res
   
-  res = zeros((lhs.nrows,rhs.ncols))
+  res = zeros((lhs.nrows,rhs.arr.ncols))
 
   csrmatrix_trunc_matmul_SO_to( ordlhs, lhs, ordrhs, rhs, res)
 

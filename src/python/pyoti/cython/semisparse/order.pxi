@@ -22,7 +22,7 @@ cdef object _order_out(object result, object out):
     Returns
     -------
     object
-        ``result`` when ``out`` is None, otherwise None.
+        ``result`` when ``out`` is None, otherwise ``out`` itself.
     """
 
     if out is None:
@@ -37,11 +37,23 @@ cdef object _order_out(object result, object out):
 
     elif isinstance(result, oarrss) and isinstance(out, oarrss):
 
-        oarrss_copy_to(&(<oarrss>result).arr, &(<oarrss>out).arr)
+        if _out_fits(out.shape, result.shape):
+
+            _assign_out(out, result)
+
+        else:
+
+            # 1.x behaviour: an out of another shape takes the result's shape (never with exports).
+            _check_no_exports(out)
+            oarrss_copy_to(&(<oarrss>result).arr, &(<oarrss>out).arr)
+            (<oarrss>out)._ndim = (<oarrss>result)._ndim
+
+        # end if
 
     elif isinstance(result, arrss) and isinstance(out, arrss):
 
         arrss_copy_to(&(<arrss>result).arr, &(<arrss>out).arr)
+        (<arrss>out)._ndim = (<arrss>result)._ndim
 
     else:
 
@@ -50,7 +62,7 @@ cdef object _order_out(object result, object out):
 
     # end if
 
-    return None
+    return out
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -86,20 +98,13 @@ cdef oarrss _order_to_soa(object value, str op):
     if isinstance(value, arrss):
 
         arrss_to_oarrss(&(<arrss>value).arr, &res)
-        return oarrss.wrap(res)
+        return _nd(oarrss.wrap(res), (<arrss>value)._ndim)
 
     # end if
 
     if isinstance(value, (np.ndarray, list, tuple)):
 
         real = np.asarray(value, dtype=np.float64)
-
-        if real.ndim == 1:
-
-            real = real.reshape((-1, 1))
-
-        # end if
-
         return oarrss.from_real(real)
 
     # end if
@@ -129,7 +134,7 @@ cdef arrss _order_to_aos(oarrss value):
     cdef arrss_t res = arrss_init()
 
     arrss_from_oarrss(&value.arr, &res)
-    return arrss.wrap(res)
+    return _nd(arrss.wrap(res), value._ndim)
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -185,7 +190,7 @@ def get_order_im(order, val, out=None):
     Returns
     -------
     ssotinum or oarrss or arrss
-        The order-``order`` part, or None when ``out`` is given.
+        The order-``order`` part; ``out`` itself when it is given.
 
     Examples
     --------
@@ -212,12 +217,12 @@ def get_order_im(order, val, out=None):
     elif isinstance(val, oarrss):
 
         oarrss_get_order_im_to(order, &(<oarrss>val).arr, &ores)
-        return _order_out(oarrss.wrap(ores), out)
+        return _order_out(_same_nd(oarrss.wrap(ores), val), out)
 
     elif isinstance(val, arrss):
 
         arrss_get_order_im_to(order, &(<arrss>val).arr, &ares, _dhl)
-        return _order_out(arrss.wrap(ares), out)
+        return _order_out(_same_nd(arrss.wrap(ares), val), out)
 
     # end if
 
@@ -246,7 +251,7 @@ cdef object _order_extract(object humdir, object val, object out, bint deriv):
     Returns
     -------
     object
-        Result, or None when ``out`` is given.
+        Result; ``out`` itself when it is given.
     """
 
     cdef tuple pair = _direction(humdir)
@@ -283,7 +288,7 @@ cdef object _order_extract(object humdir, object val, object out, bint deriv):
 
         # end if
 
-        return _order_out(oarrss.wrap(ores), out)
+        return _order_out(_same_nd(oarrss.wrap(ores), val), out)
 
     elif isinstance(val, arrss):
 
@@ -304,7 +309,7 @@ cdef object _order_extract(object humdir, object val, object out, bint deriv):
 
         # end for
 
-        return _order_out(R, out)
+        return _order_out(_same_nd(R, A), out)
 
     # end if
 
@@ -336,7 +341,7 @@ def extract_im(humdir, val, out=None):
     Returns
     -------
     ssotinum or oarrss or arrss
-        Extracted value, or None when ``out`` is given.
+        Extracted value; ``out`` itself when it is given.
 
     Examples
     --------
@@ -372,7 +377,7 @@ def extract_deriv(humdir, val, out=None):
     Returns
     -------
     ssotinum or oarrss or arrss
-        Extracted value, or None when ``out`` is given.
+        Extracted value; ``out`` itself when it is given.
 
     Examples
     --------
@@ -565,6 +570,33 @@ def set_order_im_from_array(ordi, arr, tmp):
     if isinstance(tmp, oarrss):
 
         S = tmp
+
+        if _has_exports(S):
+
+            # A live view forbids a relayout (G1.3): apply the values to a copy and copy them back
+            # only when the layout did not change.
+            trial = S.copy()
+            oarrss_add_order_im_array(ordi, <coeff_t *>vals.data, width, &(<oarrss>trial).arr)
+
+            if not _same_layout(&(<oarrss>trial).arr, &S.arr):
+
+                _check_no_exports(S)
+
+            # end if
+
+            if S.arr.size > 0:
+
+                memcpy(S.arr.p_data, (<oarrss>trial).arr.p_data,
+                       (1 + sshelp_ndir_total(S.arr.nbases, S.arr.trc_order)) * S.arr.size
+                       * sizeof(coeff_t))
+
+            # end if
+
+            S.arr.act_order = (<oarrss>trial).arr.act_order
+            return None
+
+        # end if
+
         oarrss_add_order_im_array(ordi, <coeff_t *>vals.data, width, &S.arr)
 
     else:
@@ -615,7 +647,7 @@ def trunc_dot(ordlhs, lhs, ordrhs, rhs, out=None):
     Returns
     -------
     oarrss or arrss
-        The product (AoS only when both operands are AoS), or None when ``out`` is given.
+        The product (AoS only when both operands are AoS); ``out`` itself when it is given.
 
     Examples
     --------
@@ -628,6 +660,8 @@ def trunc_dot(ordlhs, lhs, ordrhs, rhs, out=None):
     cdef oarrss L, R
     cdef oarrss_t res = oarrss_init()
     cdef int status
+    cdef int vectors
+    cdef object product
     cdef bint aos = isinstance(lhs, arrss) and isinstance(rhs, arrss)
 
     if ordlhs < 0 or ordlhs > 255 or ordrhs < 0 or ordrhs > 255:
@@ -645,11 +679,24 @@ def trunc_dot(ordlhs, lhs, ordrhs, rhs, out=None):
 
     L = _order_to_soa(lhs, "trunc_dot")
     R = _order_to_soa(rhs, "trunc_dot")
+    vectors = (L._ndim == 1) + 2 * (R._ndim == 1)
+
+    if L._ndim == 0 or R._ndim == 0:
+
+        raise ValueError("trunc_dot: operands must have at least one dimension")
+
+    # end if
+
+    if L._ndim == 1:
+
+        # numpy.dot's rule: a 1-D left operand is a row, a 1-D right operand a column (I3, k6).
+        L = _as_row(L)
+
+    # end if
 
     if L.arr.ncols != R.arr.nrows:
 
-        raise ValueError("trunc_dot: shapes {0} and {1} not aligned".format(
-            (L.arr.nrows, L.arr.ncols), (R.arr.nrows, R.arr.ncols)))
+        raise ValueError("trunc_dot: shapes {0} and {1} not aligned".format(lhs.shape, rhs.shape))
 
     # end if
 
@@ -662,13 +709,25 @@ def trunc_dot(ordlhs, lhs, ordrhs, rhs, out=None):
 
     # end if
 
-    if aos:
+    product = oarrss.wrap(res)
 
-        return _order_out(_order_to_aos(oarrss.wrap(res)), out)
+    if vectors == 3:
+
+        return _order_out(ssotinum.wrap(oarrss_get_item(0, 0, &(<oarrss>product).arr)), out)
+
+    elif vectors != 0:
+
+        _nd(product, 1)
 
     # end if
 
-    return _order_out(oarrss.wrap(res), out)
+    if aos:
+
+        return _order_out(_order_to_aos(product), out)
+
+    # end if
+
+    return _order_out(product, out)
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -697,7 +756,7 @@ def trunc_sub(order, Olhs, Orhs, out=None):
     Returns
     -------
     ssotinum or oarrss or arrss
-        The order-``order`` part of the difference, or None when ``out`` is given.
+        The order-``order`` part of the difference; ``out`` itself when it is given.
 
     Examples
     --------
@@ -734,7 +793,7 @@ def trunc_sub(order, Olhs, Orhs, out=None):
 
         # end if
 
-        return _order_out(oarrss.wrap(ores), out)
+        return _order_out(_same_nd(oarrss.wrap(ores), Olhs), out)
 
     elif isinstance(Olhs, arrss) and isinstance(Orhs, arrss):
 
@@ -756,7 +815,7 @@ def trunc_sub(order, Olhs, Orhs, out=None):
 
         # end for
 
-        return _order_out(C, out)
+        return _order_out(_same_nd(C, A), out)
 
     # end if
 
@@ -788,7 +847,7 @@ def dot_product(lhs, rhs, out=None):
     Returns
     -------
     ssotinum
-        The dot product, or None when ``out`` is given.
+        The dot product; ``out`` itself when it is given.
 
     Examples
     --------
@@ -881,7 +940,7 @@ def interp1d(x, xvals, yvals, out=None):
     Returns
     -------
     ssotinum or oarrss or arrss
-        Interpolated value(s), or None when ``out`` is given.
+        Interpolated value(s); ``out`` itself when it is given.
 
     Examples
     --------
@@ -933,11 +992,11 @@ def interp1d(x, xvals, yvals, out=None):
 
         if isinstance(x, arrss):
 
-            return _order_out(_order_to_aos(oarrss.wrap(ores)), out)
+            return _order_out(_same_nd(_order_to_aos(oarrss.wrap(ores)), x), out)
 
         # end if
 
-        return _order_out(oarrss.wrap(ores), out)
+        return _order_out(_same_nd(oarrss.wrap(ores), x), out)
 
     # end if
 
@@ -1002,11 +1061,11 @@ def moving_average(data, size):
 
     if isinstance(data, arrss):
 
-        return _order_to_aos(oarrss.wrap(res))
+        return _same_nd(_order_to_aos(oarrss.wrap(res)), data)
 
     # end if
 
-    return oarrss.wrap(res)
+    return _same_nd(oarrss.wrap(res), data)
 
 # end function
 # --------------------------------------------------------------------------------------------------------
@@ -1031,7 +1090,7 @@ def inv_block(arr, out=None):
     Returns
     -------
     oarrss or arrss
-        The inverse, or None when ``out`` is given.
+        The inverse; ``out`` itself when it is given.
 
     Examples
     --------
@@ -1061,7 +1120,7 @@ def inv_block(arr, out=None):
 
         # end if
 
-        return _order_out(oarrss.wrap(ores), out)
+        return _order_out(_same_nd(oarrss.wrap(ores), arr), out)
 
     elif isinstance(arr, arrss):
 
@@ -1080,7 +1139,7 @@ def inv_block(arr, out=None):
 
         # end if
 
-        return _order_out(arrss.wrap(ares), out)
+        return _order_out(_same_nd(arrss.wrap(ares), arr), out)
 
     # end if
 
@@ -1265,7 +1324,7 @@ def _order_rom_eval(value, bases, deltas):
         S = value
         loc = _order_local_deltas(S.arr.p_bases, S.arr.nbases, gd)
         oarrss_rom_eval_to(&S.arr, <coeff_t *>loc.data, &ores)
-        return oarrss.wrap(ores)
+        return _same_nd(oarrss.wrap(ores), value)
 
     elif isinstance(value, arrss):
 
@@ -1280,7 +1339,7 @@ def _order_rom_eval(value, bases, deltas):
 
         # end for
 
-        return R
+        return _same_nd(R, value)
 
     # end if
 

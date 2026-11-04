@@ -4,9 +4,10 @@
 # ********************************************************************************************************
 cdef class arrss:
     """
-    Array-of-structures semi-sparse matrix with an active set per element.
+    Array-of-structures semi-sparse array (logical ndim 0, 1 or 2) with an active set per element.
 
-    Construct via ``zeros`` or ``from_sparse``. Indexing returns an owned scalar copy.
+    Construct via ``zeros``, ``to_aos`` or ``from_sparse``. Indexing follows NumPy on the logical
+    shape; slices are copies and ``.real`` is a read-only copy.
     """
 
     # ****************************************************************************************************
@@ -16,6 +17,7 @@ cdef class arrss:
         """
 
         self.arr = arrss_init()
+        self._ndim = 2
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -63,22 +65,18 @@ cdef class arrss:
 
         Parameters
         ----------
-        shape : tuple of int
-            Rows and columns.
+        shape : int or tuple of int
+            Logical shape (ndim <= 2).
         order : int
             Truncation order of the zero elements.
 
         Returns
         -------
         arrss
-            Zero AoS matrix.
+            Zero AoS array.
         """
 
-        if len(shape) != 2 or any(not isinstance(x, int) or x < 0 for x in shape):
-
-            raise ValueError("shape must contain nonnegative rows and columns")
-
-        # end if
+        cdef tuple dims = _creator_dims(shape)
 
         if order < 0 or order > 255:
 
@@ -86,7 +84,7 @@ cdef class arrss:
 
         # end if
 
-        return arrss.wrap(arrss_zeros(shape[0], shape[1], order))
+        return _nd(arrss.wrap(arrss_zeros(dims[1], dims[2], order)), dims[0])
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -108,7 +106,7 @@ cdef class arrss:
             AoS matrix.
         """
 
-        return arrss.wrap(arrss_from_arrso(&value.arr, _dhl))
+        return _nd(arrss.wrap(arrss_from_arrso(&value.arr, _dhl)), len(value.shape))
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -132,7 +130,7 @@ cdef class arrss:
 
         cdef arrss_t result = arrss_init()
         arrss_from_oarrss(&value.arr, &result)
-        return arrss.wrap(result)
+        return _nd(arrss.wrap(result), value._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -149,7 +147,7 @@ cdef class arrss:
         """
 
         cdef arrso_t result = arrss_to_arrso(&self.arr, _dhl)
-        return matso.create(&result)
+        return _sparse_like(matso.create(&result), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -167,7 +165,7 @@ cdef class arrss:
 
         cdef oarrss_t result = oarrss_init()
         arrss_to_oarrss(&self.arr, &result)
-        return oarrss.wrap(result)
+        return _nd(oarrss.wrap(result), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -176,15 +174,86 @@ cdef class arrss:
     @property
     def shape(self):
         """
-        Return the array's row and column counts.
+        Return the logical shape (ndim <= 2).
 
         Returns
         -------
         tuple
-            Matrix shape.
+            ``(nrows, ncols)``, ``(n,)`` or ``()``.
         """
 
-        return self.arr.nrows, self.arr.ncols
+        return _lshape(self._ndim, self.arr.nrows, self.arr.ncols)
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    @property
+    def ndim(self):
+        """
+        Return the number of logical dimensions.
+
+        Returns
+        -------
+        int
+            0, 1 or 2.
+        """
+
+        return self._ndim
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    def __len__(self):
+        """
+        Return the length of the first axis.
+
+        Returns
+        -------
+        int
+            ``shape[0]``.
+
+        Raises
+        ------
+        TypeError
+            For a 0-D array.
+        """
+
+        if self._ndim == 0:
+
+            raise TypeError("len() of unsized object")
+
+        # end if
+
+        return self.arr.nrows
+
+    # end function
+    # ----------------------------------------------------------------------------------------------------
+
+    # ****************************************************************************************************
+    def __iter__(self):
+        """
+        Iterate over the first axis: rows of a 2-D array, OTI scalars of a 1-D array.
+
+        Returns
+        -------
+        iterator
+            ``A[0], A[1], ...``.
+
+        Raises
+        ------
+        TypeError
+            For a 0-D array.
+        """
+
+        if self._ndim == 0:
+
+            raise TypeError("iteration over a 0-d array")
+
+        # end if
+
+        return (self[i] for i in range(self.arr.nrows))
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -249,7 +318,7 @@ cdef class arrss:
     @property
     def T(self):
         """
-        Return a transposed AoS copy.
+        Return a transposed AoS copy (a copy of a 0-D or 1-D array, as NumPy).
 
         Returns
         -------
@@ -258,6 +327,13 @@ cdef class arrss:
         """
 
         cdef arrss_t result = arrss_init()
+
+        if self._ndim < 2:
+
+            return self.copy()
+
+        # end if
+
         arrss_transpose_to(&self.arr, &result)
         return arrss.wrap(result)
 
@@ -271,14 +347,15 @@ cdef class arrss:
     @property
     def nrows(self):
         """
-        Return the number of rows.
+        Return the number of rows of the 2-D C struct (deprecated in 2.0.0: use ``shape``).
 
         Returns
         -------
         int
-            Row count.
+            Row count (1-D: n; 0-D: 1).
         """
 
+        _warn_nrows("nrows")
         return self.arr.nrows
 
     # end function
@@ -288,14 +365,15 @@ cdef class arrss:
     @property
     def ncols(self):
         """
-        Return the number of columns.
+        Return the number of columns of the 2-D C struct (deprecated in 2.0.0: use ``shape``).
 
         Returns
         -------
         int
-            Column count.
+            Column count (1-D and 0-D: 1).
         """
 
+        _warn_nrows("ncols")
         return self.arr.ncols
 
     # end function
@@ -322,12 +400,12 @@ cdef class arrss:
     @property
     def real(self):
         """
-        Copy the real parts into a NumPy matrix.
+        Copy the real parts into a read-only NumPy array (AoS has no real block to view).
 
         Returns
         -------
         numpy.ndarray
-            Real coefficients, shape (nrows, ncols).
+            Real coefficients, of the array's logical shape; ``.real.copy()`` is writable.
         """
 
         return _array_real(self)
@@ -346,7 +424,7 @@ cdef class arrss:
             Independent copy.
         """
 
-        return arrss.wrap(arrss_copy(&self.arr))
+        return _nd(arrss.wrap(arrss_copy(&self.arr)), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -476,7 +554,7 @@ cdef class arrss:
         Returns
         -------
         arrss
-            Product, or None when ``out`` is given.
+            Product; ``out`` itself when it is given.
         """
 
         return dot(lhs, rhs, out)
@@ -497,7 +575,7 @@ cdef class arrss:
         Returns
         -------
         arrss
-            Inverse, or None when ``out`` is given.
+            Inverse; ``out`` itself when it is given.
         """
 
         return inv(arr, out)
@@ -518,7 +596,7 @@ cdef class arrss:
         Returns
         -------
         arrss
-            Transposed copy, or None when ``out`` is given.
+            Transposed copy; ``out`` itself when it is given.
         """
 
         return transpose(arr, out)
@@ -564,20 +642,22 @@ cdef class arrss:
     # ****************************************************************************************************
     def __getitem__(self, key):
         """
-        Read an element or a block with the indexing semantics of ``pyoti.sparse.matso``.
+        Read an element or a block with NumPy's basic indexing on the logical shape (7b).
 
-        A single integer or slice selects rows and keeps every column, so ``A[i]`` is a
-        1 x ncols matrix; two integers select one element.
+        An integer drops its axis (``A[i]`` of a matrix is 1-D), a slice keeps it, one ``...``
+        expands, negative integers count from the end; one integer per axis gives an OTI scalar.
+        ``None`` raises ``ValueError`` (at most 2 dimensions until Phase 8).
 
         Parameters
         ----------
-        key : int or slice or tuple
-            Matrix key.
+        key : int or slice or Ellipsis or tuple
+            Basic key.
 
         Returns
         -------
         ssotinum or arrss
-            Element copy for two integers, otherwise a new array holding the block.
+            Element copy for one integer per axis, otherwise a new array holding the selection
+            (a copy).
         """
 
         return _aos_getitem(self, key)
@@ -588,17 +668,18 @@ cdef class arrss:
     # ****************************************************************************************************
     def __setitem__(self, key, value):
         """
-        Assign an element or a block with the indexing semantics of ``pyoti.sparse.matso``.
+        Assign an element or a block with NumPy's rules (S1 broadcasting, S2 snapshot; 7b).
 
         The truncation order rises to the value's when it is larger (existing entries are
         zero-extended), and the active set grows to hold the value's bases.
 
         Parameters
         ----------
-        key : int or slice or tuple
-            Matrix key.
+        key : int or slice or Ellipsis or tuple
+            Basic key.
         value : float or ssotinum or sotinum or array or numpy.ndarray
-            Replacement; arrays must have the shape of the selected block.
+            Replacement, broadcast to the selection as NumPy does (an ``(n, 1)`` column does not fit
+            an ``(n,)`` target).
         """
 
         _aos_setitem(self, key, value)
@@ -666,7 +747,7 @@ cdef class arrss:
             Elementwise absolute value.
         """
 
-        cdef arrss result = arrss.wrap(arrss_copy(&self.arr))
+        cdef arrss result = _nd(arrss.wrap(arrss_copy(&self.arr)), self._ndim)
         cdef uint64_t index
         cdef ssotinum_t negated
 
@@ -806,7 +887,7 @@ cdef class arrss:
         cdef tuple pair = _direction(humdir)
         cdef arrss_t result = arrss_init()
         arrss_truncate_im_to(pair[0], pair[1], &self.arr, &result, _dhl)
-        return arrss.wrap(result)
+        return _nd(arrss.wrap(result), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -829,7 +910,7 @@ cdef class arrss:
 
         cdef arrss_t result = arrss_init()
         arrss_truncate_order_to(order, &self.arr, &result, _dhl)
-        return arrss.wrap(result)
+        return _nd(arrss.wrap(result), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -852,7 +933,7 @@ cdef class arrss:
 
         cdef arrss_t result = arrss_init()
         arrss_get_order_im_to(order, &self.arr, &result, _dhl)
-        return arrss.wrap(result)
+        return _nd(arrss.wrap(result), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -870,7 +951,7 @@ cdef class arrss:
 
         cdef arrss_t result = arrss_init()
         arrss_compact_to(&self.arr, &result, _dhl)
-        return arrss.wrap(result)
+        return _nd(arrss.wrap(result), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -888,7 +969,7 @@ cdef class arrss:
 
         cdef arrss_t result = arrss_init()
         arrss_neg_to(&self.arr, &result, _dhl)
-        return arrss.wrap(result)
+        return _nd(arrss.wrap(result), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -1088,7 +1169,7 @@ cdef class arrss:
         # end if
 
         arrss_pow_to(&(<arrss>self).arr, exponent, &result, _dhl)
-        return arrss.wrap(result)
+        return _nd(arrss.wrap(result), self._ndim)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -1110,6 +1191,9 @@ cdef class arrss:
         """
 
         cdef arrss_t result = arrss_init()
+        cdef arrss left = self
+        cdef arrss right
+        cdef arrss product
 
         if not isinstance(other, arrss):
 
@@ -1117,14 +1201,46 @@ cdef class arrss:
 
         # end if
 
-        if (<arrss>self).arr.ncols != (<arrss>other).arr.nrows:
+        right = other
 
-            raise ValueError("matmul: incompatible matrix dimensions")
+        if left._ndim == 0 or right._ndim == 0:
+
+            raise ValueError("matmul: an input operand does not have enough dimensions (0-D array)")
 
         # end if
 
-        arrss_matmul_OO_to(&(<arrss>self).arr, &(<arrss>other).arr, &result, _dhl)
-        return arrss.wrap(result)
+        if left._ndim == 1:
+
+            # A 1-D left operand is a row (I3): same records, 1 x n.
+            left = left.copy()
+            left.arr.ncols = left.arr.nrows
+            left.arr.nrows = 1
+
+        # end if
+
+        if left.arr.ncols != right.arr.nrows:
+
+            raise ValueError("matmul: mismatch in the core dimension: shapes {} and {}".format(
+                self.shape, other.shape))
+
+        # end if
+
+        arrss_matmul_OO_to(&left.arr, &right.arr, &result, _dhl)
+        product = arrss.wrap(result)
+
+        if (<arrss>self)._ndim == 1 and right._ndim == 1:
+
+            return ssotinum.wrap(ssoti_copy(&product.arr.p_data[0]))
+
+        # end if
+
+        if (<arrss>self)._ndim == 1 or right._ndim == 1:
+
+            return _nd(product, 1)
+
+        # end if
+
+        return product
 
     # end function
     # ----------------------------------------------------------------------------------------------------

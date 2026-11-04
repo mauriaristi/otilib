@@ -320,6 +320,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
         Oarr = arrso_zeros_bases( nrows, ncols, nbases, order, dhl)
         Ores = matso.create(&Oarr)
         Ores[0,0] = np_arr.item(0)
+        Ores._lk = 2
         res = Ores
 
       else:
@@ -344,6 +345,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
         for i in range(nrows):
           Ores[i,0] =  np_arr[i] # Column vectors.
         # end for 
+        Ores._lk = 1
         res = Ores
 
       else:
@@ -433,17 +435,17 @@ cpdef zeros( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip 
   """
   global dhl
   cdef uint64_t ncols, nrows
+  cdef uint8_t kind
   cdef arrso_t Ores
   cdef fearrso_t Fres
   
-  nrows, ncols = process_shape(shape_in)
+  nrows, ncols, kind = process_shape_k(shape_in)
 
   if nip == 0:
 
     # This will create an matso.
     Ores = arrso_zeros_bases(nrows,ncols,nbases,order,dhl)
-
-    return matso.create(&Ores)
+    return _sk(matso.create(&Ores), kind)
 
   else:
 
@@ -464,18 +466,18 @@ cpdef ones( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip =
   """
   global dhl
   cdef uint64_t ncols, nrows
+  cdef uint8_t kind
   cdef arrso_t Ores
   cdef fearrso_t Fres
   
-  nrows, ncols = process_shape(shape_in)
+  nrows, ncols, kind = process_shape_k(shape_in)
 
 
   if nip == 0:
 
     # This will create an matso.
     Ores = arrso_ones_bases(nrows,ncols,nbases,order,dhl)
-
-    return matso.create(&Ores)
+    return _sk(matso.create(&Ores), kind)
 
   else:
 

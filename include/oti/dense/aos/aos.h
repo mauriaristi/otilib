@@ -36,7 +36,8 @@ OTI_ND_STATIC_ASSERT(sizeof(otinum_t) % sizeof(coeff_t) == 0,
  * owning arro_t by struct assignment and keeping both copies is a double release: move it.
  */
 typedef struct {
-    ndarr_t elems; ///< OTI_F64 (nrows, ncols) over the `re` fields; strides (ncols * ARRO_W, ARRO_W).
+    ndarr_t elems; ///< OTI_F64 of the element shape S over the `re` fields, compact row-major (strides in
+                   ///< units of ARRO_W; 2-D: (ncols * ARRO_W, ARRO_W)).
 } arro_t;          ///< Dense AoS OTI array type.
 
 // -------------------------------------------------------------------------------------------------------
@@ -60,25 +61,65 @@ static inline otinum_t* arro_data(const arro_t* a){
 }
 
 /**
- * @brief Number of rows.
+ * @brief The element descriptor over the `re` fields (for bindings that cannot name the field). It is
+ *        only ever exported read-only (the `.real` view) and never an operand of an nd_* kernel.
  *
  * @param[in] a Array.
  *
- * @return elems.shape[0].
+ * @return &a->elems.
  */
-static inline uint64_t arro_nrows(const arro_t* a){
-    return (uint64_t)a->elems.shape[0];
+static inline ndarr_t* arro_elems(arro_t* a){
+    return &a->elems;
 }
 
 /**
- * @brief Number of columns.
+ * @brief Number of axes of the element shape S (Phase 7b: any rank 0 .. OTI_ND_MAXDIM - 1).
  *
  * @param[in] a Array.
  *
- * @return elems.shape[1].
+ * @return elems.ndim.
+ */
+static inline int32_t arro_ndim(const arro_t* a){
+    return a->elems.ndim;
+}
+
+/**
+ * @brief Extent of axis d of S.
+ *
+ * @param[in] a Array.
+ * @param[in] d Axis, 0 <= d < arro_ndim(a).
+ *
+ * @return elems.shape[d].
+ */
+static inline int64_t arro_shape(const arro_t* a, int32_t d){
+    return a->elems.shape[d];
+}
+
+/**
+ * @brief Rows of the row-major matricization of S: S[0] (1 for a rank-0 S).
+ *
+ * @param[in] a Array.
+ *
+ * @return nrows; element (i, j) of the matricization is arro_data(a)[j + i * ncols].
+ */
+static inline uint64_t arro_nrows(const arro_t* a){
+    return (a->elems.ndim >= 1) ? (uint64_t)a->elems.shape[0] : 1;
+}
+
+/**
+ * @brief Columns of the row-major matricization of S: the product of S[1..] (1 for rank 0 or 1).
+ *
+ * @param[in] a Array.
+ *
+ * @return ncols.
  */
 static inline uint64_t arro_ncols(const arro_t* a){
-    return (uint64_t)a->elems.shape[1];
+    uint64_t n = 1;
+    int32_t d;
+    for (d = 1; d < a->elems.ndim; d++){
+        n *= (uint64_t)a->elems.shape[d];
+    }
+    return n;
 }
 
 /**
@@ -95,6 +136,33 @@ static inline uint64_t arro_size(const arro_t* a){
 /** @} */
 // -------------------------------------------------------------------------------------------------------
 
+
+/**
+ * @brief Gives an array another element shape of the same size (a relabel: the row-major order of the
+ *        elements is kept, nothing moves).
+ *
+ * @param[in]     ndim  New rank, 0 .. OTI_ND_MAXDIM - 1.
+ * @param[in]     shape New extents.
+ * @param[in,out] arr   Array.
+ *
+ * @return DN_OK; DN_ERR_SIZE (another size, or a bad rank or extent).
+ */
+int arro_reshape(int32_t ndim, const int64_t* shape, arro_t* arr);
+// -------------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Makes an array of any element shape of real zeros (nact = 0): arro_zeros_to() of the
+ *        matricized shape, then arro_reshape().
+ *
+ * @param[in]     ndim      Rank.
+ * @param[in]     shape     Extents.
+ * @param[in]     trc_order Truncation order of every element.
+ * @param[in,out] res       Array.
+ *
+ * @return As arro_zeros_to(); DN_ERR_SIZE for a bad rank or extent.
+ */
+int arro_zeros_nd_to(int32_t ndim, const int64_t* shape, ord_t trc_order, arro_t* res);
+// -------------------------------------------------------------------------------------------------------
 
 /**
  * @brief Empty 0 x 0 array.

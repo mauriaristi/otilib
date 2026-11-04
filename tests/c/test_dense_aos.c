@@ -1387,7 +1387,7 @@ static void test_review_fixes(dhelpl_t dhl){
 
         check(oarr_zeros_to(200, 1, 10, 1, &res) == DN_OK, "M1: previous result over 200 bases");
         check(arro_to_oarr(&src, &res) == DN_OK, "M1: arro_to_oarr status");
-        check(oarr_nact(&res) == 1 && oarr_trc_order(&res) == 4 && res.nbases == 1,
+        check(oarr_nact(&res) == 1 && oarr_trc_order(&res) == 4 && res.cap == 1,
               "M1: capacity is nact, not 200");
         check(oarr_nrows(&res) == 1 && oarr_ncols(&res) == 10 && oarr_data(&res)[0] == 0.0,
               "M1: shape and real part");

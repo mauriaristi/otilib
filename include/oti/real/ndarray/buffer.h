@@ -13,9 +13,14 @@
 //         int64_t       nbytes;       // span length in bytes; -1 when unknown (foreign, unchecked)
 //         nd_release_fn release;      // called exactly once when refs reach 0; may be NULL
 //         void*         release_ctx;  // argument of release
+//         void*         inl;          // inline data of the block (small arrays), or NULL
+//         void*         extra;        // the caller's zone (nd_alloc_extra()), or NULL
+//         int64_t       extra_bytes;  // size of the zone
+//         void*         arena;        // the scratch arena of a ND_ALLOC_SCRATCH block, or NULL
 //     };
-//   Destruction (refs 1 -> 0, exactly one thread): free(base) if OWNS; then release(release_ctx) if
-//   set; then free the control block. Library allocations are 64-byte aligned (posix_memalign) and at
+//   Destruction (refs 1 -> 0, exactly one thread): free(base) if OWNS and base is not the block's
+//   inline data; then release(release_ctx) if set; then the control block (to its arena for a
+//   scratch array). Library allocations are 64-byte aligned (posix_memalign) and at
 //   least one element long, so library arrays never have data == NULL.
 //
 // State word transitions (each one CAS loop on the whole word; acquire on success unless noted):
@@ -44,8 +49,8 @@ extern "C" {
 
 /**
  * @name State word layout (nd_buffer_state())
- * bits 0..31 refs, bits 32..55 exports (each export also holds one ref), bits 56..59 flags,
- * bits 60..63 reserved (zero).
+ * bits 0..31 refs, bits 32..55 exports (each export also holds one ref), bits 56..60 flags,
+ * bits 61..63 reserved (zero).
  * @{
  */
 #define ND_STATE_REFS_MASK      0x00000000FFFFFFFFull ///< Retained descriptors (exports included).
@@ -55,6 +60,7 @@ extern "C" {
 #define ND_STATE_GROWABLE       (1ull << 57)          ///< May be reallocated (only with OWNS).
 #define ND_STATE_WRITEABLE      (1ull << 58)          ///< The memory may be written.
 #define ND_STATE_GROWING        (1ull << 59)          ///< Growth or relayout in progress (exclusive).
+#define ND_STATE_SCRATCH        (1ull << 60)          ///< Call-local (ND_ALLOC_SCRATCH): never exported.
 /** @} */
 // -------------------------------------------------------------------------------------------------------
 
@@ -65,6 +71,18 @@ extern "C" {
  */
 #define ND_ALLOC_ZERO       0x1 ///< Zero-fill.
 #define ND_ALLOC_GROWABLE   0x2 ///< Accepted, no effect: every library buffer is GROWABLE (S25).
+#define ND_ALLOC_SCRATCH    0x4 ///< Call-local array: control block, extra zone and data from the
+                                ///< calling thread's scratch arena (see nd_alloc_extra()).
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Extra zone (nd_alloc_extra())
+ * @{
+ */
+#define ND_EXTRA_ALIGN      16       ///< Alignment of the extra zone.
+#define ND_EXTRA_MAX_BYTES  65536    ///< Largest extra zone.
 /** @} */
 // -------------------------------------------------------------------------------------------------------
 
@@ -187,7 +205,7 @@ void nd_init_empty(ndarr_t* a);
  * @param[in]     ndim        0 .. OTI_ND_MAXDIM.
  * @param[in]     shape       ndim extents, >= 0 (ignored when ndim is 0).
  * @param[in]     layout      ND_LAYOUT_C or ND_LAYOUT_F.
- * @param[in]     alloc_flags ND_ALLOC_ZERO | ND_ALLOC_GROWABLE.
+ * @param[in]     alloc_flags ND_ALLOC_ZERO | ND_ALLOC_GROWABLE | ND_ALLOC_SCRATCH.
  * @param[out]    res         New retained array (refs 1). Overwritten without being released.
  *
  * @return OTI_OK; OTI_ERR_SHAPE (ndim or a negative extent), OTI_ERR_DTYPE, OTI_ERR_ARGUMENT
@@ -210,7 +228,7 @@ int nd_alloc(oti_ctx* ctx, int32_t dtype, int32_t ndim, const int64_t* shape, in
  * @param[in]     ndim        0 .. OTI_ND_MAXDIM.
  * @param[in]     shape       ndim extents, >= 0.
  * @param[in]     strides     ndim element strides, >= 0 for axes of extent > 1.
- * @param[in]     alloc_flags ND_ALLOC_ZERO | ND_ALLOC_GROWABLE.
+ * @param[in]     alloc_flags ND_ALLOC_ZERO | ND_ALLOC_GROWABLE | ND_ALLOC_SCRATCH.
  * @param[out]    res         New retained array (refs 1). Overwritten without being released.
  *
  * @return As nd_alloc(); OTI_ERR_LAYOUT when the strides are not compact and injective.
@@ -218,6 +236,45 @@ int nd_alloc(oti_ctx* ctx, int32_t dtype, int32_t ndim, const int64_t* shape, in
  */
 int nd_alloc_strided(oti_ctx* ctx, int32_t dtype, int32_t ndim, const int64_t* shape,
                      const int64_t* strides, int32_t alloc_flags, ndarr_t* res);
+
+/**
+ * @brief Allocates a new array whose control block also carries @p extra_bytes of caller storage.
+ *
+ * As nd_alloc() (strides NULL: @p layout C or F) or nd_alloc_strided() (strides given: compact and
+ * injective; @p layout ignored). The extra zone is zero-filled, ND_EXTRA_ALIGN-aligned, part of the
+ * control block's allocation, and lives exactly as long as the buffer (freed after the release of
+ * the last reference); growth moves the data, never the control block or the zone. Small arrays
+ * (data <= 4096 bytes) take one allocation for control block, zone and data (data still 64-byte
+ * aligned); every nd_alloc() / nd_alloc_strided() array does too (extra_bytes 0).
+ *
+ * ND_ALLOC_SCRATCH: a call-local array. Control block, zone and data come from the calling thread's
+ * scratch arena (a LIFO bump region, reused between calls; heap fallback when it is full or the
+ * block is large). The arena starts at 16 KiB and, when it is next empty, grows to the peak demand it
+ * could not serve (at most 1 MiB per thread); blocks above 256 KiB always come from the heap. Same
+ * contracts as a heap array (refs, retain, views, layout lock, growth: the grown data goes to the
+ * heap) except: nd_export() fails with OTI_ERR_BUSY (state ND_STATE_SCRATCH), and the last reference
+ * must be released on the allocating thread, before that thread's nd_scratch_release() (debug builds
+ * assert the thread). Budgets: max_alloc_bytes and max_temp_bytes both apply to the data bytes.
+ * nd_test_fail_alloc(): one allocation event per array (two for heap data above 4096 bytes).
+ *
+ * @param[in,out] ctx         Context, or NULL.
+ * @param[in]     dtype       OTI_F64, OTI_U8 or OTI_I64.
+ * @param[in]     ndim        0 .. OTI_ND_MAXDIM.
+ * @param[in]     shape       ndim extents, >= 0.
+ * @param[in]     strides     ndim element strides (compact, injective), or NULL for @p layout.
+ * @param[in]     layout      ND_LAYOUT_C or ND_LAYOUT_F (strides NULL).
+ * @param[in]     alloc_flags ND_ALLOC_ZERO | ND_ALLOC_GROWABLE | ND_ALLOC_SCRATCH.
+ * @param[in]     extra_bytes 0 .. ND_EXTRA_MAX_BYTES.
+ * @param[out]    extra       Start of the zone (NULL when extra_bytes is 0); may be NULL. NULL on
+ *                            failure.
+ * @param[out]    res         New retained array (refs 1). Overwritten without being released.
+ *
+ * @return As nd_alloc() / nd_alloc_strided(); OTI_ERR_ARGUMENT for extra_bytes out of range.
+ *         Caller owns the reference on success and must release it via nd_release().
+ */
+int nd_alloc_extra(oti_ctx* ctx, int32_t dtype, int32_t ndim, const int64_t* shape,
+                   const int64_t* strides, int32_t layout, int32_t alloc_flags, int64_t extra_bytes,
+                   void** extra, ndarr_t* res);
 
 /**
  * @brief Wraps foreign memory in a validated, retained array, taking over a release callback.
@@ -438,6 +495,20 @@ const void* nd_buffer_base(const nd_buffer_t* buf);
  * @return nbytes, or -1 if unknown.
  */
 int64_t nd_buffer_nbytes(const nd_buffer_t* buf);
+
+/** @brief Extra zone of a buffer (nd_alloc_extra()), or NULL if it has none. buf not NULL. */
+void* nd_buffer_extra(const nd_buffer_t* buf);
+
+/** @brief Size of the extra zone in bytes (0 if none). buf not NULL. */
+int64_t nd_buffer_extra_bytes(const nd_buffer_t* buf);
+
+/**
+ * @brief Frees the calling thread's scratch arena (also done at thread exit).
+ *
+ * @return OTI_OK; OTI_ERR_BUSY while a scratch array of this thread holds arena memory (a scratch
+ *         array that overflowed to the heap does not count); nothing is freed then.
+ */
+int nd_scratch_release(void);
 
 /**
  * @brief Takes the exclusive layout lock (refs == 1, exports == 0, GROWING clear -> GROWING).

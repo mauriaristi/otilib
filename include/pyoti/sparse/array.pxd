@@ -11,6 +11,8 @@ cdef class matso:
   
   cdef arrso_t arr
   cdef uint8_t FLAGS
+  cdef uint8_t _lk      # Logical shape kind (7b): 0 -> (nrows, ncols), 1 -> (nrows,) stored as
+                        # nrows x 1, 2 -> () stored as 1 x 1. The 2-D struct never changes.
   #---------------------------------------------------------------------------------------------------  
 
   @staticmethod
@@ -25,10 +27,6 @@ cdef class matso:
   cpdef set(           self, object rhs   )
   cpdef get_order_im(  self, ord_t order  )
 
-  cdef __setitem__r(self, object val, coeff_t value)
-  cdef __setitem__R(self, object val, dmat    value)
-  cdef __setitem__o(self, object val, sotinum value)
-  cdef __setitem__O(self, object val, matso   value)
   
   # @staticmethod
   # cpdef matso inv( matso arr, matso out = *)
